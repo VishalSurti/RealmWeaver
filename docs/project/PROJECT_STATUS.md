@@ -1,26 +1,39 @@
 # RealmWeaver — Project Status
 
-**Document Version:** 1.1
-**Last Reviewed:** 8 August 2026
+**Document Version:** 1.2
+**Last Reviewed:** 13 August 2026
 **Overall Status:** Active
-**Current Milestone:** M1 — Product Foundation
-**Milestone Status:** COMPLETE
-**Next Milestone:** M2 — Technical Design & Architecture
-**M2 Status:** Not Started
+**Current Milestone:** M2 — Technical Design & Architecture
+**Milestone Status:** IN PROGRESS
+**Current Activity:** M2.1 — V1 Game Rules Specification & Rules-Engine Boundary
+**Next Activity:** M2.1 Group 5 — Classes & Progression
 
 ---
 
 # 1. Current Project State
 
-RealmWeaver has completed Milestone 1 — Product Foundation.
+RealmWeaver has completed **Milestone 1 — Product Foundation** and has formally entered **Milestone 2 — Technical Design & Architecture**.
 
-The product vision, V1 scope, requirements, user stories, acceptance criteria, product backlog, Definition of Done, risk register, competitive/reference analysis, and project documentation have been defined.
+The product vision, V1 scope, requirements, user stories, acceptance criteria, product backlog, Definition of Done, risk register, competitive/reference analysis, and project-management documentation were established during M1.
 
-Milestone 1 documentation has been committed to Git and pushed to the remote GitHub repository.
+M2 is now defining how RealmWeaver V1 will function technically before production implementation begins.
 
-No production application code has been written.
+The first M2 activity, **M2.1 — V1 Game Rules Specification & Rules-Engine Boundary**, is currently in progress.
 
-The project is currently positioned between M1 and M2. The next development session will formally open Milestone 2 — Technical Design & Architecture.
+The following M2.1 rules groups have been approved:
+
+* Group 1 — Character Core
+* Group 2 — Checks, DCs & Saving Throws
+* Group 3 — Dice & Inspiration
+* Group 4 — Combat
+
+The next activity is:
+
+> **M2.1 Group 5 — Classes & Progression**
+
+No production application code has been introduced yet.
+
+The current focus remains technical specification and architecture rather than implementation.
 
 ---
 
@@ -55,7 +68,7 @@ Milestone 1 established what RealmWeaver is, what V1 must accomplish, and what i
 
 ## M1 Git Baseline
 
-**Commit:**
+Commit:
 
 `16fc61b — docs: complete M1 product foundation documentation`
 
@@ -63,7 +76,159 @@ This commit represents the initial approved RealmWeaver product-foundation basel
 
 ---
 
-# 3. Core Product Definition
+# 3. Milestone 2 — Current Progress
+
+## Status
+
+**IN PROGRESS**
+
+The purpose of M2 is to determine how RealmWeaver V1 will actually be built before significant production coding begins.
+
+Planned M2 areas include:
+
+* M2.1 — V1 Game Rules Specification & Rules-Engine Boundary
+* M2.2 — System Architecture
+* M2.3 — Technology Stack Confirmation
+* M2.4 — Domain Model
+* M2.5 — Database Design
+* M2.6 — AI Architecture
+* M2.7 — Memory Architecture
+* M2.8 — API Design
+* M2.9 — Application / Repository Structure
+* M2.10 — Testing Architecture
+* M2.11 — Development Environment
+* M2.12 — Architecture Review and Go/No-Go for implementation
+
+These areas may be refined, combined or reordered where technically appropriate.
+
+No major production implementation should begin until the relevant architectural foundations have been sufficiently defined and reviewed.
+
+---
+
+# 4. M2.1 — Game Rules Specification
+
+## Status
+
+**IN PROGRESS**
+
+Authoritative specification:
+
+`docs/game-rules/GAME_RULES.md`
+
+The purpose of M2.1 is to determine:
+
+* Which tabletop mechanics RealmWeaver V1 supports
+* Which mechanics are intentionally simplified
+* Which rules are explicitly excluded from V1
+* Which decisions belong to deterministic code
+* Which decisions belong to the AI Dungeon Master
+* How player intent becomes structured mechanical actions
+* How dice and rules outcomes are resolved
+* How authoritative outcomes are returned to the AI for narration
+
+## Approved Groups
+
+### Group 1 — Character Core
+
+**APPROVED**
+
+Includes:
+
+* Six core ability scores
+* Standard Array and Rolled Stats
+* Skill structure
+* Alternative ability + skill combinations
+* Proficiency
+* Expertise
+* HP
+* AC
+* Speed
+* Passive skills
+* Level-support strategy
+
+### Group 2 — Checks, DCs & Saving Throws
+
+**APPROVED**
+
+Includes:
+
+* Automatic Success / Mechanical Check / Impossible resolution
+* Controlled DC bands
+* Ability checks
+* Saving throws
+* Contested checks
+* Passive checks
+* Narrative degrees of success/failure
+* AI interpretation with deterministic resolution
+
+### Group 3 — Dice & Inspiration
+
+**APPROVED**
+
+Includes:
+
+* Standard RPG dice
+* Multiple-dice expressions
+* Automatic dice
+* Manual physical dice entry
+* Advantage / Disadvantage
+* Hidden rolls
+* Dice history
+* Inspiration
+* Inspiration declared before the roll
+* Unbiased system-generated dice
+
+### Group 4 — Combat
+
+**APPROVED**
+
+Includes:
+
+* Combat initiation
+* Initiative
+* Action economy
+* Reactions
+* Abstract distance-band positioning
+* Movement actions
+* Opportunity attacks
+* Complex natural-language combat actions
+* Attack rolls
+* Hidden enemy AC
+* Damage
+* Damage types
+* Resistances, vulnerabilities and immunities
+* Critical hits
+* Natural 1 attack misses
+* Future critical-fumble / enhanced-critical expansion
+* HP and healing
+* Unconsciousness
+* Death saves
+* Massive damage
+* Solo-play defeat outcomes
+* Persistent character death
+* Enemy tactical profiles
+* Hybrid deterministic / AI-assisted enemy tactics
+* Morale
+* Combat finalisation
+* Encounter objectives
+* Contextual loot
+* Quest updates
+* Persistent NPC/world consequences
+* Reward validation
+* Encumbrance campaign setting
+* Reusable content-pool direction
+
+## Remaining M2.1 Groups
+
+* Group 5 — Classes & Progression
+* Group 6 — Equipment & Inventory
+* Group 7 — Magic
+* Group 8 — Conditions & Resting
+* Group 9 — AI/Rules Boundary
+
+---
+
+# 5. Core Product Definition
 
 RealmWeaver is a:
 
@@ -81,9 +246,17 @@ Product tagline:
 
 > **AI tells the story. Rules decide what happens.**
 
+A second implementation principle established during M2 is:
+
+> **AI proposes. RealmWeaver validates.**
+
+The AI may interpret intent, generate narrative content and propose actions.
+
+The deterministic application remains authoritative over mechanics and persistent state.
+
 ---
 
-# 4. V1 Product Priorities
+# 6. V1 Product Priorities
 
 RealmWeaver V1 currently prioritises:
 
@@ -106,9 +279,45 @@ The project will prioritise reliable core gameplay over feature quantity.
 
 ---
 
-# 5. Current Documentation
+# 7. V1 Ruleset Direction
 
-Milestone 1 documentation:
+RealmWeaver V1 uses a **D&D-inspired fantasy tabletop ruleset closely aligned with familiar 5e-style mechanics**, while deliberately simplifying systems where full tabletop fidelity would create disproportionate complexity for an AI-driven solo RPG.
+
+RealmWeaver does not currently promise full 5e compatibility.
+
+The approved level-support strategy is:
+
+### V1 Minimum
+
+Fully supported playable content:
+
+**Levels 1–5**
+
+### V1 Stretch Target
+
+If testing, schedule and complexity permit:
+
+**Levels 1–10**
+
+The stretch target must not delay the core V1 unnecessarily.
+
+### Architecture Target
+
+The data model and rules architecture should support eventual expansion toward:
+
+**Levels 1–20**
+
+---
+
+# 8. Current Documentation
+
+## Product / Project Documentation
+
+Located primarily under:
+
+`docs/project/`
+
+Current documents include:
 
 * `PROJECT_VISION.md`
 * `REFERENCE_ANALYSIS.md`
@@ -120,13 +329,47 @@ Milestone 1 documentation:
 * `RISK_REGISTER.md`
 * `PROJECT_STATUS.md`
 
-These documents represent the current authoritative product context.
+## M2 Technical Documentation
 
-If an older discussion conflicts with an approved and subsequently updated project document, the project documentation should normally be treated as the source of truth.
+Current:
+
+* `docs/game-rules/GAME_RULES.md`
+
+Planned technical documentation may include:
+
+* `docs/architecture/SYSTEM_ARCHITECTURE.md`
+* `docs/architecture/DATABASE_DESIGN.md`
+* `docs/architecture/AI_ARCHITECTURE.md`
+* `docs/architecture/MEMORY_ARCHITECTURE.md`
+* `docs/architecture/API_DESIGN.md`
+
+Architecture Decision Records may be stored under:
+
+`docs/adr/`
+
+These files should be created progressively as their related decisions are made rather than all at once.
 
 ---
 
-# 6. Current Major Risks
+# 9. Source-of-Truth Policy
+
+RealmWeaver repository documentation is the authoritative source for approved project decisions.
+
+If an older conversation, memory, assumption or suggestion conflicts with an approved and subsequently updated repository document:
+
+> **The current approved repository documentation takes precedence.**
+
+Conversation history and assistant memory may support development, but they are not substitutes for repository documentation.
+
+Before making decisions materially dependent on previous RealmWeaver specifications, the relevant repository documents should be reviewed rather than relying solely on memory.
+
+Major architectural or rules changes may additionally require an Architecture Decision Record.
+
+Git history should preserve previous approved states.
+
+---
+
+# 10. Current Major Risks
 
 Highest-priority risks currently identified include:
 
@@ -138,11 +381,20 @@ Highest-priority risks currently identified include:
 * AI/game-engine integration complexity
 * Solo-development workload
 
+M2 should reduce these risks by clearly defining:
+
+* Rules boundaries
+* State ownership
+* AI responsibilities
+* Data architecture
+* Validation boundaries
+* Testing strategy
+
 See `RISK_REGISTER.md` for the complete register and mitigation strategies.
 
 ---
 
-# 7. Current Constraints
+# 11. Current Constraints
 
 RealmWeaver V1 is:
 
@@ -155,11 +407,13 @@ RealmWeaver V1 is:
 * Designed around API-based AI rather than heavy local inference
 * Intentionally limited in game-rules coverage
 
+The development environment includes a MacBook Air with an Apple M2 processor and 8 GB RAM, making heavyweight local-model inference unsuitable as a primary V1 architecture.
+
 ---
 
-# 8. Current Technical State
+# 12. Current Technical State
 
-No production architecture has been approved.
+No complete production architecture has yet been approved.
 
 Current preliminary technical direction includes:
 
@@ -170,83 +424,105 @@ Current preliminary technical direction includes:
 * API-based LLM
 * Deterministic rules engine
 * Structured communication between AI and game engine
+* Persistent campaign/world state
+* Controlled AI access to game data and rules services
 
-These are architectural candidates rather than final decisions.
+These remain architectural candidates until formally reviewed during M2.
 
-Milestone 2 will formally evaluate and approve the technical architecture.
+### Rules / AI Boundary Already Established
 
----
+The following principle is approved:
 
-# 9. Repository State
+**AI responsibilities may include:**
 
-RealmWeaver is under Git version control and connected to a GitHub remote repository.
+* Interpret player intent
+* Generate narration
+* Generate NPC dialogue
+* Suggest checks
+* Suggest encounter behaviour
+* Propose mechanically relevant actions
 
-The `main` branch currently contains the Milestone 1 documentation baseline.
+**Deterministic system responsibilities include:**
 
-No production application source code has been introduced.
+* Dice
+* Modifiers
+* Checks
+* HP
+* AC
+* Combat outcomes
+* Inventory state
+* Currency
+* Quest state
+* Progression
+* Persistent NPC/world state
+* Validation of AI-proposed mechanics
 
-Future development should follow the Git and review workflow established during M1.
-
----
-
-# 10. Next Milestone
-
-## M2 — Technical Design & Architecture
-
-**Status:** Not Started
-
-The purpose of M2 is to determine how RealmWeaver V1 will actually be built.
-
-Expected M2 areas include:
-
-* V1 Game Rules Specification
-* Rules-Engine Boundary
-* System Architecture
-* Technology Stack Confirmation
-* Domain Model
-* Database Design
-* Authoritative Game-State Design
-* AI Architecture
-* AI/Game-Engine Contract
-* Campaign Memory Architecture
-* API Boundaries
-* Repository/Application Structure
-* Development Environment
-* Testing Architecture
-* Architecture Decision Records
-
-No major production implementation should begin until the relevant architectural foundations are sufficiently defined.
+The detailed contract will be finalised later in M2.1 and M2.6.
 
 ---
 
-# 11. Immediate Next Action
+# 13. Current Content and Data Direction
 
-At the next RealmWeaver development session:
+RealmWeaver should avoid manually hard-coding large catalogues of game content where appropriately licensed structured content sources are available.
 
-> **Open M2 — Technical Design & Architecture.**
+Potential reusable content includes:
 
-The first planned activity is:
+* Monsters
+* Equipment
+* Weapons
+* Armour
+* Spells
+* Conditions
+* Character names
+* Location names
+* Settlement names
+* Tavern names
+* Faction names
+* Item names
+* Other world-building vocabulary
 
-### M2.1 — V1 Game Rules Specification & Rules-Engine Boundary
+The intended long-term pattern is approximately:
 
-This activity will determine:
+**Licensed / permitted source → Importer → Validation / Normalisation → RealmWeaver internal data**
 
-* Which tabletop mechanics RealmWeaver V1 actually supports.
-* Which rules are explicitly excluded.
-* Which decisions belong to deterministic code.
-* Which decisions belong to the AI Dungeon Master.
-* How uncertain player actions become mechanical checks.
-* How mechanical outcomes are returned to the AI for narration.
+External content APIs should not become mandatory runtime dependencies for core gameplay.
+
+The final content-import and storage architecture will be defined later in M2.
 
 ---
 
-# 12. Development Capacity & Planning Assumption
+# 14. Repository State
+
+RealmWeaver is under Git version control and connected to the public GitHub repository.
+
+The `main` branch contains:
+
+* M1 product-foundation documentation
+* M2 game-rules documentation
+* Current project-status documentation
+
+No production application source code has yet been introduced.
+
+Recent documentation work includes the initial `GAME_RULES.md` M2 specification.
+
+Future development should continue to use:
+
+1. Make controlled changes.
+2. Review `git status`.
+3. Stage intended files.
+4. Review staged changes with `git diff --staged`.
+5. Commit with a descriptive message.
+6. Push the checkpoint to GitHub.
+
+---
+
+# 15. Development Capacity & Planning Assumption
 
 Current planning assumes approximately:
 
 **20 development hours per week minimum**
 
-Initial high-level estimates suggest:
+Initial high-level estimates remain:
 
 * Technical prototype: approximately 2 months
 * Playable Alpha: approximately 4 months
@@ -259,36 +535,147 @@ Once sprint development begins, actual project velocity should replace broad cal
 
 ---
 
-# 13. Project Resume Instructions
+# 16. Professional Development Workflow
+
+RealmWeaver should continue following a simplified professional software-development lifecycle:
+
+**Planning → Sprint Planning → Development → Review → Testing → Sprint Review → Retrospective → Release**
+
+Professional practices to introduce progressively include:
+
+* Backlog management
+* Acceptance criteria
+* Definition of Done
+* Code review
+* Pull requests where useful
+* Automated testing
+* Architecture Decision Records
+* Technical debt tracking
+* Risk tracking
+* Release notes / changelog
+* Milestone gates
+
+The level of ceremony should remain appropriate for a solo developer while still teaching professional engineering practices.
+
+---
+
+# 17. Immediate Next Action
+
+Continue:
+
+> **M2.1 — Group 5: Classes & Progression**
+
+Topics expected to include:
+
+* V1 class scope
+* Class data structure
+* Hit Dice
+* Saving Throw proficiencies
+* Class features
+* Subclasses
+* Level-up rules
+* XP progression
+* Milestone progression
+* Level-up choices
+* Feature unlocks
+* Progress visibility
+
+Once Group 5 is approved:
+
+1. Update `GAME_RULES.md`.
+2. Commit the documentation checkpoint where appropriate.
+3. Continue to Group 6 — Equipment & Inventory.
+
+---
+
+# 18. M2.1 Completion Gate
+
+M2.1 is complete only when all approved rules areas have been specified and reviewed.
+
+Required groups:
+
+* Character Core
+* Checks, DCs & Saving Throws
+* Dice & Inspiration
+* Combat
+* Classes & Progression
+* Equipment & Inventory
+* Magic
+* Conditions & Resting
+* AI/Rules Boundary
+
+At M2.1 completion:
+
+1. Perform a full `GAME_RULES.md` review.
+2. Resolve contradictions or missing decisions.
+3. Review V1 scope alignment.
+4. Record any deferred mechanics.
+5. Add required ADRs.
+6. Update `PROJECT_STATUS.md`.
+7. Commit and push the completed M2.1 baseline.
+8. Proceed to the next M2 architecture activity.
+
+---
+
+# 19. Project Resume Instructions
 
 When returning to RealmWeaver after a break:
 
 1. Read `PROJECT_STATUS.md`.
 2. Identify the current milestone and immediate next action.
-3. Review relevant milestone or sprint documentation.
+3. Review the relevant authoritative specification.
 4. Review recent Git history where necessary.
-5. Review relevant architecture decisions.
-6. Check known blockers, technical debt, and risks.
+5. Review applicable Architecture Decision Records.
+6. Check known blockers, technical debt and risks.
 7. Continue from the documented next action rather than reconstructing project state from conversation history.
+
+For the current M2.1 activity, the primary specification to review is:
+
+`docs/game-rules/GAME_RULES.md`
 
 ---
 
-# 14. Documentation Principle
+# 20. Documentation Principle
 
 RealmWeaver documentation and Git history form the project's long-term source of truth.
 
 Conversation history may support development, but important decisions should be captured in the repository.
 
-After every major milestone, project documentation should be reviewed and updated before the milestone is formally closed.
+Documentation should be updated incrementally throughout M2 because technical design decisions are too numerous and interconnected to safely defer all documentation until milestone completion.
+
+At every major milestone:
+
+1. Review the authoritative documents.
+2. Update project status.
+3. Resolve inconsistencies.
+4. Record significant architectural decisions.
+5. Commit the milestone baseline.
+6. Pass the relevant milestone gate before moving forward.
 
 ---
 
-# 15. Next Session
+# 21. Next Session
 
-**Starting Point:**
+## Starting Point
 
-> M2.1 — V1 Game Rules Specification & Rules-Engine Boundary
+> **M2.1 Group 5 — Classes & Progression**
 
-**Current stopping point:**
+## Current Stopping Point
 
-> M1 Product Foundation complete, committed, and pushed. M2 has not yet started.
+> **M1 complete. M2 active. M2.1 Groups 1–4 approved and documented. Combat specification complete at the V1 design level.**
+
+## Current Authoritative M2 Specification
+
+`docs/game-rules/GAME_RULES.md`
+
+---
+
+# 22. Status Summary
+
+**M1 — Product Foundation:** COMPLETE
+**M2 — Technical Design & Architecture:** IN PROGRESS
+**M2.1 — Game Rules Specification:** IN PROGRESS
+**M2.1 Groups 1–4:** APPROVED
+**Current Next Group:** Group 5 — Classes & Progression
+**Production Coding:** NOT STARTED
+**Current Technical Source of Truth:** `docs/game-rules/GAME_RULES.md`
