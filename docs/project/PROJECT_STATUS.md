@@ -6,7 +6,9 @@
 **Current Milestone:** M2 — Technical Design & Architecture
 **Milestone Status:** IN PROGRESS
 **Current Activity:** M2.1 — V1 Game Rules Specification & Rules-Engine Boundary
-**Next Activity:** M2.1 Group 5 — Classes & Progression
+**Next Activity:** M2.1 GGroup 6 — Equipment & Inventory
+**Current Progress:** Groups 1–5 APPROVED and documented
+
 
 ---
 
