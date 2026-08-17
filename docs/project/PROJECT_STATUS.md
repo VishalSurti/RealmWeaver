@@ -627,28 +627,34 @@ The level of ceremony should remain appropriate for a solo developer while still
 
 Continue:
 
-> **M2.1 — Group 5: Classes & Progression**
+> **M2.1 — Group 7: Magic**
 
-Topics expected to include:
+Expected topics include:
 
-* V1 class scope
-* Class data structure
-* Hit Dice
-* Saving Throw proficiencies
-* Class features
-* Subclasses
-* Level-up rules
-* XP progression
-* Milestone progression
-* Level-up choices
-* Feature unlocks
-* Progress visibility
+* Spellcasting
+* Spell Slots
+* Prepared Spells
+* Known Spells
+* Spellbook Rules
+* Cantrips
+* Spell Components
+* Concentration
+* Spell Range
+* Spell Targeting
+* Spell Attacks
+* Saving Throw Spells
+* Spell Damage
+* Healing Spells
+* Ritual Casting
+* Upcasting
+* Innate Species Magic
 
-Once Group 5 is approved:
+
+Once Group 7 is approved:
 
 1. Update `GAME_RULES.md`.
 2. Commit the documentation checkpoint where appropriate.
-3. Continue to Group 6 — Equipment & Inventory.
+3. Continue to Group 8 — Conditions & Resting.
 
 ---
 
@@ -722,11 +728,11 @@ At every major milestone:
 
 ## Starting Point
 
-> **M2.1 Group 5 — Classes & Progression**
+> **M2.1 Group 7 — Magic**
 
 ## Current Stopping Point
 
-> **M1 complete. M2 active. M2.1 Groups 1–4 approved and documented. Combat specification complete at the V1 design level.**
+> **M1 complete. M2 active. M2.1 Groups 1–6 approved and documented. Combat specification complete at the V1 design level.**
 
 ## Current Authoritative M2 Specification
 
@@ -740,6 +746,6 @@ At every major milestone:
 **M2 — Technical Design & Architecture:** IN PROGRESS
 **M2.1 — Game Rules Specification:** IN PROGRESS
 **M2.1 Groups 1–4:** APPROVED
-**Current Next Group:** Group 5 — Classes & Progression
+**Current Next Group:** Group 7 — Magic
 **Production Coding:** NOT STARTED
 **Current Technical Source of Truth:** `docs/game-rules/GAME_RULES.md`

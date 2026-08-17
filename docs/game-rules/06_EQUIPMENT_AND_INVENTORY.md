@@ -2114,7 +2114,7 @@ V1 includes:
 * Structured Item Definitions
 * Persistent Item Instances
 * Item ownership/location
-* GP/SP/CP currency
+* GP/SP/CP/PP currency
 * Weapons
 * Basic two-weapon fighting
 * Armour and Shields
