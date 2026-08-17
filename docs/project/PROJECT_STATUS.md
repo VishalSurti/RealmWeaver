@@ -745,7 +745,7 @@ At every major milestone:
 **M1 — Product Foundation:** COMPLETE
 **M2 — Technical Design & Architecture:** IN PROGRESS
 **M2.1 — Game Rules Specification:** IN PROGRESS
-**M2.1 Groups 1–4:** APPROVED
+**M2.1 Groups 1–6:** APPROVED
 **Current Next Group:** Group 7 — Magic
 **Production Coding:** NOT STARTED
 **Current Technical Source of Truth:** `docs/game-rules/GAME_RULES.md`
