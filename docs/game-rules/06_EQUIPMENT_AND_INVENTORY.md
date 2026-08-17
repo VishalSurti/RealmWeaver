@@ -220,12 +220,13 @@ V1 supports:
 * Gold Pieces (GP)
 * Silver Pieces (SP)
 * Copper Pieces (CP)
+* Platinum Pieces (PP)
 
 Electrum is excluded from V1.
 
 ## 3.2 Currency Conversion
 
-RealmWeaver uses the supported denomination relationships between GP, SP, and CP.
+RealmWeaver uses the supported denomination relationships between GP, SP, CP and PP.
 
 Currency must remain mechanically structured rather than existing only in AI narration.
 

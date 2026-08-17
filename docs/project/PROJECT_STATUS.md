@@ -1,13 +1,13 @@
 # RealmWeaver — Project Status
 
 **Document Version:** 1.2
-**Last Reviewed:** 13 August 2026
+**Last Reviewed:** 17 August 2026
 **Overall Status:** Active
 **Current Milestone:** M2 — Technical Design & Architecture
 **Milestone Status:** IN PROGRESS
 **Current Activity:** M2.1 — V1 Game Rules Specification & Rules-Engine Boundary
-**Next Activity:** M2.1 GGroup 6 — Equipment & Inventory
-**Current Progress:** Groups 1–5 APPROVED and documented
+**Next Activity:** M2.1 Group 7 - Magic
+**Current Progress:** Groups 1–6 APPROVED and documented
 
 
 ---
@@ -28,10 +28,12 @@ The following M2.1 rules groups have been approved:
 * Group 2 — Checks, DCs & Saving Throws
 * Group 3 — Dice & Inspiration
 * Group 4 — Combat
+* Group 5 — Classes & Progression
+* Group 6 — Equipment & Inventory
 
 The next activity is:
 
-> **M2.1 Group 5 — Classes & Progression**
+> **M2.1 Group 7 — Magic**
 
 No production application code has been introduced yet.
 
@@ -220,10 +222,70 @@ Includes:
 * Encumbrance campaign setting
 * Reusable content-pool direction
 
+### Group 5 — Classes & Progression
+
+**APPROVED**
+
+Includes:
+
+* V1 Class Scope
+* Class Data Model
+* Hit Dice
+* Class Features
+* Proficiency Progression
+* Species
+* Species Traits
+* Backgrounds
+* Level-Up Structure
+* XP Progression
+* Milestone Progression
+* Adventure Leads
+* Subclasses
+* Character Choices
+* Fighter Progression
+* Rogue Progression
+* Cleric Progression
+* Wizard Progression
+* Progress Visibility
+* Progression Validation
+* Ruleset Versioning
+
+### Group 6 — Equipment & Inventory
+
+**APPROVED**
+
+Includes:
+
+- Structured Item Definitions and persistent Item Instances
+- Item ownership, location and transfer
+- Currency: CP, SP, GP and PP
+- Electrum excluded from V1
+- Weapons and weapon properties
+- Basic two-weapon fighting
+- Ammunition tracking
+- Armour and shields
+- Non-proficient armour penalties
+- Alternative AC architecture
+- Equipment and hand state
+- Containers and persistent storage
+- Optional campaign Encumbrance
+- Graduated Encumbrance thresholds
+- Coin weight when Encumbrance is enabled
+- Consumables
+- Unidentified consumables
+- Loot profiles and persistent loot
+- Hidden containers and discoveries
+- Merchant stock
+- Buying and selling
+- Haggling and basic bartering
+- Theft / pickpocket integration
+- Item-state validation
+- Tools and Tool Proficiencies
+- Flexible Ability + Tool checks
+- Full crafting deferred from V1
+
 ## Remaining M2.1 Groups
 
-* Group 5 — Classes & Progression
-* Group 6 — Equipment & Inventory
 * Group 7 — Magic
 * Group 8 — Conditions & Resting
 * Group 9 — AI/Rules Boundary

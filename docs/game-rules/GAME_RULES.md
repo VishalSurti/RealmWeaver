@@ -281,34 +281,38 @@ Covers:
 * Ruleset Versioning
 
 ---
-
 ## 4.6 Group 6 — Equipment & Inventory
 
-**Status:** NOT STARTED
+**Status:** APPROVED
 
-Planned specification:
+Specification:
 
-`06_EQUIPMENT_AND_INVENTORY.md`
+[06_EQUIPMENT_AND_INVENTORY.md](./06_EQUIPMENT_AND_INVENTORY.md)
 
-Expected topics include:
+Covers:
 
-* Weapon Data
-* Armour
-* Shields
-* General Equipment
-* Inventory State
-* Equipped Items
-* Item Ownership
-* Carrying Capacity
-* Encumbrance
-* Currency
-* Consumables
-* Item Usage
-* Item Discovery
-* Loot Transfer
-* Containers
-* Item State
-* Equipment Validation
+- Item Definitions & Item Instances
+- Item Ownership & Location
+- Currency & Wealth
+- Weapons
+- Two-Weapon Fighting
+- Armour & Shields
+- Inventory & Equipment State
+- Containers & Persistent Storage
+- Carrying Capacity
+- Optional Encumbrance
+- Consumables & Item Use
+- Unidentified Items
+- Loot & Treasure
+- Hidden Containers & Discovery
+- Merchant Stock
+- Buying & Selling
+- Haggling
+- Bartering
+- Item State & Validation
+- Tools & Tool Proficiencies
+- Flexible Ability + Tool Checks
+- Future Crafting Architecture
 
 ---
 
@@ -574,10 +578,10 @@ The project should not rely on conversation history as the only record of an app
 * Group 3 — Dice & Inspiration
 * Group 4 — Combat
 * Group 5 — Classes & Progression
+* Group 6 — Equipment & Inventory
 
 ## Not Started
 
-* Group 6 — Equipment & Inventory
 * Group 7 — Magic
 * Group 8 — Conditions & Resting
 * Group 9 — AI / Rules Boundary
@@ -603,8 +607,8 @@ M2.1 — V1 Game Rules Specification is complete only when:
 
 Continue with:
 
-> **Group 6 — Equipment & Inventory**
+> **Group 7 — Magic**
 
 Planned file:
 
-`06_EQUIPMENT_AND_INVENTORY.md`
+`07_MAGIC.md`
