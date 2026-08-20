@@ -1,13 +1,13 @@
 # RealmWeaver — Project Status
 
 **Document Version:** 1.2
-**Last Reviewed:** 17 August 2026
+**Last Reviewed:** 20 August 2026
 **Overall Status:** Active
 **Current Milestone:** M2 — Technical Design & Architecture
 **Milestone Status:** IN PROGRESS
 **Current Activity:** M2.1 — V1 Game Rules Specification & Rules-Engine Boundary
-**Next Activity:** M2.1 Group 7 - Magic
-**Current Progress:** Groups 1–6 APPROVED and documented
+**Next Activity:** M2.1 Group 8 - Conditions & Resting
+**Current Progress:** Groups 1–7 APPROVED and documented
 
 
 ---
@@ -30,10 +30,11 @@ The following M2.1 rules groups have been approved:
 * Group 4 — Combat
 * Group 5 — Classes & Progression
 * Group 6 — Equipment & Inventory
+* Group 7 - Magic
 
 The next activity is:
 
-> **M2.1 Group 7 — Magic**
+> **M2.1 Group 8 — Conditions & Resting**
 
 No production application code has been introduced yet.
 
@@ -284,9 +285,32 @@ Includes:
 - Flexible Ability + Tool checks
 - Full crafting deferred from V1
 
+### Group 7 — Magic
+
+**APPROVED**
+
+Includes:
+
+* Spellcasting
+* Spell Slots
+* Prepared Spells
+* Known Spells
+* Spellbook Rules
+* Cantrips
+* Spell Components
+* Concentration
+* Spell Range
+* Spell Targeting
+* Spell Attacks
+* Saving Throw Spells
+* Spell Damage
+* Healing Spells
+* Ritual Casting
+* Upcasting
+* Innate Species Magic
+
 ## Remaining M2.1 Groups
 
-* Group 7 — Magic
 * Group 8 — Conditions & Resting
 * Group 9 — AI/Rules Boundary
 
@@ -627,34 +651,29 @@ The level of ceremony should remain appropriate for a solo developer while still
 
 Continue:
 
-> **M2.1 — Group 7: Magic**
+> **M2.1 — Group 8: Conditions & Resting**
 
 Expected topics include:
 
-* Spellcasting
-* Spell Slots
-* Prepared Spells
-* Known Spells
-* Spellbook Rules
-* Cantrips
-* Spell Components
-* Concentration
-* Spell Range
-* Spell Targeting
-* Spell Attacks
-* Saving Throw Spells
-* Spell Damage
-* Healing Spells
-* Ritual Casting
-* Upcasting
-* Innate Species Magic
+* Conditions
+* Condition Duration
+* Short Rest
+* Long Rest
+* Hit Dice Recovery
+* Class Resource Recovery
+* Spell-Slot Recovery
+* Species Rest Traits
+* Stabilisation Recovery
+* Exhaustion
+* Rest Restrictions
+* Interrupted Rest
 
 
-Once Group 7 is approved:
+Once Group 8 is approved:
 
 1. Update `GAME_RULES.md`.
 2. Commit the documentation checkpoint where appropriate.
-3. Continue to Group 8 — Conditions & Resting.
+3. Continue to Group 9 — AI / Rules Boundary.
 
 ---
 
@@ -732,7 +751,7 @@ At every major milestone:
 
 ## Current Stopping Point
 
-> **M1 complete. M2 active. M2.1 Groups 1–6 approved and documented. Combat specification complete at the V1 design level.**
+> **M1 complete. M2 active. M2.1 Groups 1–7 approved and documented. Combat specification complete at the V1 design level.**
 
 ## Current Authoritative M2 Specification
 
@@ -745,7 +764,7 @@ At every major milestone:
 **M1 — Product Foundation:** COMPLETE
 **M2 — Technical Design & Architecture:** IN PROGRESS
 **M2.1 — Game Rules Specification:** IN PROGRESS
-**M2.1 Groups 1–6:** APPROVED
-**Current Next Group:** Group 7 — Magic
+**M2.1 Groups 1–7:** APPROVED
+**Current Next Group:** Group 8 — Conditions & Resting
 **Production Coding:** NOT STARTED
 **Current Technical Source of Truth:** `docs/game-rules/GAME_RULES.md`

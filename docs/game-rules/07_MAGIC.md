@@ -3113,6 +3113,1986 @@ The exact database/transaction implementation is deferred to architecture.
 23. Multi-target and multi-effect spell resolutions should eventually be processed atomically by the backend.
 
 ---
+# 7J — Cantrips, Ritual Casting & Special Casting
+
+**Status:** Approved
+
+## 7J.1 Cantrips
+
+Cantrips are level-0 spells.
+
+Once legitimately known, cantrips:
+
+* do not require preparation;
+* do not consume spell slots;
+* remain available unless another rule or effect prevents their use.
+
+Cantrips still obey all other applicable spellcasting requirements, including:
+
+* casting time;
+* action economy;
+* range;
+* targeting;
+* components according to the campaign's component mode;
+* conditions;
+* visibility;
+* concentration where applicable;
+* other spell-specific restrictions.
+
+"Free to cast" does not mean that normal spellcasting rules are ignored.
+
+---
+
+## 7J.2 Cantrip Scaling
+
+Cantrip scaling is determined from structured Spell Definition data.
+
+Where the applicable 2014-style rule scales a cantrip according to total character level, RealmWeaver uses character level rather than only spellcasting-class level.
+
+Typical scaling tiers are:
+
+| Character Level | Scaling Tier |
+| --------------- | ------------ |
+| 1–4             | Base         |
+| 5–10            | Second       |
+| 11–16           | Third        |
+| 17–20           | Fourth       |
+
+V1 must correctly support the level-5 scaling breakpoint.
+
+The architecture must support all later scaling tiers for eventual level-20 gameplay.
+
+RealmWeaver must not implement scaling through individual hardcoded spell-name checks.
+
+---
+
+## 7J.3 Ritual Casting
+
+RealmWeaver supports SRD 5.1 / 2014-style ritual casting.
+
+A spell may be ritual-cast only when:
+
+1. the Spell Definition has the **Ritual** property; and
+2. the caster has an applicable feature permitting ritual casting.
+
+Ritual casting does not consume a spell slot.
+
+Casting a spell as a ritual normally adds **10 minutes** to the spell's normal casting time.
+
+For example:
+
+```text
+Normal Casting Time:
+1 Action
+
+Ritual Casting Time:
+10 Minutes + 1 Action
+```
+
+Ritual eligibility is determined mechanically rather than by AI judgment.
+
+---
+
+## 7J.4 Wizard Ritual Casting
+
+Wizard ritual casting follows the SRD 5.1 / 2014-style model.
+
+A Wizard may ritual-cast an eligible Wizard spell when:
+
+* the spell has the Ritual property;
+* the spell exists in the Wizard's spellbook;
+* the character otherwise satisfies the applicable ritual-casting requirements.
+
+The spell does **not** need to be currently prepared.
+
+For example:
+
+```text
+Spellbook:
+Detect Magic ✓
+
+Prepared:
+Detect Magic ✗
+
+Ritual:
+Yes
+
+Result:
+Ritual casting permitted.
+```
+
+The same spell would still normally need to be prepared for ordinary spell-slot casting.
+
+This preserves the mechanical value of the Wizard's spellbook beyond its role in daily spell preparation.
+
+---
+
+## 7J.5 Cleric Ritual Casting
+
+Cleric ritual casting follows the applicable SRD 5.1 / 2014-style model.
+
+A Cleric may ritual-cast an eligible Cleric spell only when:
+
+* the spell has the Ritual property;
+* the spell is currently prepared;
+* the character otherwise satisfies the applicable ritual-casting requirements.
+
+Merely having the spell on the Cleric spell list does not make it available for ritual casting.
+
+This preserves the distinction between Wizard and Cleric ritual systems.
+
+---
+
+## 7J.6 Ritual Casting and Campaign Time
+
+Ritual casting advances RealmWeaver's authoritative campaign clock.
+
+For example:
+
+```text
+Campaign Time:
+14:10
+
+Ritual:
+10 minutes + normal casting time
+
+Campaign Time After Completion:
+approximately 14:20
+```
+
+The precise advancement depends on the spell's normal casting time.
+
+The AI may narrate the ritual and the passage of time, but RealmWeaver determines and records the authoritative time progression.
+
+---
+
+## 7J.7 Ritual Interruption
+
+Rituals use the extended-casting system established in 7D.
+
+A ritual may therefore remain mechanically in progress while its casting time passes.
+
+Relevant interruptions may prevent completion.
+
+RealmWeaver, rather than AI memory, determines:
+
+* whether the ritual began;
+* how much authoritative time passed;
+* whether an interruption occurred;
+* whether the ritual successfully completed.
+
+---
+
+## 7J.8 Ritual Casting UI
+
+When both ordinary and ritual casting are available, the Spells interface should clearly expose both options.
+
+For example:
+
+```text
+Detect Magic
+
+Normal Cast
+Cost: 1st-level Spell Slot
+Time: 1 Action
+
+Ritual Cast
+Cost: No Spell Slot
+Time: 10 Minutes + 1 Action
+
+[Normal Cast] [Ritual Cast]
+```
+
+For Wizards, the ritual option may be available for an eligible spellbook spell even when that spell is not prepared.
+
+The exact presentation is deferred to the UI/UX milestone.
+
+---
+
+## 7J.9 Special Casting Sources
+
+RealmWeaver must support spellcasting sources beyond ordinary class spellcasting.
+
+Potential casting sources include:
+
+* Class
+* Subclass
+* Species
+* Feat
+* Feature
+* Magic item
+* Spell scroll
+* Campaign reward
+* NPC ability
+* Environmental/world effect
+* Other validated content
+
+Different sources may define different resource and eligibility rules.
+
+For example:
+
+```text
+source = MAGIC_ITEM
+
+slot_required = false
+uses_item_charge = true
+```
+
+or:
+
+```text
+source = SPECIES_FEATURE
+
+uses_per_long_rest = 1
+slot_required = false
+```
+
+The exact source data model is deferred to architecture.
+
+---
+
+## 7J.10 Spells vs Magical Features
+
+RealmWeaver distinguishes between an actual **spell** and another ability that happens to be magical.
+
+Conceptually:
+
+```text
+ability_type:
+
+SPELL
+MAGICAL_FEATURE
+NONMAGICAL_FEATURE
+```
+
+This distinction is mechanically important because some rules specifically interact with spells.
+
+Future mechanics may treat actual spells differently from magical features for purposes such as:
+
+* spell slots;
+* components;
+* Counterspell-like interactions;
+* Dispel Magic-like interactions;
+* other spell-specific effects.
+
+RealmWeaver must not force every supernatural ability through the spellcasting system.
+
+---
+
+## 7J.11 Granted and Innate Spellcasting
+
+A class, species, feature, item, or another validated source may grant access to a spell independently of normal class spell access.
+
+For example:
+
+```text
+Granted Spell:
+Misty Step
+
+Source:
+Species Feature
+
+Uses:
+1 / Long Rest
+
+Spell Slot:
+Not Required
+```
+
+Such a grant does not automatically require the character to:
+
+* know the spell normally;
+* prepare the spell normally;
+* consume a normal spell slot;
+
+unless the granting rule explicitly requires those things.
+
+---
+
+## 7J.12 Multiple Casting Methods
+
+A spell may be available through more than one casting method.
+
+For example, a character may be able to cast Misty Step using:
+
+1. a normal spell slot; or
+2. one free use granted by a species feature.
+
+RealmWeaver must represent these casting methods independently.
+
+Conceptually:
+
+```text
+Misty Step
+
+Available Methods:
+
+FEATURE_USE
+remaining = 1
+
+SPELL_SLOT
+2nd-level slot available
+```
+
+The player should choose when the alternatives involve meaningful resource differences.
+
+---
+
+## 7J.13 Spellcasting Ability From Special Sources
+
+A special casting source determines the applicable spellcasting mechanics.
+
+Depending on the source, a spell may use:
+
+* Intelligence;
+* Wisdom;
+* Charisma;
+* the character's normal spellcasting ability;
+* a fixed Spell Save DC;
+* a fixed spell attack modifier;
+* item-defined values;
+* another explicit rule.
+
+RealmWeaver must not assume that every spell cast uses the character's normal class spellcasting ability.
+
+---
+
+## 7J.14 Casting Without Spell Slots
+
+RealmWeaver must not assume that casting a levelled spell always consumes a spell slot.
+
+Instead:
+
+```text
+Cast Source
+↓
+Casting Method
+↓
+Resource Rule
+↓
+Required Cost
+```
+
+A ritual, feature, scroll, or magic item may cast a levelled spell without consuming a normal spell slot.
+
+---
+
+## 7J.15 Free Casting and Other Requirements
+
+A rule allowing a character to cast a spell without spending a spell slot waives only that specific resource requirement unless the rule explicitly says otherwise.
+
+The spell may still require:
+
+* its normal casting time;
+* an appropriate Action/Bonus Action/Reaction;
+* valid targets;
+* valid range;
+* concentration;
+* components where applicable;
+* other spell-specific requirements.
+
+---
+
+## 7J.16 AI and Special Casting
+
+The AI may interpret natural-language intent involving special casting.
+
+For example:
+
+> "I use my racial teleport."
+
+may produce a structured proposal such as:
+
+```text
+action_type = CAST_GRANTED_SPELL
+source = SPECIES_FEATURE
+spell = MISTY_STEP
+```
+
+RealmWeaver then validates:
+
+* that the feature exists;
+* that uses remain;
+* that the action economy permits it;
+* that the destination/target is valid;
+* that all other applicable requirements are satisfied.
+
+The AI does not directly activate the feature or mutate its resources.
+
+---
+
+## 7J.17 Special Casting UI
+
+The Spells interface should expose the source and resource associated with unusual casting methods.
+
+Conceptually:
+
+```text
+SPELLS
+
+CANTRIPS
+Fire Bolt
+Mage Hand
+
+PREPARED
+Magic Missile
+Shield
+
+RITUALS
+Detect Magic
+
+GRANTED
+Misty Step — 1/1 per Long Rest
+
+ITEMS
+Staff of Example — 3 Charges
+```
+
+The exact grouping and presentation is deferred to UI/UX design.
+
+---
+
+## 7J.18 Duplicate Spell Presentation
+
+If the same spell is available from multiple sources, RealmWeaver should avoid unnecessarily displaying confusing duplicate spell entries.
+
+For example:
+
+```text
+Misty Step
+
+Available Casting Methods:
+
+• 2nd-level Spell Slot
+• Species Feature — 1 free use remaining
+```
+
+This preserves mechanical distinctions without creating unnecessary UI duplication.
+
+---
+
+## 7J Approved Decisions
+
+1. Cantrips remain level-0 spells that require no preparation once legitimately known.
+2. Cantrips consume no spell slots but obey all other applicable casting rules.
+3. Cantrip scaling comes from structured Spell Definition data.
+4. RealmWeaver supports the standard character-level cantrip scaling breakpoints through eventual level 20.
+5. V1 supports the required level-5 cantrip scaling breakpoint.
+6. RealmWeaver supports SRD 5.1 / 2014-style ritual casting.
+7. Ritual casting normally adds 10 minutes to the normal casting time.
+8. Ritual casting does not consume a normal spell slot.
+9. Wizards may ritual-cast eligible Wizard spells from their spellbook even when those spells are not prepared.
+10. Clerics may ritual-cast eligible Cleric spells only when those spells are prepared.
+11. Ritual casting advances authoritative campaign time.
+12. Ritual casting may be interrupted using the extended-casting system.
+13. The Spells UI distinguishes normal casting from ritual casting.
+14. RealmWeaver supports multiple spellcasting sources beyond ordinary class casting.
+15. Actual spells remain mechanically distinct from other magical features.
+16. Granted/innate spells may use independent resource and eligibility rules.
+17. A spell may have multiple valid casting methods.
+18. The player controls the casting method when the choice involves meaningful resource differences.
+19. Special casting sources determine their applicable spellcasting ability/DC rules.
+20. Casting a levelled spell does not inherently require consuming a normal spell slot.
+21. Free casting waives only explicitly waived costs/restrictions.
+22. AI may interpret special-casting intent but RealmWeaver validates and resolves it.
+23. Special casting source/resource information should be visible through the Spells UI.
+24. Multiple casting methods for the same spell should be consolidated where practical rather than displayed as confusing duplicates.
+
+---
+
+# 7K — Scrolls, Magical Items & Identification
+
+**Status:** Approved
+
+## 7K.1 Spell Scrolls
+
+Spell scrolls are authoritative inventory items.
+
+A scroll references the spell it contains and stores any scroll-specific mechanical information required by the applicable rules.
+
+Conceptually:
+
+```text
+SpellScroll
+
+spell_id = FIREBALL
+spell_level = 3
+consumable = true
+```
+
+The AI cannot create, consume, restore, duplicate, or otherwise modify authoritative scroll inventory state directly.
+
+---
+
+## 7K.2 Canonical Spell References
+
+A spell scroll should reference RealmWeaver's canonical Spell Definition rather than duplicate the complete spell mechanics.
+
+Conceptually:
+
+```text
+spell_id = FIREBALL
+```
+
+RealmWeaver retrieves the corresponding Spell Definition when resolving the cast.
+
+Scroll-specific overrides or properties remain part of the scroll/item definition.
+
+This prevents inconsistent duplicate versions of the same spell mechanics.
+
+---
+
+## 7K.3 Spell Scroll Eligibility
+
+For V1, spell-scroll usability follows the applicable SRD 5.1 / 2014-style class/spell-list restrictions.
+
+A character may normally use a spell scroll only when the contained spell is available through an applicable spell list/source for that character.
+
+RealmWeaver validates this mechanically.
+
+Features, feats, items, or future content may explicitly override normal scroll eligibility.
+
+---
+
+## 7K.4 Higher-Level Spell Scrolls
+
+When a scroll contains a spell on the character's applicable spell list but at a level higher than the character can normally cast, RealmWeaver supports the standard-style spellcasting ability check.
+
+The check uses:
+
+**DC = 10 + Spell Level**
+
+For example:
+
+```text
+Scroll Spell Level:
+4
+
+Required Check:
+Spellcasting Ability
+
+DC:
+14
+```
+
+RealmWeaver resolves the check using the appropriate spellcasting ability.
+
+Failure is handled according to the applicable adopted scroll rule.
+
+---
+
+## 7K.5 Scroll Resource Consumption
+
+Casting a spell from a scroll does not consume one of the character's normal spell slots unless an explicit rule says otherwise.
+
+The scroll itself is the relevant consumable resource.
+
+Conceptually:
+
+```text
+cast_source = SPELL_SCROLL
+spell_slot_cost = NONE
+resource_cost = SCROLL
+```
+
+The scroll is removed/consumed only according to the applicable committed scroll-use result.
+
+---
+
+## 7K.6 Scroll-Specific Spell Mechanics
+
+Spell-scroll attack modifiers, Spell Save DCs, and other scroll-specific values are determined from structured item/rules data.
+
+RealmWeaver must not assume that a scroll always uses the same attack modifier or Spell Save DC as the character's ordinary prepared spellcasting.
+
+The AI does not calculate or invent scroll-specific mechanical values.
+
+---
+
+## 7K.7 Scroll Failure
+
+If scroll casting requires a higher-level ability check and the character fails, RealmWeaver resolves the failure deterministically.
+
+A structured result may conceptually contain:
+
+```text
+SCROLL_CAST_FAILED
+
+reason = SPELLCASTING_ABILITY_CHECK_FAILED
+scroll_consumed = true
+```
+
+where consumption is required by the applicable adopted rule.
+
+The AI may narrate the failure after RealmWeaver resolves it.
+
+---
+
+## 7K.8 Wizard Spellbook Copying
+
+RealmWeaver supports the ability for Wizards to copy eligible Wizard spells from appropriate scrolls into their spellbooks.
+
+The system must support requirements such as:
+
+* spell eligibility;
+* time;
+* monetary/material cost;
+* copying procedure;
+* success/failure where applicable;
+* scroll consumption/destruction where applicable;
+* permanent spellbook addition following successful completion.
+
+The detailed copying procedure should follow the project's adopted SRD 5.1 / 2014-style rule and be finalized alongside spell acquisition/economy implementation.
+
+The architecture must support both meaningful scroll actions:
+
+```text
+[Cast Scroll]
+
+[Copy to Spellbook]
+```
+
+where appropriate.
+
+---
+
+## 7K.9 V1 Magic Item Scope
+
+V1 supports a limited but functional magic-item system.
+
+Initial support should include:
+
+* simple passive magic items;
+* consumable magic items;
+* items with charges;
+* items that cast predefined spells;
+* basic identification;
+* basic attunement where required.
+
+A large, highly complex magic-item catalogue is not required for V1.
+
+The architecture should nevertheless allow later expansion.
+
+---
+
+## 7K.10 Structured Magic Item Effects
+
+Mechanical magic-item properties must be structured RealmWeaver content.
+
+For example:
+
+```text
+MagicItem
+
+charges = 7
+granted_spell = MAGIC_MISSILE
+charge_cost = 1
+recharge_rule = DAWN
+```
+
+The AI may describe and roleplay the item but cannot independently determine its mechanical effects.
+
+---
+
+## 7K.11 Item Charges
+
+Items may maintain authoritative charge state.
+
+Relevant data may include:
+
+```text
+current_charges
+maximum_charges
+charge_cost_per_use
+recharge_rule
+```
+
+Item activation follows:
+
+**Validate → commit activation → consume charges → resolve effect**
+
+Invalid or cancelled item uses do not consume charges.
+
+---
+
+## 7K.12 Recharge Rules
+
+Magic-item charges may recover according to structured triggers such as:
+
+* dawn;
+* long rest;
+* short rest;
+* daily reset;
+* another explicit event.
+
+RealmWeaver resolves recharge events through campaign time, rest systems, or other deterministic events.
+
+The AI cannot arbitrarily restore charges.
+
+---
+
+## 7K.13 Items That Cast Spells
+
+Magic items that cast actual spells reuse RealmWeaver's normal spell-resolution engine.
+
+Conceptually:
+
+```text
+MAGIC ITEM
+↓
+GRANTED CAST
+↓
+SPELL DEFINITION
+↓
+SPELL ENGINE
+```
+
+The item's casting method determines relevant overrides such as:
+
+* whether a spell slot is required;
+* charge cost;
+* attack modifier;
+* Spell Save DC;
+* component exceptions;
+* other explicit item rules.
+
+RealmWeaver must not maintain an independent duplicate spell engine for magic items.
+
+---
+
+## 7K.14 Identification States
+
+RealmWeaver supports item identification states including:
+
+```text
+UNIDENTIFIED
+PARTIALLY_IDENTIFIED
+IDENTIFIED
+```
+
+The player's knowledge of an item is distinct from RealmWeaver's authoritative internal item definition.
+
+---
+
+## 7K.15 Unidentified Items
+
+An unidentified magic item exposes only information the character can reasonably know.
+
+For example:
+
+```text
+Ornate Silver Ring
+
+Status:
+Unidentified
+```
+
+Hidden mechanical information such as:
+
+* bonuses;
+* charges;
+* spells;
+* special abilities;
+* curses;
+* other concealed properties
+
+must not automatically appear to the player.
+
+---
+
+## 7K.16 System Knowledge and Player Knowledge
+
+RealmWeaver and the AI orchestration layer may have access to an item's complete mechanical definition when required for internal operation.
+
+Player-facing narration and UI must respect the character's current knowledge/identification state.
+
+### Principle
+
+**System knowledge may exceed player knowledge; player-facing narration must respect discovery state.**
+
+The AI must not leak hidden item information simply because it exists in supplied system context.
+
+---
+
+## 7K.17 Identification Methods
+
+V1 should support appropriate identification routes such as:
+
+* an applicable identification spell;
+* examination/rest where allowed by the adopted baseline;
+* an NPC expert or service;
+* a quest or story event;
+* another validated method.
+
+The AI may propose narrative opportunities for identification.
+
+For example, an NPC may offer identification services for a price.
+
+The item's identification state changes only after RealmWeaver validates and commits the relevant action.
+
+---
+
+## 7K.18 Partial Identification
+
+RealmWeaver supports partial identification architecturally.
+
+An item may reveal information progressively.
+
+For example:
+
+```text
+Known:
+The sword is magical.
+
+Unknown:
+Exact bonus
+Special ability
+Hidden property
+Curse
+```
+
+V1 does not require extensive use of partial identification, but the underlying system should not prevent it.
+
+---
+
+## 7K.19 Cursed Items
+
+RealmWeaver should support cursed items architecturally while keeping V1 cursed-item content limited.
+
+A curse may:
+
+* hide properties;
+* activate on use or equipment;
+* create persistent effects;
+* interfere with item removal;
+* impose other structured consequences.
+
+Curse state is authoritative persistent game state.
+
+The AI cannot invent, remove, or alter a mechanical curse without a validated game event.
+
+---
+
+## 7K.20 Attunement
+
+RealmWeaver supports basic SRD 5.1 / 2014-style attunement where required by included V1 magic items.
+
+An item may contain data such as:
+
+```text
+attunement_required = true
+attuned = false
+```
+
+RealmWeaver enforces the applicable normal attunement limit.
+
+The system should avoid making V1 dependent on a large attunement-heavy item catalogue.
+
+---
+
+## 7K.21 Attunement Process
+
+Attunement uses authoritative campaign time/rest mechanics where applicable.
+
+The AI may narrate the character studying or bonding with the item.
+
+RealmWeaver determines:
+
+* whether attunement requirements are satisfied;
+* whether sufficient time/activity occurred;
+* whether the attunement limit permits another item;
+* when the state transition completes.
+
+---
+
+## 7K.22 Persistent Magic Item State
+
+Magic-item state persists across campaign saves and reloads.
+
+Relevant persistent state may include:
+
+* item identity;
+* owner;
+* location;
+* charges;
+* remaining uses;
+* identification state;
+* discovered properties;
+* attunement;
+* curse state;
+* active effects;
+* other relevant state.
+
+An item must not acquire different mechanics simply because a campaign is reopened or AI context changes.
+
+---
+
+## 7K.23 AI and Magic Item Loot
+
+The AI may propose that the characters discover magical loot.
+
+Mechanically significant magic items must then be materialized from:
+
+* predefined validated content;
+* validated loot tables;
+* campaign-specific structured content;
+* another approved content-generation system.
+
+The AI cannot directly invent arbitrary authoritative bonuses or item mechanics during ordinary narration.
+
+---
+
+## 7K.24 Custom Magic Items
+
+Future RealmWeaver versions may support AI-assisted custom magic items.
+
+The AI may propose:
+
+* concept;
+* appearance;
+* history;
+* intended abilities;
+* thematic properties.
+
+However, the item becomes mechanically authoritative only after RealmWeaver creates and validates a structured item definition.
+
+Such definitions may eventually contain:
+
+* rarity;
+* effects;
+* charges;
+* granted spells;
+* attunement;
+* restrictions;
+* value;
+* lore;
+* source/version.
+
+A full custom-item editor/generator is not required for V1.
+
+---
+
+## 7K.25 Magic Item UI
+
+The Inventory interface should expose relevant magic-item actions without permanently occupying narrative space.
+
+Examples:
+
+```text
+Wand of Example
+Rare Wand
+
+Charges: 4 / 7
+Attuned ✓
+
+[Use]
+[Details]
+```
+
+Unidentified:
+
+```text
+Runed Silver Ring
+
+Unidentified
+
+[Examine]
+```
+
+Spell scroll:
+
+```text
+Scroll of Fireball
+
+3rd-level Spell
+Consumable
+
+[Cast]
+[Details]
+```
+
+Eligible Wizard scroll:
+
+```text
+[Cast]
+[Copy to Spellbook]
+```
+
+Exact presentation is deferred to UI/UX design.
+
+---
+
+## 7K Approved Decisions
+
+1. Spell scrolls are authoritative consumable inventory items.
+2. Scrolls reference canonical Spell Definitions rather than duplicating complete spell mechanics.
+3. Scroll usability follows applicable class/spell-list/access rules.
+4. Higher-level scroll use may require the standard-style spellcasting ability check.
+5. The higher-level scroll check uses DC 10 + spell level.
+6. Scroll casting does not normally consume a character's spell slots.
+7. Scroll-specific attack/DC mechanics come from structured item/rules data.
+8. Failed higher-level scroll use is resolved deterministically, including scroll consumption where applicable.
+9. Wizards may copy eligible Wizard spells from scrolls into their spellbooks.
+10. V1 supports a limited but functional magic-item system.
+11. Magic-item mechanics are structured and authoritative.
+12. Magic items may track charges and recharge rules.
+13. Charges mutate only after validated committed use.
+14. Recharge uses deterministic campaign-time/rest/event rules.
+15. Magic items that cast spells reuse RealmWeaver's existing spell engine.
+16. RealmWeaver supports unidentified, partially identified, and identified item states.
+17. Player-facing information respects item discovery/identification state.
+18. System/AI knowledge may exceed player knowledge but cannot leak hidden properties through narration.
+19. Identification may occur through validated spells, examination/rest, NPC services, story mechanisms, or other approved methods.
+20. Partial identification is supported architecturally.
+21. Cursed items are supported architecturally but remain limited in V1 content.
+22. Basic attunement is supported where required by included V1 items.
+23. Attunement state and limits are deterministic and persistent.
+24. Magic-item state persists across campaign saves.
+25. AI may propose magical loot, but mechanical items must be materialized from validated structured content.
+26. Future custom magic items may be AI-assisted but require structured validation before gaining mechanical authority.
+27. Inventory UI exposes contextually appropriate actions such as Use, Cast, Copy to Spellbook, Examine, and Details.
+
+---
+
+# 7L — AI Spellcasting, Validation & State Integrity
+
+**Status:** Approved
+
+## 7L.1 Mechanical Authority
+
+The AI Dungeon Master cannot directly modify authoritative mechanical game state.
+
+Examples of authoritative state include:
+
+* HP;
+* spell slots;
+* prepared spells;
+* conditions;
+* concentration;
+* inventory;
+* magic-item charges;
+* position;
+* campaign time;
+* NPC HP;
+* NPC spell resources;
+* ongoing effects.
+
+The AI produces narrative, interpretation, recommendations, tactical choices, or structured proposals.
+
+RealmWeaver validates and commits mechanical changes.
+
+---
+
+## 7L.2 NPCs Follow the Rules
+
+AI-controlled NPCs and enemies must obey the same applicable mechanical rules as player characters.
+
+An NPC spellcaster must obey applicable:
+
+* spell access;
+* spell resources;
+* action economy;
+* concentration;
+* range;
+* targeting;
+* components;
+* conditions;
+* line of sight;
+* reactions;
+* duration/effect rules.
+
+The AI cannot grant an NPC additional resources or abilities because they would be narratively convenient.
+
+### Principle
+
+**AI chooses strategy. RealmWeaver determines legality and outcome.**
+
+---
+
+## 7L.3 NPC Mechanical State
+
+An NPC that becomes mechanically relevant must possess enough authoritative mechanical state for RealmWeaver to validate its actions.
+
+A spellcasting NPC may require state such as:
+
+```text
+spellcasting_ability
+spell_attack_modifier
+spell_save_dc
+available_spells
+spell_slots/resources
+concentration
+conditions
+```
+
+The AI cannot treat an NPC as possessing a spell or resource that is absent from authoritative mechanical state.
+
+The complete NPC system is specified separately.
+
+---
+
+## 7L.4 NPC Mechanical Materialisation
+
+Not every narrative NPC requires a complete mechanical profile immediately.
+
+A lightweight NPC may initially contain primarily narrative/persistent information.
+
+When that NPC becomes mechanically relevant — for example by:
+
+* entering combat;
+* casting a spell;
+* joining the party;
+* becoming a recurring mechanically significant character;
+
+RealmWeaver must ensure that sufficient authoritative mechanical state exists before resolving the action.
+
+Conceptually:
+
+```text
+Narrative NPC
+↓
+Mechanical relevance detected
+↓
+NPC materialisation
+↓
+Validated mechanical archetype/content
+↓
+Persistent mechanical profile
+```
+
+Once materialised, the NPC's authoritative mechanics persist.
+
+Detailed NPC materialisation belongs to the later NPC/world-design section.
+
+---
+
+## 7L.5 AI-Proposed NPC Archetypes
+
+The AI may propose contextually appropriate NPC archetypes.
+
+For example:
+
+```text
+Narrative Role:
+Experienced Royal Mage
+
+AI Proposal:
+VETERAN_MAGE
+```
+
+RealmWeaver may use this proposal to select or construct validated mechanical content.
+
+The AI cannot directly assign arbitrary authoritative statistics and abilities without RealmWeaver validation.
+
+---
+
+## 7L.6 AI NPC Tactical Decisions
+
+The AI should control intelligent tactical and narrative decisions for NPCs.
+
+For example, the AI may determine that an enemy mage wants to cast Hold Person on a Fighter.
+
+That decision becomes a proposed action:
+
+```text
+actor = ENEMY_MAGE
+action = CAST_SPELL
+spell = HOLD_PERSON
+target = FIGHTER
+```
+
+RealmWeaver then validates and resolves the proposal.
+
+The AI controls **intent and strategy**.
+
+RealmWeaver controls **legality and mechanical outcome**.
+
+---
+
+## 7L.7 Invalid AI Actions
+
+If the AI proposes an invalid NPC action, RealmWeaver rejects the proposal using a structured reason.
+
+For example:
+
+```text
+INVALID_ACTION
+
+reason = NO_VALID_SPELL_SLOT
+```
+
+The orchestration layer may allow the AI to choose another valid action without exposing the internal failure directly to the player.
+
+The player should normally experience the final legitimate NPC action rather than technical orchestration errors.
+
+---
+
+## 7L.8 Bounded AI Retries and Fallbacks
+
+RealmWeaver must prevent infinite or excessive AI replanning loops.
+
+AI-controlled action retries should therefore be bounded.
+
+After repeated invalid proposals, RealmWeaver may use an appropriate deterministic safe fallback such as:
+
+* a valid basic attack;
+* movement;
+* Dodge;
+* another known legal action.
+
+The exact retry limit and fallback-selection algorithm are deferred to architecture/configuration.
+
+---
+
+## 7L.9 Legal-Action Context
+
+Where practical, RealmWeaver should reduce invalid AI proposals by supplying the AI with currently legal or relevant options.
+
+For example:
+
+```text
+AVAILABLE ACTIONS
+
+Fire Bolt
+Valid Targets: Fighter, Rogue
+
+Hold Person
+Valid Targets: Fighter
+
+Magic Missile
+Valid Targets: Fighter, Rogue
+
+Movement
+Available
+
+Dodge
+Available
+```
+
+The AI may then choose among valid options according to NPC personality, goals, tactics, and narrative circumstances.
+
+This principle should reduce:
+
+* invalid proposals;
+* retries;
+* token usage;
+* latency.
+
+The final action-generation architecture is deferred.
+
+---
+
+## 7L.10 Relevant AI Context
+
+RealmWeaver should not automatically provide the LLM with the entire mechanical database or campaign state for every action.
+
+Where practical, the orchestration layer supplies relevant structured context.
+
+For example:
+
+```text
+NPC:
+Necromancer
+
+Goal:
+Escape while delaying players.
+
+Available Actions:
+Ray of Frost
+Hold Person
+Dash
+Disengage
+
+Condition:
+Bloodied
+
+Relevant Positions:
+Fighter — Near
+Rogue — Short
+Exit — Long
+```
+
+Context-selection and token-management strategy are deferred to the AI architecture milestone.
+
+---
+
+## 7L.11 Natural-Language Player Casting
+
+Players may describe spellcasting through natural language.
+
+For example:
+
+> "I blast the closest goblin with Fire Bolt."
+
+The interpretation layer may convert this into:
+
+```text
+action = CAST_SPELL
+spell = FIRE_BOLT
+target = NEAREST_GOBLIN
+```
+
+RealmWeaver resolves references such as `NEAREST_GOBLIN` against authoritative campaign/combat state and validates the resulting action.
+
+AI interpretation does not itself execute the spell.
+
+---
+
+## 7L.12 Meaningful Player Ambiguity
+
+RealmWeaver should not silently infer mechanically significant decisions when player intent is materially ambiguous.
+
+For example:
+
+> "I burn the goblins."
+
+may correspond to several available spells with substantially different:
+
+* resources;
+* targets;
+* areas;
+* risks;
+* effects.
+
+RealmWeaver should request clarification before making an irreversible or significant choice.
+
+### Principle
+
+**Never infer an irreversible or significant resource decision when player intent is materially ambiguous.**
+
+---
+
+## 7L.13 Low-Risk Contextual Interpretation
+
+Not every minor ambiguity requires a player prompt.
+
+Where intent is obvious, low-risk, and contextually supported, the AI may propose the likely interpretation.
+
+RealmWeaver still validates that interpretation.
+
+The exact confidence/ambiguity mechanism is deferred to AI architecture.
+
+---
+
+## 7L.14 Structured UI Casting
+
+Structured UI actions may bypass AI intent interpretation entirely.
+
+For example:
+
+```text
+Spells
+↓
+Fireball
+↓
+Cast
+↓
+3rd-level Slot
+↓
+Area B
+```
+
+can enter the deterministic rules pipeline directly.
+
+Conceptually:
+
+```text
+Structured UI
+↓
+Rules Engine
+↓
+Mechanical Resolution
+↓
+AI Narration
+```
+
+This should reduce unnecessary LLM calls and improve responsiveness.
+
+---
+
+## 7L.15 Authoritative Spell Resolution
+
+After validation, RealmWeaver resolves the spell mechanically.
+
+A complex cast may involve:
+
+```text
+Validate Cast
+↓
+Determine Targets
+↓
+Resolve Attack/Saves
+↓
+Roll Damage/Healing
+↓
+Apply Resistance/Immunity/Vulnerability
+↓
+Update HP
+↓
+Apply Conditions
+↓
+Trigger Concentration Checks
+↓
+Create/Remove Ongoing Effects
+↓
+Consume Resources
+↓
+Commit State
+```
+
+The AI receives the resolved result afterward.
+
+---
+
+## 7L.16 AI Must Respect Mechanical Facts
+
+Resolved mechanical results are authoritative facts.
+
+If RealmWeaver determines:
+
+```text
+Goblin A:
+DEAD
+
+Goblin B:
+7 HP
+
+Kael:
+24 HP
+```
+
+the AI cannot narrate Goblin A surviving or otherwise contradict those states.
+
+AI orchestration/prompts should explicitly constrain narration to authoritative resolved facts.
+
+---
+
+## 7L.17 Narrative Freedom
+
+Mechanical authority should not unnecessarily restrict narrative creativity.
+
+Given:
+
+```text
+Goblin A dies from Fireball.
+```
+
+the AI may creatively describe how that event looks, sounds, or affects the scene.
+
+### Principle
+
+**Mechanics constrain facts; AI remains free to narrate those facts creatively.**
+
+---
+
+## 7L.18 Magical Rewards and State Changes
+
+Narrative statements do not automatically create mechanical rewards.
+
+For example:
+
+> "The ancient shrine fills you with magical power."
+
+does not automatically grant:
+
+* ability-score increases;
+* spell slots;
+* spells;
+* resistances;
+* permanent bonuses.
+
+A mechanically meaningful reward must become a structured proposed effect/change and be validated by RealmWeaver before persistent state changes.
+
+---
+
+## 7L.19 AI-Created World Magic
+
+The AI may freely create narrative magical phenomena.
+
+If such phenomena gain mechanical consequences, those consequences must become structured RealmWeaver effects.
+
+For example:
+
+```text
+WorldEffect
+
+source = ARCANE_STORM
+scope = RUINS
+
+effect:
+LIGHTNING_DAMAGE_MODIFIER
+
+duration = ...
+```
+
+### Principle
+
+**AI may freely invent fiction. AI may not freely invent authoritative mechanical rules.**
+
+---
+
+## 7L.20 Narrative-Only Magical Effects
+
+Purely narrative magical flavour does not require mechanical state.
+
+For example:
+
+> Tiny blue sparks dance across the wizard's fingertips as she becomes irritated.
+
+does not require a database effect unless those sparks have actual mechanical consequences.
+
+This distinction prevents RealmWeaver from over-modeling harmless narrative detail.
+
+---
+
+## 7L.21 State-Change Provenance
+
+Important mechanical state changes should retain their source/provenance where useful.
+
+For example:
+
+```text
+HP:
+30 → 18
+
+source = FIREBALL
+cast_id = ...
+actor = ENEMY_MAGE
+```
+
+or:
+
+```text
+condition = PARALYZED
+source = HOLD_PERSON
+```
+
+or:
+
+```text
+3rd-level Spell Slots:
+2 → 1
+
+source = FIREBALL_CAST
+```
+
+This supports:
+
+* debugging;
+* campaign history;
+* AI context;
+* rule auditing;
+* save recovery;
+* future replay/undo tooling.
+
+The exact event/provenance model is deferred to architecture.
+
+---
+
+## 7L.22 Mechanical Event History
+
+RealmWeaver should maintain a lightweight mechanical event history separate from narrative prose.
+
+For example:
+
+```text
+ROUND 4
+
+Enemy Mage:
+CAST Hold Person → Fighter
+
+Fighter:
+WIS Save = 11
+DC = 15
+Result = FAILURE
+
+Condition:
+PARALYZED
+```
+
+The event history does not need to permanently occupy the campaign interface.
+
+It primarily supports deterministic state tracking, debugging, auditing, and context reconstruction.
+
+---
+
+## 7L.23 Narrative vs Mechanical History
+
+RealmWeaver conceptually maintains two different forms of campaign history.
+
+### Narrative History
+
+Story-focused information such as:
+
+> The mage raises a skeletal hand and whispers a binding incantation.
+
+Useful for:
+
+* campaign recap;
+* AI narrative memory;
+* story continuity.
+
+### Mechanical History
+
+Structured information such as:
+
+```text
+CAST Hold Person
+Target = Fighter
+WIS Save = Failed
+Condition = Paralyzed
+```
+
+Useful for:
+
+* state reconstruction;
+* debugging;
+* rules auditing;
+* mechanical context;
+* persistence.
+
+These histories serve different purposes and should remain distinguishable.
+
+---
+
+## 7L.24 Persistent State vs AI Memory
+
+RealmWeaver must never depend on the AI remembering authoritative mechanical information across interactions or sessions.
+
+Examples include:
+
+* remaining spell slots;
+* HP;
+* lost equipment;
+* concentration;
+* active conditions;
+* item charges;
+* NPC resources;
+* campaign time.
+
+### Principle
+
+**The AI remembers the story through supplied context. RealmWeaver remembers the game through persistent state.**
+
+---
+
+## 7L.25 Save/Reload Integrity
+
+A saved campaign must reconstruct mechanically relevant state independently of AI memory.
+
+This includes state such as:
+
+* player HP/resources;
+* NPC HP/resources;
+* prepared spells;
+* spell slots;
+* inventory;
+* scrolls;
+* magic-item charges;
+* concentration;
+* conditions;
+* ongoing effects;
+* campaign time;
+* relevant positions;
+* persistent NPC state.
+
+RealmWeaver can then generate appropriate narrative/mechanical context for the AI.
+
+---
+
+## 7L.26 LLM Round Trips
+
+RealmWeaver should minimize LLM round trips.
+
+Where practical, an ordinary player action should conceptually follow:
+
+```text
+PLAYER ACTION
+↓
+Interpret Intent, if necessary
+↓
+DETERMINISTIC RULES ENGINE
+↓
+RESOLVE AND COMMIT
+↓
+MAIN AI DM GENERATION
+↓
+PLAYER RESPONSE
+```
+
+Architectures requiring repeated AI → Rules → AI → Rules loops for ordinary actions should be avoided where possible.
+
+A practical architecture target is approximately **one main AI Dungeon Master generation call per completed player action**, with additional model calls only where genuinely necessary.
+
+---
+
+## 7L.27 Streaming AI Responses
+
+Once mechanical resolution has completed and the AI Dungeon Master generation begins, RealmWeaver should support response streaming where the selected model/provider permits it.
+
+This allows players to begin reading the narrative before the entire generation has completed.
+
+Streaming is an architecture/UI requirement rather than a game mechanic.
+
+---
+
+## 7L.28 Fast Deterministic Validation
+
+Routine mechanical validation should execute through backend/rules logic without LLM calls.
+
+Examples include:
+
+* spell prepared;
+* spell slot available;
+* action available;
+* range valid;
+* target valid;
+* condition blocking;
+* required component available;
+* concentration state;
+* item charges.
+
+### Performance Principle
+
+**Rules validation should be cheap; generative AI should remain the primary variable-latency component.**
+
+---
+
+## 7L.29 Narration Failure Recovery
+
+AI narration failure must not require mechanical actions to be rerolled or re-resolved.
+
+For example:
+
+```text
+Player Casts Fireball
+↓
+Mechanics Resolve
+↓
+Authoritative State Commits
+↓
+AI Generation Times Out
+```
+
+RealmWeaver already knows what happened.
+
+The system should be able to retry narration using the same resolved mechanical event.
+
+Dice results, damage, resources, and state must not change because narration generation failed.
+
+---
+
+## 7L.30 AI Failure and State Integrity
+
+Failures such as:
+
+* provider outage;
+* timeout;
+* network failure;
+* invalid model response;
+* malformed structured output;
+* other AI errors
+
+must not corrupt authoritative campaign state.
+
+Mechanical transactions and AI narration should therefore be separable.
+
+The exact transactional architecture is deferred to the architecture milestone.
+
+---
+
+## 7L.31 Duplicate Action Protection
+
+RealmWeaver must prevent accidental duplicate action resolution.
+
+For example, a frontend/network retry must not cause the same Fireball cast to:
+
+* resolve twice;
+* consume two spell slots;
+* deal damage twice.
+
+Architecture should provide unique action/cast identities or equivalent idempotency protection.
+
+Conceptually:
+
+```text
+action_id = abc123
+```
+
+If an already-resolved action is received again, RealmWeaver should return/reuse the existing resolution rather than mechanically executing it again.
+
+---
+
+## 7L.32 Deterministic Rules vs Random Outcomes
+
+RealmWeaver being deterministic about mechanics does not mean every outcome is predetermined.
+
+For example:
+
+```text
+Spell Attack Modifier = +7
+Target AC = 16
+```
+
+is deterministic.
+
+The resulting d20 roll may be random.
+
+Once generated, however, the dice result becomes authoritative for that resolved action.
+
+### Principle
+
+**Rules are deterministic; uncertain outcomes may use randomness; resolved outcomes become authoritative state/history.**
+
+---
+
+## 7L.33 Magic Authority Hierarchy
+
+RealmWeaver follows the following authority hierarchy for player spellcasting:
+
+```text
+PLAYER
+chooses intention
+        ↓
+AI / INTERPRETATION LAYER
+interprets or proposes where necessary
+        ↓
+REALMWEAVER
+validates mechanics
+        ↓
+RULES + CONTENT
+determine legality
+        ↓
+DICE
+determine uncertain outcomes
+        ↓
+REALMWEAVER
+commits authoritative state
+        ↓
+AI DUNGEON MASTER
+narrates the resolved result
+```
+
+For AI-controlled NPCs:
+
+```text
+AI
+chooses NPC intention/strategy
+        ↓
+REALMWEAVER
+validates mechanics
+        ↓
+RULES + DICE
+resolve outcome
+        ↓
+REALMWEAVER
+commits authoritative state
+        ↓
+AI
+narrates the result
+```
+
+This hierarchy is a core RealmWeaver architectural principle.
+
+---
+
+## 7L Approved Decisions
+
+1. AI cannot directly modify authoritative mechanical state.
+2. AI-controlled NPCs obey the same applicable rules as player characters.
+3. Mechanically relevant NPC spellcasters require authoritative mechanical state.
+4. Lightweight NPCs may be mechanically materialized when they become mechanically relevant.
+5. Full NPC materialisation design is deferred to the dedicated NPC/world section.
+6. AI may propose NPC archetypes, but RealmWeaver assigns/validates authoritative mechanics.
+7. AI chooses intelligent NPC strategy/actions; RealmWeaver determines legality and outcome.
+8. Invalid AI actions are rejected and may be replanned without exposing internal technical failures to the player.
+9. AI action retries must be bounded and support deterministic safe fallback behaviour.
+10. RealmWeaver should preferentially supply AI with valid/relevant available actions.
+11. AI receives only mechanically and narratively relevant context where practical.
+12. Natural-language player actions become structured proposed actions before mechanical resolution.
+13. Materially ambiguous player decisions involving significant resources/targets require clarification.
+14. Low-risk, contextually obvious ambiguity may be resolved through interpretation.
+15. Structured UI actions may bypass AI intent interpretation.
+16. RealmWeaver performs authoritative spell resolution before AI narration.
+17. AI narration cannot contradict resolved mechanical facts.
+18. AI retains creative narrative freedom around authoritative facts.
+19. Narrative magical events cannot directly grant mechanical rewards.
+20. AI-created world magic requires structured effects before gaining mechanical consequences.
+21. Purely narrative magical flavour requires no mechanical state.
+22. Important state changes should retain provenance/source information.
+23. RealmWeaver should maintain a mechanical event history separate from narrative prose.
+24. Narrative and mechanical histories serve different purposes and remain distinguishable.
+25. Persistent mechanical game state is RealmWeaver's responsibility, not AI memory.
+26. Save/reload reconstructs mechanical state independently of AI memory.
+27. RealmWeaver minimizes LLM round trips, targeting approximately one main AI DM generation call per completed player action where practical.
+28. AI narrative generation should support streaming where possible.
+29. Routine rules validation should not require LLM calls.
+30. Failed AI narration must be retryable without rerolling or mechanically re-resolving an action.
+31. AI/provider failures cannot corrupt authoritative game state.
+32. Duplicate requests must not resolve the same mechanical action or consume resources multiple times.
+33. Rules are deterministic while dice may introduce randomness; resolved outcomes become authoritative.
+34. RealmWeaver follows the Player/AI Proposal → Rules → Dice → Persistent State → AI Narration authority hierarchy.
+
+---
+
+# Group 7 — Magic Completion
+
+**Status:** COMPLETE — APPROVED
+
+All M2.1 Group 7 subsections have been reviewed and approved:
+
+| Section | Topic                                                  | Status       |
+| ------- | ------------------------------------------------------ | ------------ |
+| 7A      | Spellcasting Core & Spell Data Model                   | **Approved** |
+| 7B      | Spellcasters, Known Spells & Prepared Spells           | **Approved** |
+| 7C      | Spell Slots & Resource Consumption                     | **Approved** |
+| 7D      | Casting a Spell & Action Economy                       | **Approved** |
+| 7E      | Spell Attacks, Saving Throws & Spell Save DC           | **Approved** |
+| 7F      | Range, Targets, Areas & Distance Bands                 | **Approved** |
+| 7G      | Components, Spellcasting Focuses & Material Components | **Approved** |
+| 7H      | Concentration, Duration & Ongoing Effects              | **Approved** |
+| 7I      | Spell Damage, Healing & Conditions                     | **Approved** |
+| 7J      | Cantrips, Ritual Casting & Special Casting             | **Approved** |
+| 7K      | Scrolls, Magical Items & Identification                | **Approved** |
+| 7L      | AI Spellcasting, Validation & State Integrity          | **Approved** |
+
+## Group 7 Architectural Requirements Identified
+
+Group 7 established several requirements whose detailed implementation is intentionally deferred to later architecture/design milestones:
+
+* authoritative persistent campaign time;
+* generic resource system;
+* generic ongoing-effect system;
+* shared damage/condition system;
+* shared positioning/range system;
+* NPC mechanical materialisation;
+* structured action proposals;
+* AI legal-action generation/context;
+* mechanical event history;
+* narrative vs mechanical history;
+* state-change provenance;
+* transactional mechanical resolution;
+* action idempotency;
+* AI failure recovery;
+* LLM round-trip minimisation;
+* AI response streaming;
+* relevant-context selection/token management.
+
+These are **requirements**, not final implementation designs. Their architecture must be designed explicitly during the appropriate later milestones rather than assumed from the conceptual examples in this document.
+
+## Core Group 7 Principle
+
+The complete Magic system follows RealmWeaver's central authority model:
+
+> **AI tells the story. Rules decide what happens.**
+
+> **AI proposes. RealmWeaver validates.**
+
+The AI Dungeon Master controls narrative interpretation, roleplay, tactical intent, recommendations, and storytelling.
+
+RealmWeaver's deterministic systems remain authoritative over legality, resources, dice resolution, mechanical effects, persistent state, and game-rule enforcement.
+
+---
 
 # Cross-System Architecture Notes Identified During Group 7
 
@@ -3169,23 +5149,3 @@ Structured UI actions may bypass AI intent interpretation entirely and enter the
 
 The complete AI orchestration, context-management, latency, streaming, and model-selection strategy is deferred to the architecture/AI milestones.
 
----
-
-## Group 7 Progress
-
-| Section | Topic                                                  | Status                               |
-| ------- | ------------------------------------------------------ | ------------------------------------ |
-| 7A      | Spellcasting Core & Spell Data Model                   | **Approved**                         |
-| 7B      | Spellcasters, Known Spells & Prepared Spells           | **Approved**                         |
-| 7C      | Spell Slots & Resource Consumption                     | **Approved**                         |
-| 7D      | Casting a Spell & Action Economy                       | **Approved** |
-| 7E      | Spell Attacks, Saving Throws & Spell Save DC           | **Approved** |
-| 7F      | Range, Targets, Areas & Distance Bands                 | **Approved** |
-| 7G      | Components, Spellcasting Focuses & Material Components | **Approved** |
-| 7H      | Concentration, Duration & Ongoing Effects              | **Approved** |
-| 7I      | Spell Damage, Healing & Conditions                     | **Approved** |
-| 7J      | Cantrips, Ritual Casting & Special Casting             | Not started                          |
-| 7K      | Scrolls, Magical Items & Identification                | Not started                          |
-| 7L      | AI Spellcasting, Validation & State Integrity          | Not started                          |
-
-**Next design subsection:** 7J — Cantrips, Ritual Casting & Special Casting

@@ -318,7 +318,7 @@ Covers:
 
 ## 4.7 Group 7 — Magic
 
-**Status:** NOT STARTED
+**Status:** APPROVED
 
 Planned specification:
 
@@ -579,10 +579,10 @@ The project should not rely on conversation history as the only record of an app
 * Group 4 — Combat
 * Group 5 — Classes & Progression
 * Group 6 — Equipment & Inventory
+* Group 7 — Magic
 
 ## Not Started
 
-* Group 7 — Magic
 * Group 8 — Conditions & Resting
 * Group 9 — AI / Rules Boundary
 
@@ -607,8 +607,8 @@ M2.1 — V1 Game Rules Specification is complete only when:
 
 Continue with:
 
-> **Group 7 — Magic**
+> **Group 8 — Conditions & Resting**
 
 Planned file:
 
-`07_MAGIC.md`
+`08_CONDITIONS_AND_RESTING.md`
