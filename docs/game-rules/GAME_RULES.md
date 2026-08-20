@@ -4,7 +4,7 @@
 **Status:** M2.1 In Progress
 **Milestone:** M2 — Technical Design & Architecture
 **Primary Rules Baseline:** SRD 5.1 / 2014-style mechanics with explicitly documented RealmWeaver adaptations
-**Last Reviewed:** 13 August 2026
+**Last Reviewed:** 20 August 2026
 
 ---
 

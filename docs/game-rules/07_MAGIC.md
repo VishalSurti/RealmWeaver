@@ -1,6 +1,6 @@
 # 07 — Magic
 
-**Status:** In Progress
+**Status:** Approved
 **Milestone:** M2.1 — Game Rules
 **Rules Baseline:** SRD 5.1 / 2014-style mechanics
 **RealmWeaver Principle:** AI tells the story. Rules decide what happens.
