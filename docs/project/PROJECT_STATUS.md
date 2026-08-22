@@ -1,13 +1,13 @@
 # RealmWeaver — Project Status
 
-**Document Version:** 1.2
-**Last Reviewed:** 20 August 2026
+**Document Version:** 1.3
+**Last Reviewed:** 22 August 2026
 **Overall Status:** Active
 **Current Milestone:** M2 — Technical Design & Architecture
 **Milestone Status:** IN PROGRESS
 **Current Activity:** M2.1 — V1 Game Rules Specification & Rules-Engine Boundary
-**Next Activity:** M2.1 Group 8 - Conditions & Resting
-**Current Progress:** Groups 1–7 APPROVED and documented
+**Next Activity:** Group 6 Amendment — Weapon Mastery, then M2.1 Group 9 — AI / Rules Boundary
+**Current Progress:** Groups 1–8 APPROVED and documented
 
 
 ---
@@ -31,10 +31,15 @@ The following M2.1 rules groups have been approved:
 * Group 5 — Classes & Progression
 * Group 6 — Equipment & Inventory
 * Group 7 - Magic
+* Group 8 — Conditions & Resting
 
 The next activity is:
 
-> **M2.1 Group 8 — Conditions & Resting**
+> **Group 6 Amendment — Weapon Mastery**
+
+After the Weapon Mastery amendment is documented, continue to:
+
+> **M2.1 Group 9 — AI / Rules Boundary**
 
 No production application code has been introduced yet.
 
@@ -309,10 +314,41 @@ Includes:
 * Upcasting
 * Innate Species Magic
 
+### Group 8 — Conditions & Resting
+
+**APPROVED**
+
+Includes:
+
+* Structured Condition Definitions and persistent Condition Instances
+* Standard SRD 5.1 / 2014-style Conditions
+* Condition sources, durations and removal rules
+* Condition immunity
+* Hidden condition / information visibility support
+* Condition persistence across scenes and save/reload
+* Distance-band adaptations for condition mechanics
+* Six-level SRD 5.1 / 2014 Exhaustion system
+* Environmental hazards and validated countermeasures
+* Short Rest rules
+* Hit Dice spending and recovery
+* Long Rest rules
+* Long Rest HP / spell-slot / resource recovery
+* Exhaustion recovery
+* Rest safety and preparation
+* Watches
+* Probabilistic, context-sensitive rest interruptions
+* Persistent authoritative campaign-time requirements
+* World-event scheduling requirements
+* NPC rest / recovery persistence
+* AI / rules authority for Conditions and Resting
+* Mechanical event history and state-change provenance
+* Fast deterministic validation without unnecessary LLM calls
+
 ## Remaining M2.1 Groups
 
-* Group 8 — Conditions & Resting
-* Group 9 — AI/Rules Boundary
+* Group 6 Amendment — Weapon Mastery
+* Group 9 — AI / Rules Boundary
+* Final M2.1 cross-group consistency review
 
 ---
 
@@ -544,8 +580,18 @@ The following principle is approved:
 * Progression
 * Persistent NPC/world state
 * Validation of AI-proposed mechanics
+* Conditions and ongoing effects
+* Exhaustion
+* Hit Dice
+* Rest eligibility and recovery
+* Campaign-time advancement
+* Rest-event probability
+* Environmental-hazard validation
+* Spell resources and spell-state validation
+* Mechanical event history
+* State-change provenance
 
-The detailed contract will be finalised later in M2.1 and M2.6.
+The core authority model is established. Group 9 will consolidate the remaining cross-system AI / Rules Boundary, and M2.6 will define its technical AI orchestration and implementation.
 
 ---
 
@@ -591,7 +637,18 @@ The `main` branch contains:
 
 No production application source code has yet been introduced.
 
-Recent documentation work includes the initial `GAME_RULES.md` M2 specification.
+Recent documentation work includes approved M2.1 rules specifications through Group 8 — Conditions & Resting.
+
+Current detailed rules specifications cover:
+
+* Character Core
+* Checks & Saving Throws
+* Dice & Inspiration
+* Combat
+* Classes & Progression
+* Equipment & Inventory
+* Magic
+* Conditions & Resting
 
 Future development should continue to use:
 
@@ -649,31 +706,36 @@ The level of ceremony should remain appropriate for a solo developer while still
 
 # 17. Immediate Next Action
 
-Continue:
+Before beginning the final main M2.1 rules group, complete:
 
-> **M2.1 — Group 8: Conditions & Resting**
+> **Group 6 Amendment — Weapon Mastery**
 
-Expected topics include:
+The amendment will evaluate the selective adoption of revised Weapon Mastery mechanics as an explicitly documented RealmWeaver exception to the primary SRD 5.1 / 2014 baseline.
 
-* Conditions
-* Condition Duration
-* Short Rest
-* Long Rest
-* Hit Dice Recovery
-* Class Resource Recovery
-* Spell-Slot Recovery
-* Species Rest Traits
-* Stabilisation Recovery
-* Exhaustion
-* Rest Restrictions
-* Interrupted Rest
+Expected areas include:
 
+* Vex
+* Sap
+* Nick
+* Cleave
+* Graze
+* Push
+* Slow
+* Topple
+* Weapon-to-Mastery mapping
+* Class access to Weapon Mastery
+* Distance-band adaptations
+* Condition/effect interactions
+* NPC Weapon Mastery use
+* AI / rules authority
+* V1 scope and balance implications
 
-Once Group 8 is approved:
+Once the Weapon Mastery amendment is approved and documented:
 
-1. Update `GAME_RULES.md`.
-2. Commit the documentation checkpoint where appropriate.
-3. Continue to Group 9 — AI / Rules Boundary.
+1. Update `06_EQUIPMENT_AND_INVENTORY.md` and any affected Combat/Class documentation.
+2. Update `GAME_RULES.md`.
+3. Continue to **Group 9 — AI / Rules Boundary**.
+4. After Group 9, perform the full M2.1 cross-group consistency review.
 
 ---
 
@@ -692,6 +754,8 @@ Required groups:
 * Magic
 * Conditions & Resting
 * AI/Rules Boundary
+
+Before the M2.1 completion gate, the approved **Weapon Mastery amendment** must also be incorporated into all affected Group 4, Group 5, and Group 6 rules documentation.
 
 At M2.1 completion:
 
@@ -747,11 +811,11 @@ At every major milestone:
 
 ## Starting Point
 
-> **M2.1 Group 7 — Magic**
+> **Group 6 Amendment — Weapon Mastery**
 
 ## Current Stopping Point
 
-> **M1 complete. M2 active. M2.1 Groups 1–7 approved and documented. Combat specification complete at the V1 design level.**
+> **M1 complete. M2 active. M2.1 Groups 1–8 approved and documented. Group 8 — Conditions & Resting is complete. Weapon Mastery has been identified as a deliberate rules amendment to resolve before Group 9.**
 
 ## Current Authoritative M2 Specification
 
@@ -761,10 +825,11 @@ At every major milestone:
 
 # 22. Status Summary
 
-**M1 — Product Foundation:** COMPLETE
-**M2 — Technical Design & Architecture:** IN PROGRESS
-**M2.1 — Game Rules Specification:** IN PROGRESS
-**M2.1 Groups 1–7:** APPROVED
-**Current Next Group:** Group 8 — Conditions & Resting
-**Production Coding:** NOT STARTED
+**M1 — Product Foundation:** COMPLETE  
+**M2 — Technical Design & Architecture:** IN PROGRESS  
+**M2.1 — Game Rules Specification:** IN PROGRESS  
+**M2.1 Groups 1–8:** APPROVED  
+**Immediate Next Work:** Group 6 Amendment — Weapon Mastery  
+**Next Main Group:** Group 9 — AI / Rules Boundary  
+**Production Coding:** NOT STARTED  
 **Current Technical Source of Truth:** `docs/game-rules/GAME_RULES.md`
