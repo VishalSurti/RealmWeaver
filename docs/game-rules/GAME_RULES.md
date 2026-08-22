@@ -4,7 +4,7 @@
 **Status:** M2.1 In Progress
 **Milestone:** M2 — Technical Design & Architecture
 **Primary Rules Baseline:** SRD 5.1 / 2014-style mechanics with explicitly documented RealmWeaver adaptations
-**Last Reviewed:** 20 August 2026
+**Last Reviewed:** 22 August 2026
 
 ---
 
@@ -102,6 +102,11 @@ Examples include:
 * Controlled DC categories instead of arbitrary AI-generated DCs
 * Simplified initial class/subclass scope
 * Limited initial reaction support
+* Configurable Full / Simplified spell-component handling
+* Persistent campaign-time requirements
+* Distance-band adaptations for spell areas and Conditions
+* Context-sensitive probabilistic rest interruptions
+* Limited environmental-hazard / countermeasure system
 
 Adaptations must be explicitly documented.
 
@@ -320,54 +325,107 @@ Covers:
 
 **Status:** APPROVED
 
-Planned specification:
+Specification:
 
-`07_MAGIC.md`
+[07_MAGIC.md](./07_MAGIC.md)
 
-Expected topics include:
+Covers:
 
-* Spellcasting
+* Spellcasting Core & Spell Data Model
+* Known / Acquired / Prepared / Castable Spell State
+* Wizard Spellbook
+* Cleric Spell Preparation
 * Spell Slots
-* Prepared Spells
-* Known Spells
-* Spellbook Rules
-* Cantrips
-* Spell Components
-* Concentration
-* Spell Range
-* Spell Targeting
+* Resource Consumption
+* Casting Time & Action Economy
+* Reaction Spells
+* Natural-Language and Structured UI Casting
 * Spell Attacks
+* Spell Save DC
 * Saving Throw Spells
+* Range & Targeting
+* Distance-Band Spell Adaptations
+* Area-of-Effect Resolution
+* Spell Components
+* Full / Simplified Component Campaign Setting
+* Material Components & Spellcasting Focuses
+* Concentration
+* Spell Durations & Ongoing Effects
 * Spell Damage
-* Healing Spells
+* Healing
+* Conditions
+* Cantrips
 * Ritual Casting
-* Upcasting
-* Innate Species Magic
+* Special / Granted Casting
+* Spell Scrolls
+* Magic Items
+* Identification
+* Attunement
+* AI Spellcasting Authority
+* NPC Spellcasting State
+* Persistent Spell / Effect State
+* LLM Round-Trip Minimisation
+* Mechanical Event History
+* AI Failure / Duplicate-Action Safety
 
 ---
 
 ## 4.8 Group 8 — Conditions & Resting
 
-**Status:** NOT STARTED
+**Status:** APPROVED
 
-Planned specification:
+Specification:
 
-`08_CONDITIONS_AND_RESTING.md`
+[08_CONDITIONS_AND_RESTING.md](./08_CONDITIONS_AND_RESTING.md)
 
-Expected topics include:
+Covers:
 
-* Conditions
+* Structured Condition Definitions
+* Persistent Condition Instances
+* Standard SRD 5.1 / 2014 Conditions
+* Condition Sources
 * Condition Duration
-* Short Rest
-* Long Rest
-* Hit Dice Recovery
-* Class Resource Recovery
-* Spell-Slot Recovery
-* Species Rest Traits
-* Stabilisation Recovery
+* Condition Removal
+* Condition Immunity
+* Overlapping Conditions
+* Hidden Conditions / Information Visibility
+* Distance-Band Condition Adaptations
 * Exhaustion
-* Rest Restrictions
-* Interrupted Rest
+* Environmental Hazards
+* Environmental Countermeasures
+* Short Rests
+* Hit Dice Spending
+* Long Rests
+* Hit Dice Recovery
+* Spell-Slot / Resource Recovery
+* Rest Safety
+* Watches
+* Probabilistic Rest Interruptions
+* Rest Event Validation
+* Persistent Campaign-Time Requirements
+* Scheduled World-Event Requirements
+* NPC Rest / Recovery Persistence
+* AI / Rules Authority
+* Mechanical Event History
+* Deterministic Validation and LLM-Call Minimisation
+
+---
+
+### Pending Cross-Group Amendment — Weapon Mastery
+
+**Status:** IDENTIFIED — DESIGN PENDING**
+
+Before Group 9 is completed, RealmWeaver will review Weapon Mastery as a possible deliberate exception to the primary SRD 5.1 / 2014 baseline.
+
+The amendment is expected to affect:
+
+* Group 4 — Combat
+* Group 5 — Classes & Progression
+* Group 6 — Equipment & Inventory
+
+Candidate mastery properties include Vex, Sap, Nick, Cleave, Graze, Push, Slow, and Topple.
+
+No Weapon Mastery mechanics are authoritative until the amendment has been reviewed and approved.
 
 ---
 
@@ -580,10 +638,14 @@ The project should not rely on conversation history as the only record of an app
 * Group 5 — Classes & Progression
 * Group 6 — Equipment & Inventory
 * Group 7 — Magic
+* Group 8 — Conditions & Resting
+
+## Pending Amendment
+
+* Weapon Mastery — affects Groups 4, 5 and 6
 
 ## Not Started
 
-* Group 8 — Conditions & Resting
 * Group 9 — AI / Rules Boundary
 
 ---
@@ -605,10 +667,24 @@ M2.1 — V1 Game Rules Specification is complete only when:
 
 # 14. Next Design Activity
 
-Continue with:
+Complete the pending cross-group amendment:
 
-> **Group 8 — Conditions & Resting**
+> **Weapon Mastery**
 
-Planned file:
+Primary affected specification:
 
-`08_CONDITIONS_AND_RESTING.md`
+`06_EQUIPMENT_AND_INVENTORY.md`
+
+Cross-group review required for:
+
+* `04_COMBAT.md`
+* `05_CLASSES_AND_PROGRESSION.md`
+* `06_EQUIPMENT_AND_INVENTORY.md`
+
+Once the amendment is approved and documented, continue with:
+
+> **Group 9 — AI / Rules Boundary**
+
+Planned Group 9 file:
+
+`09_AI_RULES_BOUNDARY.md`

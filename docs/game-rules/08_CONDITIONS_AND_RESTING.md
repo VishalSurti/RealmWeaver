@@ -1,6 +1,6 @@
 # 08 — Conditions & Resting
 
-**Status:** Approved  
+**Status:** Complete - Approved  
 **Rules Baseline:** SRD 5.1 / 2014-style mechanics  
 **Scope:** RealmWeaver V1, with architecture designed for future expansion
 
@@ -48,7 +48,7 @@ ConditionInstance
 - concentration_dependency
 - visibility
 - metadata
-````
+```
 
 The exact implementation schema is deferred to architecture design.
 
