@@ -436,23 +436,6 @@ Covers:
 * Rest Validation
 * Persistent Rest State
 
----
-
-### Pending Cross-Group Amendment — Weapon Mastery
-
-**Status:** IDENTIFIED — DESIGN PENDING**
-
-Before Group 9 is completed, RealmWeaver will review Weapon Mastery as a possible deliberate exception to the primary SRD 5.1 / 2014 baseline.
-
-The amendment is expected to affect:
-
-* Group 4 — Combat
-* Group 5 — Classes & Progression
-* Group 6 — Equipment & Inventory
-
-Candidate mastery properties include Vex, Sap, Nick, Cleave, Graze, Push, Slow, and Topple.
-
-No Weapon Mastery mechanics are authoritative until the amendment has been reviewed and approved.
 
 ---
 

@@ -1972,7 +1972,7 @@ Selected:
 - Longbow
 - Greatsword
 ```
-he number of selected weapon types may be lower than the character's current capacity.
+The number of selected weapon types may be lower than the character's current capacity.
 
 Unused Mastery Capacity does not provide any mechanical benefit until a valid weapon type is selected.
 
@@ -2109,7 +2109,7 @@ RealmWeaver then allows the player to select one additional eligible weapon type
 
 A capacity increase does not force the player to reselect existing Masteries.
 
-9.1A.8 Postponing a New Mastery Selection
+## 9.1A.8 Postponing a New Mastery Selection
 
 A player may postpone filling newly available Weapon Mastery Capacity.
 
