@@ -4,7 +4,7 @@
 **Status:** APPROVED
 **Milestone:** M2 — Technical Design & Architecture
 **Section:** M2.1 — V1 Game Rules Specification
-**Last Reviewed:** 13 August 2026
+**Last Reviewed:** 23 August 2026
 
 ---
 
@@ -23,6 +23,7 @@ It covers:
 * Movement
 * Opportunity Attacks
 * Attack rolls
+* Weapon Mastery combat integration
 * Armour Class
 * Damage
 * Critical Hits
@@ -184,6 +185,20 @@ The AI may propose whether an interaction is minor or substantial.
 
 The rules system validates the result where required.
 
+### Weapon and Equipment Interaction Amendment
+
+Item possession, equipment state and active wield state are distinct.
+
+A weapon being present in a character's inventory does not automatically mean that it is equipped, ready for immediate use or currently wielded.
+
+Drawing or switching a properly equipped/readied weapon may qualify as a minor interaction where permitted by the supported combat rules.
+
+Retrieving or preparing a weapon that is merely stored in general inventory may require a more substantial interaction depending on its location and context.
+
+The combat system validates the requested equipment transition before the weapon becomes available for an attack.
+
+Detailed inventory, equipment and wield-state rules are defined in `06_EQUIPMENT_AND_INVENTORY.md`.
+
 ---
 
 # 4. Reactions
@@ -289,6 +304,21 @@ Character Speed remains mechanically relevant.
 Speed helps determine whether a creature can transition between distance bands during a turn.
 
 Species, class features, spells, conditions and other supported mechanics may modify Speed.
+
+Weapon Mastery effects such as Slow may also temporarily modify effective Speed.
+
+Temporary Speed modifiers do not overwrite the creature's base Speed.
+
+Conceptually:
+
+```text
+Base Speed: 30 ft
+Slow Mastery Effect: -10 ft
+Effective Speed: 20 ft
+```
+When the temporary effect expires, only the modifier is removed and effective Speed is recalculated from the unchanged base state and any other remaining modifiers.
+
+RealmWeaver preserves canonical numerical movement modifiers internally even though V1 presents battlefield positioning through distance bands.
 
 ---
 
@@ -693,6 +723,630 @@ An unused Bonus Action does not automatically grant another Attack Action.
 
 ---
 
+# 9A. Weapon Mastery — Combat Integration
+
+## 9A.1 RealmWeaver Weapon Mastery Adaptation
+
+### Status: APPROVED
+
+RealmWeaver selectively adopts Weapon Mastery mechanics from the revised rules as an explicit RealmWeaver adaptation.
+
+SRD 5.1 / 2014-style mechanics remain RealmWeaver's primary rules baseline.
+
+Weapon Mastery is always enabled and is not a campaign-builder toggle.
+
+The purpose of Weapon Mastery is to:
+
+* Increase tactical differentiation between weapons
+* Give martial characters additional combat decisions
+* Strengthen weapon identity
+* Add tactical depth without requiring grid-based combat
+
+The supported V1 Weapon Mastery properties are:
+
+* Cleave
+* Graze
+* Nick
+* Push
+* Sap
+* Slow
+* Topple
+* Vex
+
+Detailed weapon mappings and mastery-selection rules are defined in:
+
+* `05_CLASSES_AND_PROGRESSION.md`
+* `06_EQUIPMENT_AND_INVENTORY.md`
+
+---
+
+## 9A.2 Mastery Eligibility
+
+### Status: APPROVED
+
+A weapon's Mastery property does not automatically activate merely because a creature possesses or uses that weapon.
+
+RealmWeaver validates:
+
+1. The weapon being used.
+2. Whether that weapon is legally wielded.
+3. Whether the creature possesses an active Weapon Mastery-granting feature.
+4. Whether that specific weapon type is currently mastered.
+5. Whether the relevant Mastery trigger is satisfied.
+6. Whether the target and current combat state are valid.
+
+Weapon proficiency and Weapon Mastery are separate mechanics.
+
+A creature may be proficient with a weapon without having mastery of that weapon.
+
+---
+
+## 9A.3 Weapon Mastery Resolution
+
+### Status: APPROVED
+
+Weapon Mastery is resolved deterministically as part of normal combat resolution.
+
+Conceptually:
+
+```text
+Attack Declared
+        ↓
+Weapon / Wield State Validated
+        ↓
+Attack Resolved
+        ↓
+Mastery Eligibility Checked
+        ↓
+Mastery Trigger Evaluated
+        ↓
+Mastery Effect Resolved
+        ↓
+Mechanical State Committed
+        ↓
+AI Narrates Validated Result
+```
+
+## 9A.4 Cleave
+
+### Status: APPROVED
+
+Cleave permits a qualifying weapon attack to create an additional attack opportunity against another valid nearby creature according to the adopted Mastery rule.
+
+RealmWeaver adapts Cleave to the distance-band system.
+
+A secondary Cleave target must occupy an appropriate immediate melee relationship with the original target and attacker.
+
+In V1 this normally requires the secondary target to be within the relevant Engaged/Near melee cluster as determined by authoritative combat positioning.
+
+The rules engine validates:
+
+Whether Cleave triggered
+Whether Cleave remains available
+Whether a valid secondary target exists
+Whether the target occupies a valid positional relationship
+Whether the secondary attack is legal
+
+For a player-controlled character, selection of a secondary target remains a player decision.
+
+If multiple valid targets exist, RealmWeaver may present them through UI or natural-language interaction.
+
+AI-controlled creatures may choose their own valid Cleave target.
+
+## 9A.5 Graze
+
+### Status: APPROVED
+
+Graze is evaluated automatically when a qualifying attack with a mastered Graze weapon misses.
+
+Conceptually:
+```text
+Attack Misses
+        ↓
+Graze Mastery Valid?
+        ↓
+YES
+        ↓
+Resolve Graze Effect
+```
+
+Graze does not convert the miss into a normal hit.
+
+Its resulting damage or other mechanical effect follows the adopted Weapon Mastery rule and is resolved deterministically.
+
+The AI cannot grant Graze damage to an attack made with an unmastered weapon.
+
+## 9A.6 Nick
+### Status: APPROVED
+
+Nick integrates with RealmWeaver's Light weapon and two-weapon fighting rules.
+
+When its requirements are satisfied, Nick allows the applicable additional Light-weapon attack to occur without consuming the Bonus Action normally associated with that attack.
+
+RealmWeaver validates:
+
+Required weapon properties
+Wield state
+Hand state
+Previous attacks
+Turn usage
+Action economy
+Mastery eligibility
+Any applicable once-per-turn restriction
+
+Nick does not create unlimited additional attacks.
+
+It modifies the action-economy treatment of the qualifying additional attack according to the adopted rule.
+
+## 9A.7 Push
+
+### Status: APPROVED
+
+Push applies forced movement according to the adopted Weapon Mastery rule.
+
+RealmWeaver preserves the canonical numerical forced-movement distance internally rather than automatically translating Push into one complete distance-band transition.
+
+Conceptually:
+
+Push Effect
+→ canonical forced movement distance
+→ positioning system evaluates result
+
+Depending on the target's existing position, the result may:
+
+Change relative position within the current band
+Separate creatures from an immediate melee cluster
+Change an Engaged relationship
+Move the target into another distance band
+Interact with terrain or another supported positional mechanic
+
+The AI cannot independently determine the mechanical destination.
+
+Authoritative positioning determines the result.
+
+## 9A.8 Sap
+### Status: APPROVED
+
+Sap creates a temporary structured combat effect according to the adopted Mastery rule.
+
+A qualifying Sap hit applies the appropriate disadvantage effect to the target's next qualifying attack.
+
+Conceptually:
+
+Sap Triggered
+        ↓
+SAP_EFFECT Applied
+        ↓
+Target makes qualifying attack
+        ↓
+Disadvantage applied
+        ↓
+Effect consumed
+
+Sap is not represented as a permanent statistic change.
+
+Its source, target, duration/consumption rule and active state are tracked mechanically.
+
+## 9A.9 Slow
+### Status: APPROVED
+
+Slow temporarily reduces the target's effective movement according to the adopted Mastery rule.
+
+RealmWeaver preserves the canonical numerical movement reduction internally.
+
+Example:
+
+Base Speed: 30 ft
+Slow: -10 ft
+Effective Speed: 20 ft
+
+The movement system then determines what movement and distance-band transitions remain mechanically possible.
+
+Slow does not overwrite base Speed.
+
+When Slow expires, its modifier is removed and effective Speed is recalculated from the unchanged base value and any other active modifiers.
+
+Repeated Slow applications follow the adopted stacking, replacement and duration rules and do not automatically accumulate into unlimited movement reduction.
+
+## 9A.10 Topple
+### Status: APPROVED
+
+Topple uses RealmWeaver's existing Saving Throw and Condition systems.
+
+Conceptually:
+
+Qualifying Hit
+        ↓
+Topple Triggered
+        ↓
+RealmWeaver calculates required Save
+        ↓
+Target rolls Save
+        ↓
+Failure
+        ↓
+PRONE applied
+
+RealmWeaver validates:
+
+Save type
+Save DC
+Target eligibility
+Condition immunity
+Other applicable modifiers
+Result
+
+A successful Save prevents the Prone application where required by the adopted rule.
+
+The AI cannot narratively override the Saving Throw result.
+
+## 9A.11 Vex
+### Status: APPROVED
+
+Vex creates a temporary target-specific advantage effect according to the adopted Mastery rule.
+
+Conceptually:
+
+Vex Triggered against Target A
+        ↓
+VEX_EFFECT stored
+        ↓
+Next qualifying attack against Target A
+        ↓
+Advantage applied
+        ↓
+Effect consumed
+
+Vex is associated with the appropriate source and target.
+
+A Vex effect created against one creature does not grant advantage against another creature.
+
+The effect expires or is consumed according to the adopted timing rule.
+
+## 9A.12 Mastery Effects and Conditions
+### Status: APPROVED
+
+Weapon Mastery mechanics use the most appropriate RealmWeaver subsystem.
+
+Not every Mastery property is represented as a Condition.
+
+Examples:
+
+Topple
+→ PRONE Condition
+Sap
+→ Temporary combat modifier/effect
+Vex
+→ Temporary target-specific modifier/effect
+Slow
+→ Temporary Speed modifier
+Push
+→ Forced movement
+Nick / Cleave
+→ Attack and action-economy interactions
+
+RealmWeaver must not force mechanically different concepts into the Condition system merely because they are temporary.
+
+## 9A.13 Temporary Effect Invariant
+
+### Status: APPROVED
+
+Temporary Weapon Mastery effects never permanently overwrite base creature statistics.
+
+RealmWeaver conceptually distinguishes:
+
+BASE STATE
++
+ACTIVE MODIFIERS / EFFECTS
+=
+EFFECTIVE STATE
+
+Example:
+
+Base Speed = 30 ft
+
+Active Slow Effect = -10 ft
+
+Effective Speed = 20 ft
+
+When Slow expires:
+
+Base Speed = 30 ft
+
+Active Slow Effect = removed
+
+Effective Speed = 30 ft
+
+The system must not implement temporary effects by changing a base statistic and later attempting to manually restore the previous value.
+
+This is necessary because multiple independent effects may exist simultaneously.
+
+Removing one temporary effect removes only that effect.
+
+Remaining valid effects continue to influence effective state.
+
+## 9A.14 Mastery Effect Duration and Expiry
+### Status: APPROVED
+
+Every temporary Mastery effect must define an authoritative duration or consumption rule.
+
+Possible timing models include:
+
+Start of turn
+End of turn
+Start of next turn
+End of next turn
+Next qualifying attack
+Effect consumption
+Another explicitly supported trigger
+
+Combat timing is authoritative over turn-based Mastery effects.
+
+The AI does not decide when an effect has "probably worn off."
+
+Once the expiry or consumption condition occurs, RealmWeaver removes the relevant effect automatically.
+
+## 9A.15 Repeated and Overlapping Mastery Effects
+
+### Status: APPROVED
+
+Multiple different Mastery effects may coexist where mechanically legal.
+
+Example:
+
+Target:
+SAP_EFFECT
+SLOW_EFFECT
+VEX_EFFECT from another attacker
+
+Each effect is tracked independently.
+
+Repeated application of the same Mastery effect follows that effect's explicit rules for:
+
+Stacking
+Replacement
+Duration refresh
+Independent sources
+Consumption
+
+Repeated hits do not automatically stack an effect unless the adopted rule explicitly permits stacking.
+
+## 9A.16 Player Choice
+
+### Status: APPROVED
+
+Automatic Mastery effects resolve without unnecessary player confirmation.
+
+RealmWeaver should not interrupt combat with repeated confirmation prompts for effects that have no meaningful choice.
+
+If a Mastery effect requires a meaningful player decision, RealmWeaver presents only the valid choices.
+
+Example:
+
+Cleave Available
+
+Valid Targets:
+- Bandit B
+- Bandit C
+- Skip
+
+The AI cannot silently make such a decision for a player-controlled character.
+
+## 9A.17 NPC Weapon Mastery
+
+### Status: APPROVED
+
+NPC possession of a weapon does not automatically grant its Mastery property.
+
+A mechanically relevant NPC must explicitly possess:
+
+A Weapon Mastery-granting feature or capability.
+Mastery of the applicable weapon type.
+
+AI-controlled NPCs may make tactical decisions involving their available Mastery properties.
+
+RealmWeaver validates all resulting mechanics.
+
+Simple or disposable NPCs do not require Weapon Mastery unless their mechanical profile explicitly grants it.
+
+## 9A.18 Natural-Language Attacks
+
+### Status: APPROVED
+
+Players are not required to explicitly announce automatic Weapon Mastery effects.
+
+Example:
+
+I slash the bandit with my longsword.
+
+If the Longsword is:
+
+legally wielded;
+mastered by the character; and
+its Sap trigger is satisfied;
+
+RealmWeaver evaluates Sap automatically.
+
+The player does not need to say:
+
+I activate Sap.
+
+Natural-language interpretation identifies player intent.
+
+The rules engine resolves Mastery mechanics.
+
+## 9A.19 Structured Combat UI
+### Status: APPROVED
+
+Explicit UI actions may bypass AI intent interpretation where the mechanical intent is already unambiguous.
+
+Example:
+
+[Attack]
+→ Longsword
+→ Orc Captain
+
+may proceed directly to deterministic combat validation and resolution.
+
+Weapon Mastery is evaluated within the same resolution pipeline.
+
+AI narration may then describe the completed result.
+
+Weapon Mastery does not require a separate LLM request.
+
+## 9A.20 Mastery Resolution and AI Latency
+### Status: APPROVED
+
+RealmWeaver should resolve Weapon Mastery together with the other deterministic consequences of an attack.
+
+Preferred pipeline:
+
+Player Intent
+        ↓
+Intent Interpretation
+(if required)
+        ↓
+Attack Validation
+        ↓
+Attack / Damage / Mastery /
+Condition / Movement Resolution
+        ↓
+State Commit
+        ↓
+Structured Mechanical Result
+        ↓
+AI Narration
+
+RealmWeaver should avoid separate AI round trips for:
+
+Mastery selection
+Mastery trigger detection
+Mastery effect calculation
+Effect duration
+Effect expiry
+
+These are deterministic responsibilities.
+
+## 9A.21 Mechanical Event History
+
+### Status: APPROVED
+
+Weapon Mastery interactions participate in RealmWeaver's mechanical event history.
+
+Possible events include:
+
+WEAPON_MASTERY_TRIGGERED
+WEAPON_MASTERY_EFFECT_APPLIED
+WEAPON_MASTERY_EFFECT_CONSUMED
+WEAPON_MASTERY_EFFECT_EXPIRED
+FORCED_MOVEMENT
+CONDITION_APPLIED
+
+A single attack may generate an ordered event sequence.
+
+Example:
+
+ATTACK_DECLARED
+↓
+ATTACK_ROLLED
+↓
+ATTACK_HIT
+↓
+DAMAGE_APPLIED
+↓
+WEAPON_MASTERY_TRIGGERED: TOPPLE
+↓
+SAVING_THROW_ROLLED
+↓
+SAVING_THROW_FAILED
+↓
+CONDITION_APPLIED: PRONE
+
+The exact event schema is deferred to architecture.
+
+## 9A.22 AI Failure and Duplicate Resolution
+
+### Status: APPROVED
+
+Once a Weapon Mastery interaction has been mechanically resolved and committed, subsequent AI failure does not rerun the mechanics.
+
+Example:
+
+Attack Roll = 17
+Attack = HIT
+Damage = 9
+Topple Save = FAILED
+PRONE applied
+        ↓
+AI narration fails
+
+Retrying narration uses the existing committed result.
+
+RealmWeaver must not:
+
+Reroll the attack
+Reroll damage
+Reroll the Saving Throw
+Reapply damage
+Apply Mastery twice
+
+Duplicate requests must not duplicate mechanical consequences.
+
+## 9A.23 Mechanical Explanation
+
+### Status: APPROVED DIRECTION
+
+Weapon Mastery should participate in RealmWeaver's future mechanical explanation/provenance system.
+
+Example:
+
+Attack Roll — Advantage
+
+[Why?]
+
+Vex
+→ Previous qualifying Rapier hit against this target
+→ Advantage on this qualifying attack
+
+Movement example:
+
+Effective Speed: 20 ft
+
+[Why?]
+
+Base Speed: 30 ft
+Slow Mastery: -10 ft
+
+The detailed UI is deferred, but the underlying rules architecture should retain sufficient provenance to support these explanations.
+
+## 9A.24 Future Architecture
+
+### Status: APPROVED DIRECTION
+
+Detailed Weapon Mastery implementation is deferred to later M2 architecture sections.
+
+The combat rules establish requirements for:
+
+Mastery trigger validation
+Temporary effect resolution
+Turn-based effect expiry
+Forced movement
+Action-economy modification
+Saving Throw integration
+Condition integration
+Effect provenance
+Mechanical event history
+AI-failure recovery
+Duplicate-action protection
+
+The final implementation should use shared RealmWeaver systems rather than creating isolated Mastery-specific versions of mechanics already supported elsewhere.
+
+
+That is the main Combat amendment.
+
+
+---
+
 # 10. Critical Hits & Critical Misses
 
 ## 10.1 Natural 20 Attack
@@ -1076,6 +1730,9 @@ Enemy tactical reasoning may consider relevant information such as:
 * Enemies
 * Encounter objective
 * Tactical profile
+* Equipped and currently wielded weapons
+* Available Weapon Mastery properties
+* Active temporary combat effects
 
 ---
 
@@ -1098,6 +1755,9 @@ Possible validation includes:
 * Feature availability
 * Condition restrictions
 * Other relevant rules
+* Equipment and wield-state validity
+* Weapon Mastery eligibility
+* Weapon Mastery usage restrictions
 
 Invalid AI-selected actions are rejected.
 

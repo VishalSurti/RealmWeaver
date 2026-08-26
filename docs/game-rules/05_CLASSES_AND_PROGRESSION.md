@@ -5,7 +5,7 @@
 **Milestone:** M2 — Technical Design & Architecture
 **Section:** M2.1 — V1 Game Rules Specification
 **Primary Rules Baseline:** SRD 5.1 / 2014-style rules
-**Last Reviewed:** 13 August 2026
+**Last Reviewed:** 26 August 2026
 
 ---
 
@@ -15,6 +15,7 @@ This document defines RealmWeaver V1 rules for:
 
 * Classes
 * Class features
+* Weapon Mastery access and progression
 * Species
 * Species traits
 * Backgrounds
@@ -131,6 +132,8 @@ A class may define:
 * Saving Throw proficiencies
 * Armour proficiencies
 * Weapon proficiencies
+* Weapon Mastery access
+* Weapon Mastery capacity progression
 * Skill choices
 * Starting equipment
 * Level-based features
@@ -319,6 +322,7 @@ Features may include:
 * Bonus Action options
 * Reactions
 * Conditional effects
+* Weapon Mastery
 * Spellcasting
 * Resource recovery
 * Character choices
@@ -332,6 +336,20 @@ The rules engine determines:
 * What mechanical effect occurs
 
 The AI may explain or narrate the feature but cannot independently grant or execute unsupported mechanics.
+
+Weapon Mastery is represented as a mechanically validated character feature rather than being inferred directly from class name.
+
+A class may grant:
+
+* Access to Weapon Mastery
+* A defined Weapon Mastery capacity
+* Level-based increases to that capacity
+
+The existence of a Mastery property on a weapon does not itself grant the character access to that property.
+
+Detailed Weapon Mastery combat behaviour is defined in `04_COMBAT.md`.
+
+Detailed weapon-to-Mastery mapping and equipment interaction are defined in `06_EQUIPMENT_AND_INVENTORY.md`.
 
 ---
 
@@ -1024,6 +1042,7 @@ Potential changes include:
 * Current HP adjustment
 * Hit Dice
 * Class features
+* Weapon Mastery capacity
 * Feature upgrades
 * Species progression features
 * Spellcasting progression
@@ -1076,6 +1095,8 @@ Examples:
 * Resource-capacity changes
 * Spell-slot progression
 * Species feature progression
+* Weapon Mastery access
+* Weapon Mastery capacity progression
 
 ### Player Choices Required
 
@@ -1087,6 +1108,7 @@ Examples:
 * Spells
 * Fighting Style
 * Expertise
+* New Weapon Mastery selection where capacity increases
 
 After completion, RealmWeaver displays exactly what changed.
 
@@ -1158,6 +1180,9 @@ unless a supported feature explicitly permits a higher value.
 A general feat catalogue is not required for initial V1.
 
 Architecture should allow feats to be represented as character features in future versions.
+A future supported feat may grant Weapon Mastery access, additional Mastery Capacity or another explicitly defined Mastery-related feature.
+
+Weapon Mastery must therefore remain feature-driven rather than being structurally restricted to particular class names.
 
 ---
 
@@ -1895,19 +1920,287 @@ Such adaptations must be documented.
 
 ---
 
+## 9.1A Weapon Mastery Class Framework
+
+### Status: APPROVED
+
+RealmWeaver selectively adopts Weapon Mastery as an explicit RealmWeaver adaptation while retaining SRD 5.1 / 2014-style mechanics as the primary rules baseline.
+
+Weapon Mastery is always enabled.
+
+Weapon Mastery access is granted through authoritative character features.
+
+V1 class access is:
+
+| Class   | Weapon Mastery |
+| ------- | -------------- |
+| Fighter | Yes            |
+| Rogue   | Yes            |
+| Cleric  | No             |
+| Wizard  | No             |
+
+Cleric and Wizard do not receive Weapon Mastery through their normal V1 class progression.
+
+They may still use weapons according to their normal proficiencies and other applicable rules.
+
+Future supported mechanics may grant Weapon Mastery through sources such as:
+
+* Feats
+* Subclasses
+* Special training
+* Campaign rewards
+* Other validated character features
+
+The architecture must therefore not hardcode Weapon Mastery exclusively to Fighter and Rogue class names.
+
+---
+
+### 9.1A.1 Mastery Capacity
+
+Characters with Weapon Mastery have a defined Mastery Capacity.
+
+Mastery Capacity represents the maximum number of weapon types the character may currently have selected for Weapon Mastery.
+
+Conceptually:
+
+```text
+Weapon Mastery Feature: ACTIVE
+Mastery Capacity: 3
+
+Selected:
+- Longsword
+- Longbow
+- Greatsword
+```
+he number of selected weapon types may be lower than the character's current capacity.
+
+Unused Mastery Capacity does not provide any mechanical benefit until a valid weapon type is selected.
+
+## 9.1A.2 Weapon-Specific Selection
+
+Weapon Mastery selections apply to specific weapon types.
+
+Example:
+
+Mastered:
+Longsword
+
+does not mean:
+
+Mastered:
+Sap
+
+The character masters the weapon type.
+
+The weapon definition determines which Mastery property that weapon provides.
+
+This preserves weapon identity and allows the same character feature system to support future weapon content.
+
+## 9.1A.3 Weapon Mastery and Proficiency
+
+Weapon proficiency and Weapon Mastery are separate mechanics.
+
+A character may be proficient with a weapon without having selected that weapon for Mastery.
+
+Conceptually:
+
+Longsword Proficiency: YES
+Longsword Mastery: NO
+
+The character may use the Longsword normally but does not receive its Mastery property.
+
+When selecting Weapon Mastery through normal class progression, RealmWeaver restricts selection to weapon types the character is mechanically eligible to master under the supported rules.
+
+## 9.1A.4 Ownership Is Not Required
+
+A character does not need to currently own a weapon to select that weapon type for Mastery.
+
+Weapon Mastery represents training rather than ownership.
+
+Example:
+
+Mastered:
+Greatsword
+
+Inventory:
+No Greatsword
+
+is valid.
+
+If the character later obtains a Greatsword, the existing Mastery selection becomes usable immediately when all normal equipment and wield requirements are satisfied.
+
+During character creation, RealmWeaver should warn the player when a selected Mastery weapon is not available in their current starting equipment.
+
+The warning does not invalidate the selection.
+
+## 9.1A.5 Character-Creation Selection
+
+A level-1 character whose class grants Weapon Mastery selects their initial mastered weapon types during character creation.
+
+RealmWeaver presents only mechanically valid choices.
+
+The interface should expose the Mastery property associated with each available weapon type.
+
+Example:
+
+Choose Weapon Masteries
+
+Longsword — Sap
+Greatsword — Graze
+Longbow — applicable Mastery
+Battleaxe — Topple
+
+The player makes the selection.
+
+The AI may explain or recommend options but may not select Weapon Masteries on the player's behalf.
+
+## 9.1A.6 Changing Weapon Mastery
+
+After completing a successful Long Rest, a character with Weapon Mastery may optionally change their current mastered weapon selections.
+
+Changing Weapon Mastery is never automatic.
+
+The player may retain all existing selections or reselect any number of eligible weapon types, provided the final selection does not exceed current Mastery Capacity.
+
+Conceptually:
+
+Before Long Rest:
+
+Longsword
+Longbow
+Greatsword
+
+After optional reselection:
+
+Battleaxe
+Longbow
+Maul
+
+The AI may recommend a change but cannot perform the change for a player-controlled character.
+
+Weapon Mastery reselection and equipment changes are separate mechanics.
+
+Selecting a new Weapon Mastery does not:
+
+Grant the weapon
+Equip the weapon
+Wield the weapon
+Remove another physical weapon from inventory
+
+Likewise, equipping or acquiring a weapon does not automatically alter Weapon Mastery selections.
+
+Detailed Long Rest resolution is defined in 08_CONDITIONS_AND_RESTING.md.
+
+## 9.1A.7 Capacity Increase
+
+When class progression increases Weapon Mastery Capacity, existing Mastery selections remain unchanged.
+
+Example:
+
+Before:
+Capacity = 3
+Selected = 3
+
+After Level Up:
+Capacity = 4
+Selected = 3
+
+RealmWeaver then allows the player to select one additional eligible weapon type.
+
+A capacity increase does not force the player to reselect existing Masteries.
+
+9.1A.8 Postponing a New Mastery Selection
+
+A player may postpone filling newly available Weapon Mastery Capacity.
+
+Example:
+
+Mastery Capacity = 4
+Selected Masteries = 3
+
+is valid.
+
+The unused selection provides no mechanical benefit until the player chooses an eligible weapon type.
+
+RealmWeaver should continue to indicate that an unused Mastery selection is available.
+
+## 9.1A.9 Persistent Mastery State
+
+Weapon Mastery access, capacity and selected weapon types are authoritative persistent character state.
+
+They must survive:
+
+Scene transitions
+Rest
+Save/reload
+AI context reconstruction
+
+The AI does not reconstruct Weapon Mastery selections from conversation history.
+
+If the feature granting Weapon Mastery becomes temporarily inactive through a future supported mechanic, the selections remain stored but provide no Mastery benefit until the feature becomes active again.
+
+## 9.1A.10 Higher-Level Progression
+
+RealmWeaver V1 guarantees class progression through levels 1–5.
+
+Architecture must support Weapon Mastery progression through eventual levels 1–20.
+
+Higher-level:
+
+Mastery Capacity increases
+Fighter-specific Mastery enhancements
+Flexible Mastery features
+Other revised-rules Mastery interactions
+
+are not automatically imported into V1.
+
+Any such mechanics require explicit future RealmWeaver approval and documentation.
+
+---
+
 ## 9.2 Fighter
 
 ### 9.2.1 Fighter Progression — Levels 1–5
 
-| Level | Proficiency | Features                    |
-| ----- | ----------: | --------------------------- |
-| 1     |          +2 | Fighting Style, Second Wind |
-| 2     |          +2 | Action Surge                |
-| 3     |          +2 | Champion                    |
-| 4     |          +2 | Ability Score Improvement   |
-| 5     |          +3 | Extra Attack                |
+| Level | Proficiency | Weapon Mastery Capacity | Features                                    |
+| ----- | ----------: | ----------------------: | ------------------------------------------- |
+| 1     |          +2 |                       3 | Weapon Mastery, Fighting Style, Second Wind |
+| 2     |          +2 |                       3 | Action Surge                                |
+| 3     |          +2 |                       3 | Champion                                    |
+| 4     |          +2 |                       3 | Ability Score Improvement                   |
+| 5     |          +3 |                       4 | Extra Attack                                |
 
-### 9.2.2 Fighting Style
+### 9.2.2 Weapon Mastery
+
+Fighter gains Weapon Mastery at level 1.
+
+Fighter Weapon Mastery Capacity for guaranteed V1 levels is:
+
+| Fighter Level | Mastery Capacity |
+| ------------: | ---------------: |
+| 1             |                3 |
+| 2             |                3 |
+| 3             |                3 |
+| 4             |                3 |
+| 5             |                4 |
+
+The Fighter therefore begins with broader Weapon Mastery access than the Rogue.
+
+At level 5:
+
+```text
+Mastery Capacity
+3 → 4
+```
+Existing selections remain unchanged.
+
+The player may select one additional eligible weapon type immediately or postpone the selection.
+
+Fighter Weapon Mastery follows the shared rules defined under 9.1A Weapon Mastery Class Framework.
+
+Advanced higher-level Fighter Weapon Mastery features are deferred until the corresponding level range is formally designed.
+
+### 9.2.3 Fighting Style
 
 At level 1, Fighter selects one supported Fighting Style.
 
@@ -1922,7 +2215,7 @@ Initial supported options may include:
 
 The choice is mechanically validated.
 
-### 9.2.3 Second Wind
+### 9.2.4 Second Wind
 
 Second Wind is a Bonus Action.
 
@@ -1937,13 +2230,13 @@ The rules engine tracks:
 * Healing result
 * Recharge
 
-### 9.2.4 Action Surge
+### 9.2.5 Action Surge
 
 At Fighter level 2, Action Surge grants an additional Action according to the supported rule.
 
 The AI does not independently grant extra Actions.
 
-### 9.2.5 Champion
+### 9.2.6 Champion
 
 Champion is the initial Fighter subclass.
 
@@ -1952,11 +2245,11 @@ Its V1 Improved Critical feature allows eligible attack rolls to critically hit 
 * Natural 19
 * Natural 20
 
-### 9.2.6 Ability Score Improvement
+### 9.2.7 Ability Score Improvement
 
 At Fighter level 4, the standard RealmWeaver ASI rules apply.
 
-### 9.2.7 Extra Attack
+### 9.2.8 Extra Attack
 
 At Fighter level 5:
 
@@ -1974,15 +2267,46 @@ This does not grant a second unrestricted Action.
 
 ### 9.3.1 Rogue Progression — Levels 1–5
 
-| Level | Proficiency | Sneak Attack | Features                               |
-| ----- | ----------: | -----------: | -------------------------------------- |
-| 1     |          +2 |          1d6 | Expertise, Sneak Attack, Thieves' Cant |
-| 2     |          +2 |          1d6 | Cunning Action                         |
-| 3     |          +2 |          2d6 | Thief                                  |
-| 4     |          +2 |          2d6 | Ability Score Improvement              |
-| 5     |          +3 |          3d6 | Uncanny Dodge                          |
+| Level | Proficiency | Sneak Attack | Weapon Mastery Capacity | Features                                               |
+| ----- | ----------: | -----------: | ----------------------: | ------------------------------------------------------ |
+| 1     |          +2 |          1d6 |                       2 | Weapon Mastery, Expertise, Sneak Attack, Thieves' Cant |
+| 2     |          +2 |          1d6 |                       2 | Cunning Action                                         |
+| 3     |          +2 |          2d6 |                       2 | Thief                                                  |
+| 4     |          +2 |          2d6 |                       2 | Ability Score Improvement                              |
+| 5     |          +3 |          3d6 |                       2 | Uncanny Dodge                                          |
 
-### 9.3.2 Sneak Attack
+### 9.3.2 Weapon Mastery
+
+Rogue gains Weapon Mastery at level 1.
+
+Rogue Weapon Mastery Capacity for guaranteed V1 levels is:
+
+| Rogue Level | Mastery Capacity |
+| ----------: | ---------------: |
+| 1           |                2 |
+| 2           |                2 |
+| 3           |                2 |
+| 4           |                2 |
+| 5           |                2 |
+
+Rogue uses the shared Weapon Mastery framework defined under `9.1A Weapon Mastery Class Framework`.
+
+The Rogue intentionally has narrower Weapon Mastery breadth than the Fighter.
+
+This preserves the distinction:
+
+```text
+Fighter
+→ broader weapon expertise
+
+Rogue
+→ narrower weapon specialization
+```
+Rogue does not gain an additional Mastery selection within guaranteed V1 levels 1–5.
+
+Future higher-level Rogue progression may expand or modify Weapon Mastery only after explicit RealmWeaver design approval.
+
+### 9.3.3 Sneak Attack
 
 Sneak Attack is deterministic conditional damage.
 
@@ -2006,13 +2330,13 @@ The engine checks:
 
 The AI does not need to remember to add Sneak Attack.
 
-### 9.3.3 Expertise
+### 9.3.4 Expertise
 
 Rogue receives Expertise according to class progression.
 
 Selected eligible proficiencies receive doubled proficiency.
 
-### 9.3.4 Thieves' Cant
+### 9.3.5 Thieves' Cant
 
 Stored as an authoritative character feature.
 
@@ -2022,7 +2346,7 @@ It may affect:
 * Signs
 * Relevant narrative understanding
 
-### 9.3.5 Cunning Action
+### 9.3.6 Cunning Action
 
 At Rogue level 2, supported actions may be used as a Bonus Action:
 
@@ -2030,17 +2354,17 @@ At Rogue level 2, supported actions may be used as a Bonus Action:
 * Disengage
 * Hide
 
-### 9.3.6 Thief
+### 9.3.7 Thief
 
 Thief is the initial Rogue subclass.
 
 Exact-position features must be adapted to RealmWeaver's distance-band system where necessary.
 
-### 9.3.7 Ability Score Improvement
+### 9.3.8 Ability Score Improvement
 
 At Rogue level 4, the standard ASI rules apply.
 
-### 9.3.8 Uncanny Dodge
+### 9.3.9 Uncanny Dodge
 
 At Rogue level 5, Uncanny Dodge provides an eligible Reaction to reduce incoming damage according to the supported rule.
 
@@ -2057,6 +2381,14 @@ At Rogue level 5, Uncanny Dodge provides an eligible Reaction to reduce incoming
 | 3     |          +2 |        3 |               4 |               2 |               — | 2nd-level spells                 |
 | 4     |          +2 |        4 |               4 |               3 |               — | Ability Score Improvement        |
 | 5     |          +3 |        4 |               4 |               3 |               2 | 3rd-level spells, Destroy Undead |
+
+### Weapon Mastery
+
+Cleric does not receive Weapon Mastery through normal V1 class progression.
+
+Cleric weapon proficiency continues to function normally.
+
+Future supported features such as a subclass, feat, special training or campaign reward may grant Weapon Mastery independently of the Cleric class.
 
 ### 9.4.2 Spellcasting Ability
 
@@ -2124,6 +2456,14 @@ At Cleric level 5, Turn Undead gains the supported enhanced effect against quali
 | 3     |          +2 |        3 |               4 |               2 |               — | 2nd-level spells              |
 | 4     |          +2 |        4 |               4 |               3 |               — | Ability Score Improvement     |
 | 5     |          +3 |        4 |               4 |               3 |               2 | 3rd-level spells              |
+
+### Weapon Mastery
+
+Wizard does not receive Weapon Mastery through normal V1 class progression.
+
+Wizard weapon proficiency continues to function normally.
+
+Future supported features such as a subclass, feat, special training or campaign reward may grant Weapon Mastery independently of the Wizard class.
 
 ### 9.5.2 Spellbook
 
@@ -2510,6 +2850,12 @@ rules_version = 1.0
 ```
 
 Specific later-SRD exceptions should also be traceable where needed.
+
+Weapon Mastery is one such explicit RealmWeaver rules-source exception.
+
+RealmWeaver selectively adopts Weapon Mastery from the revised rules while retaining SRD 5.1 / 2014-style mechanics as the primary baseline.
+
+Weapon Mastery is always enabled within the RealmWeaver V1 ruleset and is not a per-campaign rules toggle.
 
 Existing campaigns should not silently change mechanics when rules are updated.
 

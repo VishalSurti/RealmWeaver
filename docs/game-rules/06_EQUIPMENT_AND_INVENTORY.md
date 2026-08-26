@@ -4,6 +4,7 @@
 > **Rules Group:** 6 — Equipment & Inventory  
 > **Scope:** V1 Game Rules Specification  
 > **Authority:** This document is the canonical source for RealmWeaver equipment, inventory, currency, loot, trading, consumables, encumbrance, and tool rules.
+> **Last Reviewed:** 26 August 2026
 
 ---
 
@@ -90,7 +91,7 @@ Damage: 1d8
 Damage Type: Slashing
 Weight: 3 lb
 Properties: Versatile
-````
+```
 
 Definitions describe what an item **is**.
 
@@ -108,6 +109,10 @@ An Item Instance may contain:
 * Quantity
 * Charges
 * Equipped state
+* Wield state
+* Equipment/loadout slot where applicable
+* Base weapon type where applicable
+* Weapon Mastery property reference where applicable
 * Condition
 * Identified state
 * Custom name
@@ -151,6 +156,26 @@ Items may exist in:
 * Loot sources
 
 An item must have one authoritative location/state at a time.
+Equipment and wield state are separate from ownership/location.
+
+For example, an item may be:
+
+```text
+Owner: Player
+Location: Player Inventory
+Equipped: Yes
+Wielded: No
+```
+Or:
+
+```text
+Owner: Player
+Location: Player Inventory
+Equipped: Yes
+Wielded: Right Hand
+```
+RealmWeaver must not infer active use merely from ownership or inventory location.
+---
 
 ## 2.5 Owned vs Carried
 
@@ -302,6 +327,8 @@ A weapon may contain:
 * Ammunition requirements
 * Proficiency category
 * Other mechanical properties
+* Weapon Mastery property
+* Base weapon type / canonical weapon identity where applicable
 
 ## 4.2 Weapon Categories
 
@@ -328,6 +355,80 @@ Weapon proficiency is determined by class/features and stored in authoritative c
 
 The AI does not infer proficiency from narrative context.
 
+## 4.4A Weapon Mastery
+
+Weapon Mastery is an always-enabled RealmWeaver adaptation selectively adopted from the revised rules while SRD 5.1 / 2014-style mechanics remain the primary baseline.
+
+Each supported standard weapon type has one authoritative default Weapon Mastery property.
+
+Weapon proficiency and Weapon Mastery are separate mechanics.
+
+Example:
+
+```text
+Longsword Proficiency: Yes
+Longsword Mastery Selected: No
+```
+The character may use the weapon normally but does not gain its Mastery effect.
+
+If:
+
+```text
+Longsword Proficiency: Yes
+Longsword Mastery Selected: Yes
+```
+
+the weapon's Mastery property may participate when the applicable combat trigger is satisfied.
+
+Owning, equipping or wielding a weapon does not itself grant Weapon Mastery.
+
+Class access and Mastery Capacity are defined in `05_CLASSES_AND_PROGRESSION.md`.
+
+Mastery combat resolution is defined in `04_COMBAT.md`.
+
+## 4.4B Standard Weapon Mastery Mapping
+
+RealmWeaver uses the canonical revised-rules Weapon Mastery mapping for supported standard weapon types rather than inventing a separate V1 mapping.
+
+Examples include:
+
+| Weapon         | Mastery |
+| -------------- | ------- |
+| Club           | Slow    |
+| Dagger         | Nick    |
+| Greatclub      | Push    |
+| Handaxe        | Vex     |
+| Javelin        | Slow    |
+| Light Hammer   | Nick    |
+| Mace           | Sap     |
+| Quarterstaff   | Topple  |
+| Sickle         | Nick    |
+| Spear          | Sap     |
+| Dart           | Vex     |
+| Light Crossbow | Slow    |
+| Shortbow       | Vex     |
+| Sling          | Slow    |
+| Battleaxe      | Topple  |
+| Flail          | Sap     |
+| Glaive         | Graze   |
+| Greataxe       | Cleave  |
+| Greatsword     | Graze   |
+| Halberd        | Cleave  |
+| Lance          | Topple  |
+| Longsword      | Sap     |
+| Maul           | Topple  |
+| Morningstar    | Sap     |
+| Pike           | Push    |
+| Rapier         | Vex     |
+| Scimitar       | Nick    |
+| Shortsword     | Vex     |
+| Trident        | Topple  |
+| Warhammer      | Push    |
+
+For any supported V1 weapon not represented above, RealmWeaver should use the applicable canonical revised-rules mapping rather than AI-generated assignment.
+
+Weapon Mastery mappings are authoritative rules data.
+
 ## 4.5 Attack Resolution
 
 Weapons provide mechanical data to the Combat system.
@@ -353,12 +454,17 @@ The rules engine determines the valid calculation.
 ## 4.7 Versatile Weapons
 
 Versatile weapons support appropriate one-handed and two-handed damage configurations.
+The applicable damage is determined from authoritative current wield/hand state rather than merely from the weapon being equipped.
 
 ## 4.8 Two-Handed Weapons
 
 Two-handed weapons require both hands while actively being used.
 
 They cannot simultaneously be actively used with a shield or another held weapon.
+
+RealmWeaver validates current wield state before an attack is permitted.
+
+Possessing or equipping a Two-Handed weapon is not sufficient if the character's current hand configuration is incompatible with actively using it.
 
 ## 4.9 Two-Weapon Fighting
 
@@ -378,11 +484,21 @@ The Combat system determines the resulting Bonus Action attack and damage rules.
 
 More advanced dual-wielding features may be added in later versions.
 
+Two-weapon fighting requires the applicable weapons to be actually wielded in valid hand states.
+
+Possessing two eligible Light weapons in inventory, or merely having them equipped, does not automatically satisfy this requirement.
+
+The Nick Weapon Mastery property integrates with these rules through `04_COMBAT.md`.
+
 ## 4.10 Ammunition
 
 Ranged weapons requiring ammunition consume appropriate ammunition according to their weapon rules.
 
 Ammunition is authoritative inventory state.
+
+An ammunition-based weapon may be equipped and wielded while still being unable to make an attack because the required ammunition is unavailable.
+
+RealmWeaver validates ammunition before resolving the attack.
 
 ## 4.11 Improvised Weapon Use
 
@@ -391,6 +507,19 @@ Creative weapon use may be interpreted by the AI.
 The rules engine determines the appropriate mechanical treatment.
 
 The AI cannot invent arbitrary damage or bonuses.
+
+Improvised weapons do not automatically receive standard Weapon Mastery properties.
+
+The AI must not infer:
+
+```text
+Chair
+→ Greatclub
+→ Push
+```
+solely because an improvised object resembles a standard weapon.
+
+If a validated rule explicitly treats an object as a particular standard weapon type, that authoritative weapon type may provide its normal Mastery mapping.
 
 ---
 
@@ -615,9 +744,45 @@ Stored
 Carried
 Accessible
 Equipped
+Wielded / Active
 ```
 
 These are not equivalent.
+
+A character may own an item without carrying it.
+
+A carried item may not be immediately accessible.
+
+An accessible item may not be equipped.
+
+An equipped weapon may be readied for combat without currently being wielded.
+
+A wielded weapon is currently held and available for mechanics requiring active weapon use.
+
+Example:
+
+```text
+Greatsword
+Rapier
+Potion
+
+Equipped:
+Longsword
+Longbow
+Shield
+
+Wielded:
+Longsword
+Shield
+
+```
+The Greatsword and Rapier are carried but not equipped.
+
+The Longbow is equipped/readied but not currently wielded.
+
+The Longsword and Shield are actively wielded.
+
+RealmWeaver must use authoritative state rather than AI narration to determine these relationships.
 
 ## 6.3 Lightweight Equipment Slots
 
@@ -631,6 +796,11 @@ Required states include:
 * Two-Handed weapon state where appropriate
 
 Additional slots should only be introduced when mechanically necessary.
+V1 also conceptually distinguishes equipment that is part of the character's ready loadout from equipment merely stored elsewhere in carried inventory.
+
+The exact number and presentation of ready-equipment slots is deferred to later architecture/UI design.
+
+RealmWeaver should avoid treating every carried weapon as simultaneously ready for immediate combat use.
 
 ## 6.4 Hand State
 
@@ -650,19 +820,51 @@ Dagger + Dagger
 Greatsword occupying both hands
 ```
 
+Hand state represents current active wield configuration.
+
+Weapons requiring active use must satisfy the applicable hand state at the moment the mechanical action is resolved.
+
+Equipment state alone does not satisfy hand-dependent requirements.
+
 ## 6.5 Drawing and Switching Weapons
 
-One accessible ordinary weapon may normally be drawn using reasonable free interaction where supported.
+Equipping, drawing/wielding and stowing a weapon are distinct state transitions.
+
+Conceptually:
+
+```text
+Inventory / Carried
+        ↓ equip
+Equipped / Ready
+        ↓ draw
+Wielded
+```
+```text
+Wielded
+        ↓ stow
+Equipped / Ready
+```
+One accessible, properly equipped ordinary weapon may normally be drawn using reasonable free interaction where supported.
+
+A weapon that is merely carried/stored in general inventory may require a more substantial interaction before it becomes wielded.
 
 Complex loadout changes may require additional interactions/actions.
 
 RealmWeaver should avoid unnecessary hand-movement micromanagement while preserving meaningful action economy.
+
+Detailed combat interaction costs are defined in `04_COMBAT.md`.
 
 ## 6.6 Dropping Items
 
 Dropped items transfer from the character to the current world location.
 
 They are not deleted.
+
+If the dropped item was wielded, its wield state immediately ends.
+
+Dropping a weapon does not remove the character's proficiency or Weapon Mastery training for that weapon type.
+
+The physical Item Instance remains authoritative in scene/world state until another valid event moves, transfers, retrieves or destroys it.
 
 ## 6.7 Picking Up Items
 
@@ -734,9 +936,12 @@ The AI should not receive the entire inventory on every turn.
 
 RealmWeaver should provide:
 
+* Currently wielded/active items
 * Equipped items
 * Relevant carried items
+* Relevant Weapon Mastery availability where needed
 * Contextually necessary inventory information
+
 
 Future AI tools/services may query authoritative inventory state when necessary.
 
@@ -751,12 +956,19 @@ Equipment changes may trigger recalculation of:
 * Stealth effects
 * Available features
 * Other derived mechanics
+* Wield legality
+* Available Weapon Mastery effects
+* Hand-dependent features
 
 ## 6.15 Combat Restrictions
 
 Inventory management remains subject to Combat action economy.
 
 The player cannot freely reorganise their entire inventory during a combat turn.
+
+Being present in inventory does not make a weapon immediately usable in combat.
+
+RealmWeaver validates whether the required equipment/draw/wield transition can legally occur within the current action economy.
 
 ## 6.16 Outside Combat
 
@@ -781,6 +993,91 @@ V1 has no arbitrary videogame-style inventory-slot limit.
 When Encumbrance is enabled, weight provides the primary carrying limitation.
 
 When Encumbrance is disabled, general carrying-capacity penalties are ignored.
+
+## 6.19 Weapon Mastery and Equipment State
+
+Weapon Mastery selection and equipment state are independent.
+
+A character may:
+
+* Master a weapon they do not currently own.
+* Own a weapon they have not mastered.
+* Equip an unmastered weapon.
+* Carry a mastered weapon without equipping it.
+* Wield a mastered weapon and activate its Mastery when the normal trigger is satisfied.
+
+Changing Weapon Mastery does not automatically:
+
+* Grant the physical weapon.
+* Add the weapon to inventory.
+* Equip the weapon.
+* Wield the weapon.
+
+Changing equipment does not automatically alter Weapon Mastery selections.
+
+Weapon Mastery only participates when the applicable weapon is actually used in a mechanically valid action.
+
+Example:
+
+```text
+Mastered Weapons:
+Longsword
+Longbow
+
+Currently Wielded:
+Longsword
+
+Attack:
+Longsword
+→ Sap may apply
+
+Longbow Mastery:
+Irrelevant to this attack
+```
+
+## 6.20 Magic and Unique Weapons
+
+A magic weapon based on a standard weapon type inherits that base weapon type's normal Weapon Mastery property unless the specific validated item definition explicitly overrides it.
+
+Example:
+
+```text
++1 Longsword
+
+Base Weapon Type:
+Longsword
+
+Default Mastery:
+Sap
+```
+A character who has mastered Longsword may use that Mastery with different valid Longsword Item Instances, including magical Longswords.
+
+Weapon Mastery represents training in a weapon type rather than training with one individual physical item.
+
+Named or unique weapons should identify an authoritative base weapon type where applicable.
+
+An AI-generated or custom weapon may change its Mastery property only through validated structured item data.
+
+## 6.21 Thrown Weapons and Physical Item State
+
+When a physical weapon with the Thrown property is thrown, that specific Item Instance leaves the character's wield state.
+
+Conceptually:
+
+```text
+Handaxe #17
+
+Before:
+Wielded
+
+After Throw:
+Current Scene / Battlefield
+```
+The character cannot repeatedly throw the same physical Item Instance without retrieving it unless a supported rule or magical property explicitly returns or recreates the weapon.
+
+A mastered Thrown weapon may still use its Weapon Mastery property where the applicable Mastery rule permits it.
+
+Multiple copies of the same weapon type may exist as separate Item Instances where individual state matters.
 
 ---
 
@@ -887,6 +1184,7 @@ Owned items stored elsewhere do not contribute to current carried weight.
 ## 7.10 Equipped Item Weight
 
 Equipped weapons, armour, shields, and other items still contribute to carried weight.
+Current wield state does not remove the item from carried-weight calculations.
 
 ## 7.11 Coin Weight
 
@@ -1220,6 +1518,12 @@ If an NPC already has persistent possessions, those possessions are authoritativ
 
 RealmWeaver must not reroll their inventory.
 
+This persistence also applies to mechanically relevant equipment changes.
+
+If an important NPC drops, loses, transfers, consumes or has an item stolen, RealmWeaver persists the resulting possession/equipment state.
+
+The AI must not regenerate the item merely because it existed in the NPC's original profile or archetype.
+
 ## 9.5 Loot Materialisation
 
 Lightweight NPCs/loot sources may initially contain profiles rather than exact contents.
@@ -1227,6 +1531,16 @@ Lightweight NPCs/loot sources may initially contain profiles rather than exact c
 When exact possessions become mechanically relevant, RealmWeaver may materialise them.
 
 After materialisation, they become persistent.
+
+When mechanically relevant, materialisation may also include:
+
+* Equipped weapons
+* Currently wielded weapon
+* Ammunition
+* Shield/off-hand configuration
+* Weapon Mastery capability and selections where applicable
+
+Disposable NPCs need only enough equipment detail to support meaningful mechanics and loot.
 
 ## 9.6 Generate Once, Persist Afterwards
 
@@ -1355,6 +1669,10 @@ Not every merchant purchases every item category.
 Rare/powerful loot uses stricter generation restrictions.
 
 Powerful items should require an appropriate source and context.
+
+Dropping an actively wielded weapon also ends its active wield state.
+
+Retrieving it later requires a valid item interaction before it becomes usable again.
 
 ## 9.18 Quest Loot
 
@@ -2116,6 +2434,9 @@ V1 includes:
 * Item ownership/location
 * GP/SP/CP/PP currency
 * Weapons
+* Weapon Mastery
+* Inventory / Equipped / Wielded state distinction
+* Persistent dropped/thrown weapon state
 * Basic two-weapon fighting
 * Armour and Shields
 * Armour proficiency penalties
@@ -2204,6 +2525,10 @@ Group 6 interacts with:
 * Action economy
 * Loot after combat
 * Movement penalties
+* Weapon Mastery resolution
+* Wield-state validation
+* Weapon switching
+* Temporary Mastery effects
 
 ### Classes & Progression
 
@@ -2212,6 +2537,10 @@ Group 6 interacts with:
 * Tool proficiency
 * Expertise
 * Future class equipment features
+* Weapon Mastery access
+* Mastery Capacity
+* Mastery selection/reselection
+* Fighter/Rogue progression
 
 ### Magic
 
@@ -2250,6 +2579,8 @@ Group 6 interacts with:
 * Loot proposals
 * Structured item actions
 * Player/system knowledge separation
+* Current wield state
+* Relevant Weapon Mastery capabilities
 
 ---
 

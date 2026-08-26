@@ -4,7 +4,7 @@
 **Status:** M2.1 In Progress
 **Milestone:** M2 — Technical Design & Architecture
 **Primary Rules Baseline:** SRD 5.1 / 2014-style mechanics with explicitly documented RealmWeaver adaptations
-**Last Reviewed:** 22 August 2026
+**Last Reviewed:** 26 August 2026
 
 ---
 
@@ -102,6 +102,7 @@ Examples include:
 * Controlled DC categories instead of arbitrary AI-generated DCs
 * Simplified initial class/subclass scope
 * Limited initial reaction support
+* Selective adoption of revised-rules Weapon Mastery while retaining SRD 5.1 / 2014-style mechanics as the primary baseline
 * Configurable Full / Simplified spell-component handling
 * Persistent campaign-time requirements
 * Distance-band adaptations for spell areas and Conditions
@@ -126,6 +127,29 @@ Such exceptions should document:
 * Interaction with the primary baseline
 
 Goliath is currently an example of a Species requiring an explicit later-SRD source decision.
+
+Weapon Mastery is an approved later-rules exception for RealmWeaver V1.
+
+RealmWeaver selectively adopts Weapon Mastery to increase tactical weapon differentiation and martial character depth while retaining SRD 5.1 / 2014-style mechanics as the primary rules baseline.
+
+Weapon Mastery is always enabled and is not a campaign-builder toggle.
+
+The approved Weapon Mastery system includes:
+
+* Cleave
+* Graze
+* Nick
+* Push
+* Sap
+* Slow
+* Topple
+* Vex
+
+Weapon Mastery class access and progression are defined in `05_CLASSES_AND_PROGRESSION.md`.
+
+Weapon definitions, Mastery mappings and equipment-state interaction are defined in `06_EQUIPMENT_AND_INVENTORY.md`.
+
+Weapon Mastery combat resolution is defined in `04_COMBAT.md`.
 
 ---
 
@@ -225,6 +249,9 @@ Covers:
 * Opportunity Attacks
 * Natural-Language Combat Actions
 * Attack Resolution
+* Weapon Mastery Combat Resolution
+* Weapon Mastery Temporary Effects
+* Weapon Mastery Forced Movement
 * Armour Class
 * Damage
 * Damage Types
@@ -267,6 +294,9 @@ Covers:
 * Class Data Model
 * Hit Dice
 * Class Features
+* Weapon Mastery Class Access
+* Weapon Mastery Capacity & Progression
+* Weapon Mastery Selection & Reselection
 * Proficiency Progression
 * Species
 * Species Traits
@@ -300,9 +330,14 @@ Covers:
 - Item Ownership & Location
 - Currency & Wealth
 - Weapons
+- Weapon Mastery Definitions & Mapping
+- Weapon Mastery / Equipment Interaction
 - Two-Weapon Fighting
 - Armour & Shields
-- Inventory & Equipment State
+- Inventory, Equipped & Wielded State
+- Hand & Wield State
+- Weapon Drawing & Switching
+- Dropped & Thrown Weapon State
 - Containers & Persistent Storage
 - Carrying Capacity
 - Optional Encumbrance
@@ -380,34 +415,26 @@ Specification:
 
 Covers:
 
-* Structured Condition Definitions
-* Persistent Condition Instances
-* Standard SRD 5.1 / 2014 Conditions
-* Condition Sources
+* Conditions
+* Condition Application & Removal
 * Condition Duration
-* Condition Removal
-* Condition Immunity
-* Overlapping Conditions
-* Hidden Conditions / Information Visibility
-* Distance-Band Condition Adaptations
-* Exhaustion
+* Temporary Effects
 * Environmental Hazards
-* Environmental Countermeasures
-* Short Rests
-* Hit Dice Spending
-* Long Rests
+* Environmental Hazard Responses
+* Short Rest
+* Long Rest
 * Hit Dice Recovery
-* Spell-Slot / Resource Recovery
-* Rest Safety
-* Watches
-* Probabilistic Rest Interruptions
-* Rest Event Validation
-* Persistent Campaign-Time Requirements
-* Scheduled World-Event Requirements
-* NPC Rest / Recovery Persistence
-* AI / Rules Authority
-* Mechanical Event History
-* Deterministic Validation and LLM-Call Minimisation
+* Class Resource Recovery
+* Spell-Slot Recovery
+* Species Rest Traits
+* Stabilisation Recovery
+* Exhaustion
+* Exhaustion Recovery
+* Rest Restrictions
+* Rest Interruption
+* Probabilistic Rest Interruption
+* Rest Validation
+* Persistent Rest State
 
 ---
 
@@ -500,6 +527,7 @@ Potential reusable rules content includes:
 * Subclasses
 * Monsters
 * Weapons
+* Weapon Mastery definitions and mappings
 * Armour
 * Equipment
 * Spells
@@ -590,6 +618,8 @@ A significant rule change should:
 6. Record an ADR where the decision is architecturally significant.
 7. Preserve history through Git.
 
+Cross-group amendments such as Weapon Mastery must be reflected in every affected detailed specification before the amendment is considered fully incorporated into the authoritative ruleset.
+
 ---
 
 # 10. Cross-Group Consistency
@@ -605,6 +635,10 @@ Examples:
 * Rest may restore class resources.
 * Combat may trigger XP or Milestone progress.
 * AI proposals must respect every authoritative rules domain.
+* Weapon Mastery access originates from character features and progression.
+* Weapon Mastery availability depends on weapon and equipment state.
+* Weapon Mastery effects may modify combat, movement, action economy and temporary effect state.
+* Temporary effects modify effective state without overwriting authoritative base statistics.
 
 Before M2.1 is considered complete, all nine rules groups require a consistency review.
 
@@ -640,9 +674,20 @@ The project should not rely on conversation history as the only record of an app
 * Group 7 — Magic
 * Group 8 — Conditions & Resting
 
-## Pending Amendment
+### Approved Cross-Group Amendments
 
-* Weapon Mastery — affects Groups 4, 5 and 6
+* Weapon Mastery
+  * WM-A — Core Weapon Mastery Framework
+  * WM-B — Weapon Mastery Effects
+  * WM-C — Class Access & Progression
+  * WM-D — Weapon Mapping, Equipment State & NPCs
+  * WM-E — AI / Rules Boundary, Persistence & Cross-System Integration
+
+Weapon Mastery amendments are incorporated across:
+
+* `04_COMBAT.md`
+* `05_CLASSES_AND_PROGRESSION.md`
+* `06_EQUIPMENT_AND_INVENTORY.md`
 
 ## Not Started
 
@@ -655,6 +700,7 @@ The project should not rely on conversation history as the only record of an app
 M2.1 — V1 Game Rules Specification is complete only when:
 
 * Groups 1–9 have approved specifications.
+* Approved cross-group amendments have been incorporated into every affected detailed specification.
 * Cross-group contradictions have been reviewed.
 * Major V1 simplifications are documented.
 * AI authority boundaries are explicitly defined.
@@ -667,24 +713,12 @@ M2.1 — V1 Game Rules Specification is complete only when:
 
 # 14. Next Design Activity
 
-Complete the pending cross-group amendment:
-
-> **Weapon Mastery**
-
-Primary affected specification:
-
-`06_EQUIPMENT_AND_INVENTORY.md`
-
-Cross-group review required for:
-
-* `04_COMBAT.md`
-* `05_CLASSES_AND_PROGRESSION.md`
-* `06_EQUIPMENT_AND_INVENTORY.md`
-
-Once the amendment is approved and documented, continue with:
+Continue with:
 
 > **Group 9 — AI / Rules Boundary**
 
-Planned Group 9 file:
+Planned file:
 
 `09_AI_RULES_BOUNDARY.md`
+
+Group 9 is the final rules-design group required before the M2.1 cross-group consistency review and completion gate.
