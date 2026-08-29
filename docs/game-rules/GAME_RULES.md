@@ -1,10 +1,10 @@
 # RealmWeaver — V1 Game Rules
 
 **Document Type:** Rules Index
-**Status:** M2.1 In Progress
+**Status:** M2.1 Rules Design Complete — Review Gate Pending
 **Milestone:** M2 — Technical Design & Architecture
 **Primary Rules Baseline:** SRD 5.1 / 2014-style mechanics with explicitly documented RealmWeaver adaptations
-**Last Reviewed:** 26 August 2026
+**Last Reviewed:** 29 August 2026
 
 ---
 
@@ -37,6 +37,19 @@ The core principle is:
 A second governing principle is:
 
 > **AI proposes. RealmWeaver validates.**
+
+```markdown
+A third governing principle established by the completed AI/rules boundary is:
+
+> **AI may remember context. RealmWeaver preserves truth.**
+
+The player owns meaningful player-character intent and decisions.
+
+AI may interpret intent, choose behaviour for AI-controlled actors, propose mechanics/content and narrate outcomes.
+
+RealmWeaver remains authoritative over rules, controlled randomness, mechanical resolution, persistent campaign state, world canon, knowledge boundaries and long-term campaign continuity.
+```
+
 
 The AI Dungeon Master may:
 
@@ -355,115 +368,211 @@ Covers:
 - Future Crafting Architecture
 
 ---
-
 ## 4.7 Group 7 — Magic
 
-**Status:** APPROVED
+Status: APPROVED
 
 Specification:
 
-[07_MAGIC.md](./07_MAGIC.md)
+`07_MAGIC.md`
 
 Covers:
 
-* Spellcasting Core & Spell Data Model
-* Known / Acquired / Prepared / Castable Spell State
-* Wizard Spellbook
-* Cleric Spell Preparation
-* Spell Slots
-* Resource Consumption
-* Casting Time & Action Economy
-* Reaction Spells
-* Natural-Language and Structured UI Casting
-* Spell Attacks
-* Spell Save DC
-* Saving Throw Spells
-* Range & Targeting
-* Distance-Band Spell Adaptations
-* Area-of-Effect Resolution
-* Spell Components
-* Full / Simplified Component Campaign Setting
-* Material Components & Spellcasting Focuses
-* Concentration
-* Spell Durations & Ongoing Effects
-* Spell Damage
-* Healing
-* Conditions
+* Structured Spell Definitions
+* Spell Access Sources
+* Known / Acquired / Prepared / Castable State
+* Wizard Spellbooks
+* Cleric Preparation
 * Cantrips
+* Spell Slots
+* Upcasting
+* Arcane Recovery
+* Casting Time
+* Actions / Bonus Actions / Reactions
+* Extended Casting
+* Range
+* Targeting
+* Areas of Effect
+* Spell Attack Rolls
+* Saving Throw Spells
+* Spell Save DC
+* Damage
+* Healing
+* Verbal / Somatic / Material Components
+* Campaign-Level Component Setting
+* Concentration
 * Ritual Casting
-* Special / Granted Casting
-* Spell Scrolls
-* Magic Items
-* Identification
-* Attunement
-* AI Spellcasting Authority
-* NPC Spellcasting State
-* Persistent Spell / Effect State
-* LLM Round-Trip Minimisation
-* Mechanical Event History
-* AI Failure / Duplicate-Action Safety
+* Innate Species Magic
+* Persistent Spell Effects
+* Spell Provenance
+* AI / Rules Authority for Spellcasting
+* Deterministic Spell Validation and Resolution
 
 ---
-
 ## 4.8 Group 8 — Conditions & Resting
 
-**Status:** APPROVED
+Status: APPROVED
 
 Specification:
 
-[08_CONDITIONS_AND_RESTING.md](./08_CONDITIONS_AND_RESTING.md)
+`08_CONDITIONS_AND_RESTING.md`
 
 Covers:
 
-* Conditions
-* Condition Application & Removal
+* Structured Condition Instances
+* Standard Conditions
+* Multiple Condition Sources
 * Condition Duration
-* Temporary Effects
 * Environmental Hazards
-* Environmental Hazard Responses
+* Environmental Countermeasures
+* Exhaustion
+* Death / Stabilisation Interactions
 * Short Rest
 * Long Rest
 * Hit Dice Recovery
 * Class Resource Recovery
 * Spell-Slot Recovery
 * Species Rest Traits
-* Stabilisation Recovery
-* Exhaustion
-* Exhaustion Recovery
 * Rest Restrictions
-* Rest Interruption
-* Probabilistic Rest Interruption
-* Rest Validation
-* Persistent Rest State
-
+* Interrupted Rest
+* Persistent NPC Recovery
+* Authoritative World-Time Advancement
+* Rest Event History
+* Condition / Recovery Provenance
+* Idempotent Recovery Behaviour
 
 ---
 
 ## 4.9 Group 9 — AI / Rules Boundary
 
-**Status:** NOT STARTED
+Status: APPROVED
 
-Planned specification:
+Specification:
 
 `09_AI_RULES_BOUNDARY.md`
 
-Expected topics include:
+Covers:
 
-* AI Authority
-* Rules-Engine Authority
+### Authority & Intent
+
+* Authority Model
 * Player Intent Interpretation
-* Structured Action Proposals
-* Mechanical Validation
-* Tool / Service Boundaries
-* Progression Events
-* Quest Events
-* Discovery Events
-* World-State Changes
-* Invalid AI Output
-* Deterministic Fallback
-* Error Recovery
-* AI Failure Safety
-* State Integrity
+* AI Mechanical Proposals
+* Validation & Rejection
+
+### Resolution & Narration
+
+* Mechanical Resolution Pipeline
+* Commit-Before-Narration Contract
+* AI Narration Boundary
+* Structured Mechanical Results
+* Player Agency
+* Deterministic Consequence Handling
+
+### NPC & World Authority
+
+* NPC AI Authority
+* NPC Knowledge Boundaries
+* Persistent NPC State
+* Selective Off-Screen NPC Progression
+* World & Content Proposals
+* Incidental / Scene-Relevant / Persistent Content
+* Locations
+* Factions
+* Quests
+* Items
+* Lore
+* Dynamic World State
+* World-Generation Profile Constraints
+
+### Knowledge & Memory
+
+* Objective World Truth
+* Player-Character Knowledge
+* NPC Knowledge
+* AI / DM Context
+* Fact / Rumour / Myth / Belief / Propaganda Distinctions
+* Hidden Information
+* Partial Discovery
+* Context Assembly
+* Memory Categories
+* Summarisation
+* Entity-Linked Retrieval
+* Provider-Independent Campaign Memory
+* Session-Independent Campaign Continuity
+
+### Reliability
+
+* Failure Categories
+* Coherent State Commitment
+* Idempotency
+* Duplicate Request Protection
+* Bounded AI Retries
+* Retry-Safe Randomness
+* No Free Rerolls from Technical Failure
+* Safe Fallback Behaviour
+* Stale-State Revalidation
+* Narration Regeneration
+* Save Integrity
+* World-Event Failure Recovery
+
+### Latency & UX
+
+* Narrative-First Gameplay
+* Inspectable Mechanics
+* Local Deterministic Resolution
+* Minimum Necessary AI Calls
+* Structured UI Bypassing Intent Interpretation Where Appropriate
+* Hidden and Visible Dice UX
+* Direct Structured State Inspection
+* Campaign Resume and Recap
+* Player Agency
+* Correctness Before Latency
+* Task-Proportional Context and Processing
+
+### Visual Quality
+
+RealmWeaver treats visual quality as a first-class product requirement.
+
+The UI should:
+
+* Present a distinctive RealmWeaver fantasy identity
+* Use a coherent reusable design system
+* Avoid appearing as a generic AI chatbot or unmodified UI-library application
+* Preserve readability and interaction clarity
+* Use purposeful animation
+* Elevate important gameplay/story moments visually
+* Remain responsive, accessible and performant
+* Permit suitable UI/component/animation libraries and development accelerators
+* Require explicit visual/UX review for important player-facing features
+
+The governing visual principle is:
+
+> **The interface should make the player want to enter the world.**
+
+### Final Group 9 Contract
+
+> **Player chooses. AI interprets, proposes, decides for AI-controlled actors and narrates. RealmWeaver validates, resolves, commits and remembers.**
+
+The complete lifecycle is:
+
+```text
+PLAYER INTENT
+        ↓
+INTERPRET / PROPOSE
+        ↓
+VALIDATE
+        ↓
+RESOLVE
+        ↓
+COMMIT
+        ↓
+NARRATE
+        ↓
+PERSIST / CONTINUE WORLD
+```
+
+Persistent consequences cannot bypass RealmWeaver's authoritative state model.
 
 ---
 
@@ -643,10 +752,11 @@ When a rules group is completed:
 The project should not rely on conversation history as the only record of an approved rule.
 
 ---
-
 # 12. Current M2.1 Status
 
-## Approved
+## Rules Design
+
+All required M2.1 rules groups are APPROVED:
 
 * Group 1 — Character Core
 * Group 2 — Checks & Saving Throws
@@ -656,52 +766,87 @@ The project should not rely on conversation history as the only record of an app
 * Group 6 — Equipment & Inventory
 * Group 7 — Magic
 * Group 8 — Conditions & Resting
-
-### Approved Cross-Group Amendments
-
-* Weapon Mastery
-  * WM-A — Core Weapon Mastery Framework
-  * WM-B — Weapon Mastery Effects
-  * WM-C — Class Access & Progression
-  * WM-D — Weapon Mapping, Equipment State & NPCs
-  * WM-E — AI / Rules Boundary, Persistence & Cross-System Integration
-
-Weapon Mastery amendments are incorporated across:
-
-* `04_COMBAT.md`
-* `05_CLASSES_AND_PROGRESSION.md`
-* `06_EQUIPMENT_AND_INVENTORY.md`
-
-## Not Started
-
 * Group 9 — AI / Rules Boundary
 
----
+The primary M2.1 rules-design stage is therefore complete.
 
+## Current Phase
+
+**REVIEW GATE PENDING**
+
+Remaining M2.1 work:
+
+1. Group 9 internal consistency review.
+2. Full Groups 1–9 cross-group consistency review.
+3. Terminology and cross-reference review.
+4. Weapon Mastery cross-group verification.
+5. V1 scope and deferred-mechanics review.
+6. SRD/IP/content-provenance audit.
+7. Required specification corrections.
+8. Final M2.1 completion gate.
+
+M2.1 must not be marked COMPLETE until these review activities pass.
+
+---
 # 13. M2.1 Completion Gate
 
 M2.1 — V1 Game Rules Specification is complete only when:
 
 * Groups 1–9 have approved specifications.
-* Approved cross-group amendments have been incorporated into every affected detailed specification.
-* Cross-group contradictions have been reviewed.
-* Major V1 simplifications are documented.
-* AI authority boundaries are explicitly defined.
+* Group 9 has passed internal consistency review.
+* All nine groups have passed cross-group consistency review.
+* Cross-group contradictions and ambiguous interactions have been resolved.
+* Major V1 simplifications and adaptations are documented.
+* Weapon Mastery amendments are consistent across affected files.
+* AI authority boundaries are explicitly and consistently defined.
 * Core rules are implementable without relying on AI memory.
-* Unsupported/deferred mechanics are clearly identified.
-* Rules-source/licensing decisions are documented.
-* The rules specification is sufficiently stable to support system architecture and domain modelling.
+* Player agency is consistently protected.
+* NPC decisions respect mechanical and information boundaries.
+* Persistent world facts cannot be created through narration alone.
+* Knowledge boundaries distinguish world truth, actor knowledge and AI/DM context.
+* Retry/idempotency rules prevent duplicate effects and free rerolls.
+* Unsupported and deferred mechanics are clearly identified.
+* Rules-source/licensing decisions have been reviewed.
+* Mechanically defined content has appropriate provenance where required.
+* Unknown or unsupported content sources required for implementation are resolved.
+* The specification is sufficiently stable to support system architecture and domain modelling.
+* `PROJECT_STATUS.md` reflects the final M2.1 state.
+* The completed M2.1 documentation baseline is committed and pushed.
+
+Current gate status:
+
+> **NOT YET PASSED — RULES DESIGN COMPLETE, REVIEW PENDING**
 
 ---
-
 # 14. Next Design Activity
+
+Do not proceed directly to M2.2 yet.
 
 Continue with:
 
-> **Group 9 — AI / Rules Boundary**
+> **M2.1 — Group 9 Internal Consistency Review**
 
-Planned file:
+Then:
 
-`09_AI_RULES_BOUNDARY.md`
+```text
+Group 9 Internal Review
+        ↓
+Groups 1–9 Cross-Group Review
+        ↓
+V1 / Deferred Mechanics Review
+        ↓
+SRD / IP / Content-Provenance Audit
+        ↓
+Documentation Corrections
+        ↓
+M2.1 Final Gate
+        ↓
+M2.2 — System Architecture
+```
 
-Group 9 is the final rules-design group required before the M2.1 cross-group consistency review and completion gate.
+The next major architecture activity after the M2.1 gate passes will be:
+
+> **M2.2 — System Architecture**
+
+```
+```

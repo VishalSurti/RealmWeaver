@@ -1,62 +1,58 @@
 # RealmWeaver — Project Status
 
 **Document Version:** 1.3
-**Last Reviewed:** 26 August 2026
+**Last Reviewed:** 29 August 2026
 **Overall Status:** Active
 **Current Milestone:** M2 — Technical Design & Architecture
 **Milestone Status:** IN PROGRESS
 **Current Activity:** M2.1 — V1 Game Rules Specification & Rules-Engine Boundary
-**Next Activity:** M2.1 Group 9 — AI / Rules Boundary
-**Current Progress:** Groups 1–8 APPROVED and documented; Weapon Mastery cross-group amendment APPROVED
+**Next Activity:** Rules specification complete; consistency and provenance review pending  
+**Current Progress:** Groups 1–9 APPROVED and documented
 
 ---
 
 # 1. Current Project State
 
-RealmWeaver has completed **Milestone 1 — Product Foundation** and has formally entered **Milestone 2 — Technical Design & Architecture**.
+RealmWeaver has completed Milestone 1 — Product Foundation and has formally entered Milestone 2 — Technical Design & Architecture.
 
 The product vision, V1 scope, requirements, user stories, acceptance criteria, product backlog, Definition of Done, risk register, competitive/reference analysis, and project-management documentation were established during M1.
 
-M2 is now defining how RealmWeaver V1 will function technically before production implementation begins.
+M2 is defining how RealmWeaver V1 will function technically before production implementation begins.
 
-The first M2 activity, **M2.1 — V1 Game Rules Specification & Rules-Engine Boundary**, is currently in progress.
+The first M2 activity, M2.1 — V1 Game Rules Specification & Rules-Engine Boundary, has completed its primary rules-design stage.
 
-The following M2.1 rules groups have been approved:
+The following M2.1 rules groups are APPROVED and documented:
 
 * Group 1 — Character Core
-* Group 2 — Checks, DCs & Saving Throws
+* Group 2 — Checks & Saving Throws
 * Group 3 — Dice & Inspiration
 * Group 4 — Combat
 * Group 5 — Classes & Progression
 * Group 6 — Equipment & Inventory
-* Group 7 - Magic
+* Group 7 — Magic
 * Group 8 — Conditions & Resting
+* Group 9 — AI / Rules Boundary
 
-A cross-group Weapon Mastery amendment has also been approved and incorporated into the relevant M2.1 rules specifications.
+The detailed specifications are stored under:
 
-The amendment covers:
+`docs/game-rules/`
 
-* WM-A — Core Weapon Mastery Framework
-* WM-B — Weapon Mastery Effects
-* WM-C — Class Access & Progression
-* WM-D — Weapon Mapping, Equipment State & NPCs
-* WM-E — AI / Rules Boundary, Persistence & Cross-System Integration
+The primary rules-design work is complete, but M2.1 has **not yet passed its completion gate**.
 
-The amendment affects:
+Before M2.1 is formally closed, RealmWeaver must complete:
 
-* `04_COMBAT.md`
-* `05_CLASSES_AND_PROGRESSION.md`
-* `06_EQUIPMENT_AND_INVENTORY.md`
-
-Weapon Mastery is always enabled as an explicit RealmWeaver adaptation while SRD 5.1 / 2014-style mechanics remain the primary rules baseline.
-
-The next activity is:
-
-> **M2.1 Group 9 — AI / Rules Boundary**
+1. Group 9 internal consistency review.
+2. Full Groups 1–9 cross-group consistency review.
+3. Terminology and cross-reference review.
+4. V1 scope/deferred-feature review.
+5. SRD/IP/content-provenance audit.
+6. Required documentation corrections.
+7. Final M2.1 gate review.
+8. Documentation checkpoint commit and push.
 
 No production application code has been introduced yet.
 
-The current focus remains technical specification and architecture rather than implementation.
+The project remains in technical specification and architecture preparation rather than implementation.
 
 ---
 
@@ -127,27 +123,46 @@ These areas may be refined, combined or reordered where technically appropriate.
 No major production implementation should begin until the relevant architectural foundations have been sufficiently defined and reviewed.
 
 ---
-
 # 4. M2.1 — Game Rules Specification
 
 ## Status
 
-**IN PROGRESS**
+**RULES DESIGN COMPLETE — REVIEW GATE PENDING**
 
-Authoritative specification:
+Authoritative rules index:
 
 `docs/game-rules/GAME_RULES.md`
+
+Detailed specifications:
+
+* `docs/game-rules/01_CHARACTER_CORE.md`
+* `docs/game-rules/02_CHECKS_AND_SAVES.md`
+* `docs/game-rules/03_DICE_AND_INSPIRATION.md`
+* `docs/game-rules/04_COMBAT.md`
+* `docs/game-rules/05_CLASSES_AND_PROGRESSION.md`
+* `docs/game-rules/06_EQUIPMENT_AND_INVENTORY.md`
+* `docs/game-rules/07_MAGIC.md`
+* `docs/game-rules/08_CONDITIONS_AND_RESTING.md`
+* `docs/game-rules/09_AI_RULES_BOUNDARY.md`
 
 The purpose of M2.1 is to determine:
 
 * Which tabletop mechanics RealmWeaver V1 supports
-* Which mechanics are intentionally simplified
-* Which rules are explicitly excluded from V1
-* Which decisions belong to deterministic code
+* Which mechanics are intentionally simplified or adapted
+* Which mechanics are explicitly excluded or deferred
+* Which decisions belong to deterministic RealmWeaver systems
 * Which decisions belong to the AI Dungeon Master
-* How player intent becomes structured mechanical actions
-* How dice and rules outcomes are resolved
-* How authoritative outcomes are returned to the AI for narration
+* How natural-language player intent becomes structured mechanical proposals
+* How AI-generated proposals are validated
+* How dice and deterministic mechanics are resolved
+* How authoritative state is committed and persisted
+* How AI-controlled NPC decisions remain bounded by rules and knowledge
+* How world content becomes authoritative
+* How player/NPC/world knowledge remains separated
+* How long-running campaign context and memory are assembled
+* How retries and failures preserve authoritative state
+* How committed outcomes are returned to AI for narration
+* How narrative-first UX coexists with inspectable deterministic mechanics
 
 ## Approved Groups
 
@@ -155,227 +170,100 @@ The purpose of M2.1 is to determine:
 
 **APPROVED**
 
-Includes:
+Defines core character statistics, ability generation, skills, proficiency, Expertise, HP, AC, movement and level-support foundations.
 
-* Six core ability scores
-* Standard Array and Rolled Stats
-* Skill structure
-* Alternative ability + skill combinations
-* Proficiency
-* Expertise
-* HP
-* AC
-* Speed
-* Passive skills
-* Level-support strategy
-
-### Group 2 — Checks, DCs & Saving Throws
+### Group 2 — Checks & Saving Throws
 
 **APPROVED**
 
-Includes:
-
-* Automatic Success / Mechanical Check / Impossible resolution
-* Controlled DC bands
-* Ability checks
-* Saving throws
-* Contested checks
-* Passive checks
-* Narrative degrees of success/failure
-* AI interpretation with deterministic resolution
+Defines automatic success, checks, impossible actions, DCs, saving throws, contested checks, passive checks and narrative interpretation around deterministic outcomes.
 
 ### Group 3 — Dice & Inspiration
 
 **APPROVED**
 
-Includes:
-
-* Standard RPG dice
-* Multiple-dice expressions
-* Automatic dice
-* Manual physical dice entry
-* Advantage / Disadvantage
-* Hidden rolls
-* Dice history
-* Inspiration
-* Inspiration declared before the roll
-* Unbiased system-generated dice
+Defines supported dice, automatic and manual rolling, advantage/disadvantage, rerolls, hidden rolls, dice history, Inspiration and dice authority.
 
 ### Group 4 — Combat
 
 **APPROVED**
 
-Includes:
+Defines initiative, action economy, reactions, distance-band positioning, attacks, damage, healing, unconsciousness, death, combat AI, encounter consequences and related combat rules.
 
-* Combat initiation
-* Initiative
-* Action economy
-* Reactions
-* Abstract distance-band positioning
-* Movement actions
-* Opportunity attacks
-* Complex natural-language combat actions
-* Attack rolls
-* Weapon Mastery combat resolution
-* Weapon Mastery trigger validation
-* Weapon Mastery temporary effects
-* Weapon Mastery forced movement
-* Hidden enemy AC
-* Damage
-* Damage types
-* Resistances, vulnerabilities and immunities
-* Critical hits
-* Natural 1 attack misses
-* Future critical-fumble / enhanced-critical expansion
-* HP and healing
-* Unconsciousness
-* Death saves
-* Massive damage
-* Solo-play defeat outcomes
-* Persistent character death
-* Enemy tactical profiles
-* Hybrid deterministic / AI-assisted enemy tactics
-* Morale
-* Combat finalisation
-* Encounter objectives
-* Contextual loot
-* Quest updates
-* Persistent NPC/world consequences
-* Reward validation
-* Encumbrance campaign setting
-* Reusable content-pool direction
-* Deterministic Mastery resolution before AI narration
-* Mastery effect persistence and expiry
+Includes approved Weapon Mastery cross-group amendments.
 
 ### Group 5 — Classes & Progression
 
 **APPROVED**
 
-Includes:
-
-* V1 Class Scope
-* Class Data Model
-* Hit Dice
-* Class Features
-* Weapon Mastery class access
-* Weapon Mastery Capacity
-* Weapon Mastery selection and reselection
-* Proficiency Progression
-* Species
-* Species Traits
-* Backgrounds
-* Level-Up Structure
-* XP Progression
-* Milestone Progression
-* Adventure Leads
-* Subclasses
-* Character Choices
-* Fighter Progression
-* Rogue Progression
-* Fighter/Rogue Weapon Mastery progression
-* Cleric Progression
-* Wizard Progression
-* Progress Visibility
-* Progression Validation
-* Ruleset Versioning
+Defines the V1 Fighter, Rogue, Wizard and Cleric scope, species/background foundations, class progression, XP/milestone progression, level-up behaviour and progression validation.
 
 ### Group 6 — Equipment & Inventory
 
 **APPROVED**
 
-Includes:
+Defines structured item definitions/instances, ownership, currency, weapons, armour, shields, hand/equipment state, ammunition, consumables, loot, merchants, tools and optional Encumbrance.
 
-- Structured Item Definitions and persistent Item Instances
-- Item ownership, location and transfer
-- Currency: CP, SP, GP and PP
-- Electrum excluded from V1
-- Weapons and weapon properties
-- Weapon Mastery definitions and mappings
-- Weapon Mastery / equipment interaction
-- Basic two-weapon fighting
-- Ammunition tracking
-- Armour and shields
-- Non-proficient armour penalties
-- Alternative AC architecture
-- Inventory / Equipped / Wielded state distinction
-- Equipment and hand state
-- Weapon drawing and switching
-- Persistent dropped/thrown weapon state
-- Magic/unique weapon Mastery inheritance
-- Persistent NPC equipment state
-- Containers and persistent storage
-- Optional campaign Encumbrance
-- Graduated Encumbrance thresholds
-- Coin weight when Encumbrance is enabled
-- Consumables
-- Unidentified consumables
-- Loot profiles and persistent loot
-- Hidden containers and discoveries
-- Merchant stock
-- Buying and selling
-- Haggling and basic bartering
-- Theft / pickpocket integration
-- Item-state validation
-- Tools and Tool Proficiencies
-- Flexible Ability + Tool checks
-- Full crafting deferred from V1
+Includes the authoritative Weapon Mastery weapon-state integration.
 
 ### Group 7 — Magic
 
 **APPROVED**
 
-Includes:
-
-* Spellcasting
-* Spell Slots
-* Prepared Spells
-* Known Spells
-* Spellbook Rules
-* Cantrips
-* Spell Components
-* Concentration
-* Spell Range
-* Spell Targeting
-* Spell Attacks
-* Saving Throw Spells
-* Spell Damage
-* Healing Spells
-* Ritual Casting
-* Upcasting
-* Innate Species Magic
+Defines structured spell data, spell access, preparation, spellbooks, spell slots, casting time, range, targeting, attack/save resolution, components, concentration, rituals, upcasting, innate magic, damage/healing, persistent effects and magic authority boundaries.
 
 ### Group 8 — Conditions & Resting
 
 **APPROVED**
 
-Includes:
+Defines structured conditions, environmental hazards, Exhaustion, short/long rests, Hit Dice recovery, death/stabilisation interactions, persistent recovery, rest interruption and authoritative world-time progression requirements.
 
-* Conditions
-* Condition application and removal
-* Condition duration
-* Temporary effects
-* Environmental hazards
-* Environmental hazard responses
-* Short Rest
-* Long Rest
-* Hit Dice recovery
-* Class resource recovery
-* Spell-slot recovery
-* Species rest traits
-* Stabilisation recovery
-* Exhaustion
-* Exhaustion recovery
-* Rest restrictions
-* Probabilistic rest interruption
-* Rest validation
-* Persistent rest state
-* Mechanical event history and provenance
-* Duplicate-resolution protection
+### Group 9 — AI / Rules Boundary
 
-## Remaining M2.1 Groups
+**APPROVED**
 
-* Group 9 — AI / Rules Boundary
-* Final M2.1 cross-group consistency review
+Defines:
+
+* Authority Model
+* Player Intent Interpretation
+* AI Mechanical Proposals
+* Validation & Rejection
+* Mechanical Resolution Pipeline
+* AI Narration Boundary
+* NPC AI Authority
+* World & Content Proposals
+* Knowledge & Information Boundaries
+* Context & Memory Boundary
+* Failure, Retry & Consistency
+* Latency, UX & Final Contract
+
+Group 9 establishes the central contract:
+
+> **Player chooses. AI interprets, proposes, decides for AI-controlled actors and narrates. RealmWeaver validates, resolves, commits and remembers.**
+
+It also establishes that:
+
+> **The interface should make the player want to enter the world.**
+
+Visual quality, a coherent RealmWeaver design system, purposeful animation, accessibility, responsiveness and explicit visual/UX review are first-class product requirements.
+
+## Current Review State
+
+All nine detailed rules groups are approved.
+
+M2.1 is now entering its review phase.
+
+Remaining work before the M2.1 gate:
+
+* Group 9 internal consistency review
+* Full Groups 1–9 cross-group consistency review
+* Weapon Mastery cross-file verification
+* Rules terminology review
+* Deferred-feature review
+* V1 scope alignment review
+* SRD/IP/content-provenance review
+* Final documentation corrections
+* M2.1 gate decision
 
 ---
 
@@ -465,7 +353,6 @@ The data model and rules architecture should support eventual expansion toward:
 **Levels 1–20**
 
 ---
-
 # 8. Current Documentation
 
 ## Product / Project Documentation
@@ -486,25 +373,28 @@ Current documents include:
 * `RISK_REGISTER.md`
 * `PROJECT_STATUS.md`
 
-## M2 Technical Documentation
+## M2 Game-Rules Documentation
 
-Current authoritative M2.1 rules documentation includes:
+Located under:
 
-* `docs/game-rules/GAME_RULES.md`
-* `docs/game-rules/01_CHARACTER_CORE.md`
-* `docs/game-rules/02_CHECKS_AND_SAVES.md`
-* `docs/game-rules/03_DICE_AND_INSPIRATION.md`
-* `docs/game-rules/04_COMBAT.md`
-* `docs/game-rules/05_CLASSES_AND_PROGRESSION.md`
-* `docs/game-rules/06_EQUIPMENT_AND_INVENTORY.md`
-* `docs/game-rules/07_MAGIC.md`
-* `docs/game-rules/08_CONDITIONS_AND_RESTING.md`
+`docs/game-rules/`
 
-Planned next M2.1 specification:
+Current rules documentation includes:
 
-* `docs/game-rules/09_AI_RULES_BOUNDARY.md`
+* `GAME_RULES.md`
+* `01_CHARACTER_CORE.md`
+* `02_CHECKS_AND_SAVES.md`
+* `03_DICE_AND_INSPIRATION.md`
+* `04_COMBAT.md`
+* `05_CLASSES_AND_PROGRESSION.md`
+* `06_EQUIPMENT_AND_INVENTORY.md`
+* `07_MAGIC.md`
+* `08_CONDITIONS_AND_RESTING.md`
+* `09_AI_RULES_BOUNDARY.md`
 
-Planned technical documentation may include:
+## Planned Architecture Documentation
+
+Later M2 work is expected to introduce documentation such as:
 
 * `docs/architecture/SYSTEM_ARCHITECTURE.md`
 * `docs/architecture/DATABASE_DESIGN.md`
@@ -516,7 +406,7 @@ Architecture Decision Records may be stored under:
 
 `docs/adr/`
 
-These files should be created progressively as their related decisions are made rather than all at once.
+These files should be created progressively as their related architectural decisions are made.
 
 ---
 
@@ -579,7 +469,6 @@ RealmWeaver V1 is:
 The development environment includes a MacBook Air with an Apple M2 processor and 8 GB RAM, making heavyweight local-model inference unsuitable as a primary V1 architecture.
 
 ---
-
 # 12. Current Technical State
 
 No complete production architecture has yet been approved.
@@ -587,60 +476,77 @@ No complete production architecture has yet been approved.
 Current preliminary technical direction includes:
 
 * Python backend
-* FastAPI
+* FastAPI as a backend candidate
 * Web frontend
 * Persistent database
-* API-based LLM
+* API-based LLM integration
 * Deterministic rules engine
-* Structured communication between AI and game engine
+* Structured AI ↔ RealmWeaver communication
 * Persistent campaign/world state
-* Controlled AI access to game data and rules services
+* Controlled AI access to game state
+* Task-specific context assembly
+* Long-term campaign memory outside the LLM
+* Structured UI reading authoritative RealmWeaver state directly
+* Strong visual design system and polished fantasy UI as a first-class product requirement
 
-These remain architectural candidates until formally reviewed during M2.
+These remain architectural candidates until formally reviewed during the appropriate M2 activities.
 
-### Rules / AI Boundary Already Established
+## Rules / AI Boundary Established
 
-The following principle is approved:
+The detailed AI/rules contract is now defined in:
 
-**AI responsibilities may include:**
+`docs/game-rules/09_AI_RULES_BOUNDARY.md`
 
-* Interpret player intent
+The core authority relationship is:
+
+### Player responsibilities
+
+The player owns:
+
+* Player-character intent
+* Meaningful player decisions
+* Dialogue/actions chosen by the player
+* Optional player-controlled choices
+
+### AI responsibilities
+
+AI may:
+
+* Interpret natural-language intent
 * Generate narration
-* Generate NPC dialogue
-* Suggest checks
-* Suggest encounter behaviour
-* Propose mechanically relevant actions
+* Control NPC dialogue/personality expression
+* Select intentions for AI-controlled NPCs
+* Propose checks and mechanical actions
+* Propose world/content additions
+* Propose continuity-relevant memory updates
 
-**Deterministic system responsibilities include:**
+### RealmWeaver responsibilities
 
-* Dice
-* Modifiers
-* Checks
-* HP
-* AC
-* Combat outcomes
-* Weapon Mastery validation and resolution
-* Conditions and temporary effects
-* Effect duration and expiry
-* Inventory, equipment and wield state
-* Currency
-* Quest state
+RealmWeaver owns:
+
+* Rules
+* Dice/randomness
+* Mechanical legality
+* Mechanical resolution
+* Persistent state
+* Inventory/equipment
+* Currency/resources
+* Conditions
 * Progression
-* Persistent NPC/world state
-* Persistent item location/state
-* Validation of AI-proposed mechanics
-* Conditions and ongoing effects
-* Exhaustion
-* Hit Dice
-* Rest eligibility and recovery
-* Campaign-time advancement
-* Rest-event probability
-* Environmental-hazard validation
-* Spell resources and spell-state validation
-* Mechanical event history
-* State-change provenance
+* Quest state
+* World clock
+* Materialized world canon
+* Knowledge boundaries
+* Commit/retry consistency
+* Long-term authoritative campaign truth
 
-The core authority model is established. Group 9 will consolidate the remaining cross-system AI / Rules Boundary, and M2.6 will define its technical AI orchestration and implementation.
+The governing principles are:
+
+> **AI tells the story. Rules decide what happens.**
+
+> **AI proposes. RealmWeaver validates.**
+
+> **AI may remember context. RealmWeaver preserves truth.**
 
 ---
 
@@ -674,47 +580,32 @@ External content APIs should not become mandatory runtime dependencies for core 
 The final content-import and storage architecture will be defined later in M2.
 
 ---
-
 # 14. Repository State
 
 RealmWeaver is under Git version control and connected to the public GitHub repository.
 
-The `main` branch contains:
+The `main` branch is intended to contain:
 
 * M1 product-foundation documentation
 * M2 game-rules documentation
 * Current project-status documentation
+* Approved technical documentation as M2 progresses
+
+The M2.1 rules-design documentation now covers Groups 1–9.
 
 No production application source code has yet been introduced.
 
-Recent documentation work includes:
+The next repository checkpoint should capture the completed Groups 1–9 rules-design baseline before or together with the M2.1 review corrections.
 
-* Completion and documentation of M2.1 Groups 1–8
-* Completion of the Magic rules specification
-* Completion of the Conditions & Resting rules specification
-* Approval and incorporation of the cross-group Weapon Mastery amendment
-* Weapon Mastery updates across Combat, Classes & Progression, and Equipment & Inventory
-* Ongoing maintenance of `GAME_RULES.md` as the M2.1 rules index
-
-Current detailed rules specifications cover:
-
-* Character Core
-* Checks & Saving Throws
-* Dice & Inspiration
-* Combat
-* Classes & Progression
-* Equipment & Inventory
-* Magic
-* Conditions & Resting
-
-Future development should continue to use:
+Development should continue to use:
 
 1. Make controlled changes.
 2. Review `git status`.
-3. Stage intended files.
-4. Review staged changes with `git diff --staged`.
-5. Commit with a descriptive message.
-6. Push the checkpoint to GitHub.
+3. Stage only intended files.
+4. Review changes with `git diff`.
+5. Review staged changes with `git diff --staged`.
+6. Commit with a descriptive message.
+7. Push the checkpoint to GitHub.
 
 ---
 
@@ -763,76 +654,82 @@ The level of ceremony should remain appropriate for a solo developer while still
 
 # 17. Immediate Next Action
 
-Continue:
+The primary rules-design stage of M2.1 is complete.
 
-> **M2.1 — Group 9: AI / Rules Boundary**
+The immediate next activity is:
 
-Group 9 will formally define the boundary between AI-controlled narrative reasoning and deterministic RealmWeaver mechanics.
+> **M2.1 — Group 9 Internal Consistency Review**
 
-Expected topics include:
+Review:
 
-* Player-intent interpretation
-* Structured AI proposals
-* Mechanical validation
-* AI access to authoritative game state
-* Rules-engine authority
-* AI narration of validated outcomes
-* NPC tactical decision boundaries
-* AI-generated world/content proposals
-* Invalid or impossible AI proposals
-* Structured tool/action interfaces
-* AI failure and retry behaviour
-* Idempotent mechanical resolution
-* Context supplied to the AI
-* Hidden information boundaries
-* AI hallucination containment
-* Mechanical provenance and explanation
-* Performance and latency considerations
+* Authority terminology across 9A–9L
+* Proposal → validation → resolution → commit → narration lifecycle
+* Player agency rules
+* NPC autonomy rules
+* Knowledge/information boundaries
+* World-content materialization
+* Memory/context rules
+* Retry/idempotency rules
+* Narration/state boundaries
+* UI/UX authority rules
+* Duplicated or contradictory statements
 
-Once Group 9 is approved:
+After Group 9 passes its internal review:
 
-1. Create/update `09_AI_RULES_BOUNDARY.md`.
-2. Update `GAME_RULES.md`.
-3. Perform the complete M2.1 cross-group consistency review.
-4. Resolve contradictions, gaps or stale rules.
-5. Update `PROJECT_STATUS.md`.
-6. Commit and push the completed M2.1 baseline.
-7. Pass the M2.1 completion gate.
-8. Continue to the next M2 architecture activity.
+1. Perform the full Groups 1–9 cross-group consistency review.
+2. Resolve contradictions and ambiguous interactions.
+3. Verify Weapon Mastery integration across affected groups.
+4. Review V1/deferred boundaries.
+5. Perform the SRD/IP/content-provenance audit.
+6. Update affected documentation.
+7. Update `PROJECT_STATUS.md` if required.
+8. Perform the M2.1 completion gate.
+9. Commit and push the completed M2.1 baseline.
+10. Proceed to M2.2 — System Architecture only after the gate passes.
+
 ---
-
 # 18. M2.1 Completion Gate
 
-M2.1 is complete only when all approved rules areas have been specified and reviewed.
+## Current Gate Status
 
-Required groups:
+**NOT YET PASSED**
 
-* Character Core
-* Checks, DCs & Saving Throws
-* Dice & Inspiration
-* Combat
-* Classes & Progression
-* Equipment & Inventory
-* Magic
-* Conditions & Resting
-* AI/Rules Boundary
+All required rules groups have approved specifications, but the final review requirements remain.
 
-Approved cross-group amendments must also be incorporated into every affected detailed specification before M2.1 can be considered complete.
+Required rules groups:
 
-Before the M2.1 completion gate, the approved **Weapon Mastery amendment** must also be incorporated into all affected Group 4, Group 5, and Group 6 rules documentation.
+* Character Core — APPROVED
+* Checks & Saving Throws — APPROVED
+* Dice & Inspiration — APPROVED
+* Combat — APPROVED
+* Classes & Progression — APPROVED
+* Equipment & Inventory — APPROVED
+* Magic — APPROVED
+* Conditions & Resting — APPROVED
+* AI / Rules Boundary — APPROVED
 
-At M2.1 completion:
+Before M2.1 can be marked COMPLETE:
 
-1. Perform a full cross-group review of `GAME_RULES.md` and all detailed M2.1 rule specifications.
-2. Resolve contradictions or missing decisions.
-3. Review V1 scope alignment.
-4. Record any deferred mechanics.
-5. Add required ADRs.
-6. Update `PROJECT_STATUS.md`.
-7. Commit and push the completed M2.1 baseline.
-8. Proceed to the next M2 architecture activity.
+1. Perform the Group 9 internal consistency review.
+2. Perform the complete Groups 1–9 cross-group review.
+3. Resolve contradictory or ambiguous rules.
+4. Verify V1 scope alignment.
+5. Record explicitly deferred mechanics.
+6. Verify rules terminology and cross-file references.
+7. Review Weapon Mastery cross-group amendments.
+8. Perform the SRD/IP/content-provenance audit.
+9. Classify mechanically defined content provenance where applicable.
+10. Resolve any `UNKNOWN / REQUIRES_REVIEW` licensing/content-source issues required before implementation.
+11. Add any required ADRs.
+12. Update `GAME_RULES.md`.
+13. Update `PROJECT_STATUS.md`.
+14. Commit and push the completed M2.1 baseline.
+15. Record the M2.1 gate as PASSED.
+16. Proceed to M2.2 — System Architecture.
 
----
+Until those checks are complete, M2.1 remains:
+
+> **RULES DESIGN COMPLETE — REVIEW GATE PENDING**
 
 # 19. Project Resume Instructions
 
@@ -879,7 +776,7 @@ At every major milestone:
 
 ## Current Stopping Point
 
-> **M1 complete. M2 active. M2.1 Groups 1–8 approved and documented. Weapon Mastery cross-group amendment approved and incorporated. Group 9 is the final remaining M2.1 rules-design group.**
+> **M1 complete. M2 active. M2.1 Groups 1–8 approved and documented. Weapon Mastery cross-group amendment approved and incorporated. Group 9 is tcomplete.**
 
 ## Current Authoritative M2 Specification
 
