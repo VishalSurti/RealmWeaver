@@ -216,6 +216,38 @@ Mechanical and persistent state changes must occur through controlled game-engin
 
 AI narration alone must not be capable of modifying authoritative game state.
 
+## Core Visual and UX Quality
+
+Visual quality is mandatory for the core V1 player experience.
+
+Mandatory review areas include:
+
+* Landing and campaign entry.
+* Character creation.
+* Main campaign and narration interface.
+* Character sheet and resources.
+* Dice and mechanical-result presentation.
+* Combat status and actions.
+* Inventory and equipment.
+* Spells and conditions.
+* Quest and objective tracking.
+* Save, loading, error, and recovery states.
+* Responsive behaviour on supported screen sizes.
+
+Core V1 must provide:
+
+* A coherent fantasy identity.
+* Consistent colours, typography, spacing, components, and iconography.
+* Clear distinction between narration, dialogue, player choices, and mechanics.
+* Clear presentation of authoritative state changes.
+* Readable contrast and accessible interaction states.
+* Designed loading, empty, disabled, success, error, and recovery states.
+* No obviously unfinished placeholder UI in the V1 release.
+
+Important player-facing features require visual/UX review before they satisfy the Definition of Done.
+
+The primary campaign screen should focus on AI narration and player input. Secondary information should be available through clear on-demand interfaces rather than permanently cluttering gameplay.
+
 ---
 
 # 4. Should Have
@@ -275,9 +307,9 @@ Players should be able to modify this preference during a campaign.
 
 Players should be able to explore the world through natural-language actions.
 
-The AI may progressively introduce new locations, NPCs, encounters, clues, and potential discoveries.
+The AI may progressively propose new locations, NPCs, encounters, clues, and potential discoveries.
 
-Important generated content should become part of persistent campaign state when appropriate.
+Significant generated content becomes established persistent reality only after validation, materialisation and commit/persistence. Rumours, beliefs, allegations, predictions and other uncertain information may be presented as claims without establishing their contents as objective truth.
 
 ## Visible Campaign Memory
 
@@ -297,9 +329,9 @@ Hidden Dungeon Master information must remain inaccessible.
 
 Ending a session should generate and preserve a useful summary of important events.
 
-## User-Friendly Campaign Interface
+## Additional Campaign Interface Convenience
 
-The primary campaign screen should focus on:
+Beyond the mandatory core interface standard, additional convenience improvements should continue to prioritise:
 
 * AI narration.
 * Player input.
@@ -312,7 +344,7 @@ Secondary information such as:
 * Progression.
 * Campaign memory.
 
-should be accessible through on-demand panels rather than permanently cluttering the gameplay screen.
+should remain accessible through on-demand panels rather than permanently cluttering the gameplay screen.
 
 ---
 
@@ -327,6 +359,19 @@ An alternative dark interface theme.
 ## Dice Animations
 
 Visual dice-roll animations while preserving deterministic dice results.
+
+## Optional or Deferred Visual Enhancements
+
+The mandatory visual-quality standard does not require:
+
+* Elaborate animations or cinematic transitions.
+* Custom artwork for every entity.
+* 3D environments.
+* Fully animated maps.
+* Multiple complete visual themes.
+* Purely decorative effects without usability value.
+
+Generated video or voice presentation remains deferred from V1.
 
 ## Enhanced Goal Classification
 

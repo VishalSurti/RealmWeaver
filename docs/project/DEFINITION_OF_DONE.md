@@ -2,7 +2,7 @@
 
 **Document Version:** 1.0
 **Last Reviewed:** 7 August 2026
-**Status:** Approved for V1 Development
+**Status:** Approved Completion Standard for Future Authorized V1 Development
 
 ---
 
@@ -152,6 +152,27 @@ Recorded technical debt should explain:
 * What the limitation is
 * Why it was accepted
 * Potential future impact
+
+---
+
+## 2.11 Visual and UX Quality Is Verified
+
+Important player-facing features have completed applicable visual/UX review.
+
+Review must verify all applicable criteria:
+
+* Coherent RealmWeaver fantasy identity.
+* Consistent colours, typography, spacing, components, and iconography.
+* Clear distinction between narration, dialogue, player choices, and mechanics.
+* Clear communication of authoritative state changes.
+* Readable contrast and accessible interaction states.
+* Designed loading, empty, disabled, success, error, and recovery states.
+* Responsive behaviour on supported screen sizes.
+* No obviously unfinished placeholder UI in the V1 release.
+
+Applicable review coverage includes landing and campaign entry, character creation, the main campaign interface, character state/resources, dice and mechanical results, combat, inventory/equipment, spells/conditions, quests/objectives, and save/load/error/recovery states.
+
+Elaborate animations, custom artwork for every entity, 3D environments, fully animated maps, generated voice/video, multiple complete visual themes, Dark Mode, and purely decorative effects are not universally required for completion.
 
 ---
 

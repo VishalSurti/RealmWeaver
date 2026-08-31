@@ -1,13 +1,20 @@
 # RealmWeaver — Project Status
 
 **Document Version:** 1.3
-**Last Reviewed:** 29 August 2026
+**Last Reviewed:** 31 August 2026
 **Overall Status:** Active
 **Current Milestone:** M2 — Technical Design & Architecture
 **Milestone Status:** IN PROGRESS
 **Current Activity:** M2.1 — V1 Game Rules Specification & Rules-Engine Boundary
-**Next Activity:** Rules specification complete; consistency and provenance review pending  
-**Current Progress:** Groups 1–9 APPROVED and documented
+**Next Activity:** Groups 1–9 cross-group consistency review
+
+**Current Progress:** Sections 9A–9L APPROVED; Group 9 rules design COMPLETE; internal consistency review PASSED
+
+**Group 9 Internal Review Gate:** PASSED
+
+**M2.1 Completion Gate:** PENDING
+
+**Production Coding:** NOT AUTHORIZED
 
 ---
 
@@ -41,14 +48,13 @@ The primary rules-design work is complete, but M2.1 has **not yet passed its com
 
 Before M2.1 is formally closed, RealmWeaver must complete:
 
-1. Group 9 internal consistency review.
-2. Full Groups 1–9 cross-group consistency review.
-3. Terminology and cross-reference review.
-4. V1 scope/deferred-feature review.
-5. SRD/IP/content-provenance audit.
-6. Required documentation corrections.
-7. Final M2.1 gate review.
-8. Documentation checkpoint commit and push.
+1. Full Groups 1–9 cross-group consistency review.
+2. Terminology and cross-reference review.
+3. V1 scope/deferred-feature review.
+4. SRD/IP/content-provenance audit.
+5. Required documentation corrections.
+6. Final M2.1 gate review.
+7. Documentation checkpoint commit and push.
 
 No production application code has been introduced yet.
 
@@ -127,7 +133,7 @@ No major production implementation should begin until the relevant architectural
 
 ## Status
 
-**RULES DESIGN COMPLETE — REVIEW GATE PENDING**
+**RULES DESIGN COMPLETE — GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW NEXT — M2.1 GATE PENDING**
 
 Authoritative rules index:
 
@@ -220,7 +226,13 @@ Defines structured conditions, environmental hazards, Exhaustion, short/long res
 
 ### Group 9 — AI / Rules Boundary
 
-**APPROVED**
+**Sections 9A–9L:** APPROVED
+
+**Rules Design:** COMPLETE
+
+**Internal Consistency Review:** PASSED
+
+**Internal Review Gate:** PASSED
 
 Defines:
 
@@ -241,21 +253,42 @@ Group 9 establishes the central contract:
 
 > **Player chooses. AI interprets, proposes, decides for AI-controlled actors and narrates. RealmWeaver validates, resolves, commits and remembers.**
 
+The canonical lifecycle is:
+
+```text
+INTENT
+↓
+PROPOSE
+↓
+VALIDATE
+↓
+RESOLVE
+↓
+COMMIT / PERSIST
+↓
+NARRATE
+↓
+CONTINUE WORLD
+```
+
+Commit/persist includes atomic durable persistence. Significant persistent content must complete validation, materialisation and commit/persistence before presentation as established reality. Claims and rumours remain distinct from objective world truth.
+
+Randomness generated for a validated action remains bound to that action across technical and persistence retries. AI decides NPC intent and submits action proposals; deterministic NPC fallback is limited to bounded failure recovery.
+
 It also establishes that:
 
 > **The interface should make the player want to enter the world.**
 
-Visual quality, a coherent RealmWeaver design system, purposeful animation, accessibility, responsiveness and explicit visual/UX review are first-class product requirements.
+Visual quality, a coherent RealmWeaver visual identity, accessibility, responsiveness and explicit visual/UX review are mandatory for the core V1 player experience. Elaborate animations and other purely decorative enhancements remain optional or deferred.
 
 ## Current Review State
 
-All nine detailed rules groups are approved.
+All nine detailed rules groups have approved rules-design sections.
 
-M2.1 is now entering its review phase.
+Group 9 rules design is complete. Its internal consistency review and internal-review gate passed on 31 August 2026.
 
 Remaining work before the M2.1 gate:
 
-* Group 9 internal consistency review
 * Full Groups 1–9 cross-group consistency review
 * Weapon Mastery cross-file verification
 * Rules terminology review
@@ -535,7 +568,7 @@ RealmWeaver owns:
 * Progression
 * Quest state
 * World clock
-* Materialized world canon
+* Materialised world canon
 * Knowledge boundaries
 * Commit/retry consistency
 * Long-term authoritative campaign truth
@@ -593,7 +626,7 @@ The `main` branch is intended to contain:
 
 The M2.1 rules-design documentation now covers Groups 1–9.
 
-No production application source code has yet been introduced.
+No production application source code has yet been introduced, and production coding is not authorized.
 
 The next repository checkpoint should capture the completed Groups 1–9 rules-design baseline before or together with the M2.1 review corrections.
 
@@ -654,27 +687,15 @@ The level of ceremony should remain appropriate for a solo developer while still
 
 # 17. Immediate Next Action
 
-The primary rules-design stage of M2.1 is complete.
+The primary rules-design stage of M2.1 is complete. The Group 9 internal consistency review and internal-review gate passed on 31 August 2026.
 
 The immediate next activity is:
 
-> **M2.1 — Group 9 Internal Consistency Review**
+> **M2.1 — Groups 1–9 Cross-Group Consistency Review**
 
-Review:
+Review Groups 1–9 for cross-group contradictions, ambiguous interactions, terminology consistency, source-of-truth alignment, and affected cross-file rules including Weapon Mastery.
 
-* Authority terminology across 9A–9L
-* Proposal → validation → resolution → commit → narration lifecycle
-* Player agency rules
-* NPC autonomy rules
-* Knowledge/information boundaries
-* World-content materialization
-* Memory/context rules
-* Retry/idempotency rules
-* Narration/state boundaries
-* UI/UX authority rules
-* Duplicated or contradictory statements
-
-After Group 9 passes its internal review:
+During and after the Groups 1–9 cross-group consistency review:
 
 1. Perform the full Groups 1–9 cross-group consistency review.
 2. Resolve contradictions and ambiguous interactions.
@@ -694,7 +715,7 @@ After Group 9 passes its internal review:
 
 **NOT YET PASSED**
 
-All required rules groups have approved specifications, but the final review requirements remain.
+All required rules groups have approved rules-design sections, and the Group 9 internal-review gate has passed. The M2.1 completion gate has not passed.
 
 Required rules groups:
 
@@ -710,26 +731,25 @@ Required rules groups:
 
 Before M2.1 can be marked COMPLETE:
 
-1. Perform the Group 9 internal consistency review.
-2. Perform the complete Groups 1–9 cross-group review.
-3. Resolve contradictory or ambiguous rules.
-4. Verify V1 scope alignment.
-5. Record explicitly deferred mechanics.
-6. Verify rules terminology and cross-file references.
-7. Review Weapon Mastery cross-group amendments.
-8. Perform the SRD/IP/content-provenance audit.
-9. Classify mechanically defined content provenance where applicable.
-10. Resolve any `UNKNOWN / REQUIRES_REVIEW` licensing/content-source issues required before implementation.
-11. Add any required ADRs.
-12. Update `GAME_RULES.md`.
-13. Update `PROJECT_STATUS.md`.
-14. Commit and push the completed M2.1 baseline.
-15. Record the M2.1 gate as PASSED.
-16. Proceed to M2.2 — System Architecture.
+1. Perform the complete Groups 1–9 cross-group review.
+2. Resolve contradictory or ambiguous rules.
+3. Verify V1 scope alignment.
+4. Record explicitly deferred mechanics.
+5. Verify rules terminology and cross-file references.
+6. Review Weapon Mastery cross-group amendments.
+7. Perform the SRD/IP/content-provenance audit.
+8. Classify mechanically defined content provenance where applicable.
+9. Resolve any `UNKNOWN / REQUIRES_REVIEW` licensing/content-source issues required before implementation.
+10. Add any required ADRs.
+11. Update `GAME_RULES.md`.
+12. Update `PROJECT_STATUS.md`.
+13. Commit and push the completed M2.1 baseline.
+14. Record the M2.1 gate as PASSED.
+15. Proceed to M2.2 — System Architecture.
 
 Until those checks are complete, M2.1 remains:
 
-> **RULES DESIGN COMPLETE — REVIEW GATE PENDING**
+> **RULES DESIGN COMPLETE — GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW PENDING — M2.1 GATE PENDING**
 
 # 19. Project Resume Instructions
 
@@ -772,17 +792,17 @@ At every major milestone:
 
 ## Starting Point
 
-> **M2.1 Group 9 — AI / Rules Boundary**
+> **M2.1 — Groups 1–9 Cross-Group Consistency Review**
 
 ## Current Stopping Point
 
-> **M1 complete. M2 active. M2.1 Groups 1–8 approved and documented. Weapon Mastery cross-group amendment approved and incorporated. Group 9 is tcomplete.**
+> **M1 complete. M2 active. Sections 9A–9L approved. Group 9 rules design complete. Group 9 internal consistency review and internal-review gate passed on 31 August 2026. Groups 1–9 cross-group consistency review is next. M2.1 gate pending. Production coding not authorized.**
 
 ## Current Authoritative M2 Specification
 
 `docs/game-rules/GAME_RULES.md`
 
-Before continuing Group 9, review:
+Before beginning the Groups 1–9 cross-group consistency review, review:
 
 * `docs/game-rules/GAME_RULES.md`
 * Relevant detailed M2.1 rule specifications where cross-system behaviour is being defined
@@ -793,11 +813,24 @@ Repository documentation remains authoritative over conversation history or assi
 
 # 22. Status Summary
 
-**M1 — Product Foundation:** COMPLETE  
-**M2 — Technical Design & Architecture:** IN PROGRESS  
-**M2.1 — Game Rules Specification:** IN PROGRESS  
-**M2.1 Groups 1–8:** APPROVED  
-**Weapon Mastery Cross-Group Amendment:** APPROVED AND INCORPORATED  
-**Remaining M2.1 Group:** Group 9 — AI / Rules Boundary  
-**Production Coding:** NOT STARTED  
+**M1 — Product Foundation:** COMPLETE
+
+**M2 — Technical Design & Architecture:** IN PROGRESS
+
+**M2.1 — Game Rules Specification:** IN PROGRESS
+
+**M2.1 Groups 1–9 Rules Design:** APPROVED
+
+**Weapon Mastery Cross-Group Amendment:** APPROVED AND INCORPORATED
+
+**Group 9 Rules Design:** COMPLETE
+
+**Group 9 Internal Consistency Review:** PASSED
+
+**Group 9 Internal Review Gate:** PASSED
+
+**M2.1 Completion Gate:** PENDING
+
+**Production Coding:** NOT AUTHORIZED
+
 **Current Technical Source of Truth:** `docs/game-rules/GAME_RULES.md`

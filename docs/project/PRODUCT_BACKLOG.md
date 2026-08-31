@@ -300,14 +300,22 @@ RealmWeaver V1 will use progressively generated and persisted locations rather t
 
 | ID     | Backlog Item                                       | Priority | Size | Key Dependency              |
 | ------ | -------------------------------------------------- | -------: | :--: | --------------------------- |
-| PB-127 | Design primary campaign-screen UX                  |       P0 |   L  | Product requirements        |
-| PB-128 | Implement AI narration/chat view                   |       P0 |   L  | AI DM                       |
+| PB-127 | Design core V1 player-facing UX and visual standard |       P0 |   L  | Product requirements        |
+| PB-128 | Implement narration, dialogue, choice, mechanics, and combat presentation |       P0 |   L  | AI DM                       |
 | PB-129 | Implement player-action input                      |       P0 |   M  | PB-053                      |
-| PB-130 | Implement collapsible/on-demand information panels |       P0 |   L  | Character, Quest, Inventory |
-| PB-131 | Implement DM processing/loading feedback           |       P1 |   S  | AI DM                       |
-| PB-132 | Implement important game-event notifications       |       P1 |   M  | Game State                  |
+| PB-130 | Implement on-demand character, resource, inventory, quest, spell, and condition panels |       P0 |   L  | Character, Quest, Inventory |
+| PB-131 | Implement loading, empty, disabled, success, error, and recovery states |       P0 |   S  | AI DM                       |
+| PB-132 | Communicate important authoritative state changes clearly |       P0 |   M  | Game State                  |
 | PB-133 | Implement campaign-settings access                 |       P1 |   M  | Settings                    |
-| PB-134 | Implement desktop/tablet responsive layout         |       P1 |   M  | PB-127–133                  |
+| PB-134 | Implement accessible desktop/tablet responsive behaviour |       P0 |   M  | PB-127–133                  |
+
+---
+
+The mandatory core-V1 visual/UX standard applies to all important player-facing interfaces, including interface items in other epics. PB-127–130 include the combat-status and action presentation used within the main campaign interface.
+
+Before an applicable player-facing item enters implementation, its acceptance criteria must cover the approved visual identity, consistency, information hierarchy, authoritative-state clarity, accessibility, interaction states, responsive behaviour, and relevant visual/UX review requirements defined in `V1_SCOPE.md`, `REQUIREMENTS.md`, and `DEFINITION_OF_DONE.md`.
+
+The core standard does not make elaborate animations, custom artwork for every entity, 3D environments, fully animated maps, generated voice/video, multiple complete visual themes, Dark Mode, or purely decorative effects mandatory. These remain optional or deferred.
 
 ---
 
@@ -372,13 +380,13 @@ RealmWeaver V1 will use progressively generated and persisted locations rather t
 
 | ID     | Backlog Item                                  | Priority | Size | Key Dependency |
 | ------ | --------------------------------------------- | -------: | :--: | -------------- |
-| PB-164 | Conduct complete V1 acceptance testing        |       P0 |  XL  | All V1 systems |
+| PB-164 | Conduct complete V1 functional and visual/UX acceptance testing |       P0 |  XL  | All V1 systems |
 | PB-165 | Conduct regression testing                    |       P0 |   L  | PB-164         |
-| PB-166 | Resolve release-blocking defects              |       P0 |  XL  | PB-164–165     |
+| PB-166 | Resolve release-blocking defects, including mandatory visual/UX failures and unfinished placeholder UI |       P0 |  XL  | PB-164–165     |
 | PB-167 | Review unresolved technical debt              |       P0 |   M  | All            |
-| PB-168 | Review V1 requirements against implementation |       P0 |   M  | All            |
+| PB-168 | Review V1 functional and visual/UX requirements against implementation |       P0 |   M  | All            |
 | PB-169 | Prepare V1 release documentation              |       P0 |   M  | V1 complete    |
-| PB-170 | Perform formal V1 Go/No-Go review             |       P0 |   M  | PB-164–169     |
+| PB-170 | Perform formal V1 Go/No-Go review, including visual/UX approval |       P0 |   M  | PB-164–169     |
 
 ---
 
@@ -402,6 +410,13 @@ The following items are recognised but shall not enter V1 implementation unless 
 * Subscription/payment infrastructure.
 * Human Dungeon Master co-pilot mode.
 * Advanced animated dice systems.
+* Elaborate animations or cinematic transitions.
+* Custom artwork for every entity.
+* 3D environments.
+* Fully animated maps.
+* Generated video presentation.
+* Multiple complete visual themes.
+* Purely decorative effects without usability value.
 
 ---
 

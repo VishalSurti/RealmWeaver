@@ -460,6 +460,26 @@ Where required, related state changes shall either complete successfully togethe
 **FR-117 — State Correction**
 The system should provide a controlled method for correcting critical campaign-state errors during V1 development and personal use.
 
+**FR-118 — Commit and Persistence Boundary**
+The system shall calculate a complete state change during resolution without making it authoritative, then apply it through atomic durable commit/persistence before presenting the outcome as completed.
+
+If commit/persistence fails, the uncommitted outcome shall not be narrated as completed.
+
+**FR-119 — Significant Generated Content**
+Significant persistent NPCs, quests, promises, relationships, locations, rewards, injuries, deaths, statuses, and consequential world facts shall be proposed, validated, materialised, and committed/persisted before being presented as established reality.
+
+Rumours, beliefs, allegations, predictions, and uncertain information may be presented as claims. In that case, the authoritative fact is that the claim was made or communicated, not that its contents are objectively true.
+
+**FR-120 — Action-Bound Randomness**
+Once randomness is generated for a validated action, the system shall bind the result to that action and reuse it for technical or persistence retries of the same action.
+
+Cosmetic rewording or technical resubmission shall not create a new action or a new random result. If the bound result cannot be recovered, the system shall fail safely and reconcile state rather than silently reroll.
+
+**FR-121 — NPC Intent and Action Proposals**
+The AI shall decide intent for AI-controlled NPCs and submit intended actions as non-authoritative proposals. RealmWeaver shall validate, resolve, and commit/persist the resulting action.
+
+A deterministic NPC fallback may be used only as bounded, legal, conservative failure recovery after AI recovery fails.
+
 ---
 
 # 4. Non-Functional Requirements
@@ -557,6 +577,27 @@ Critical deterministic game behaviour should be covered by automated tests.
 
 **NFR-022 — AI Evaluation**
 Probabilistic AI behaviour should be evaluated using defined scenarios for continuity, repetition, player agency, and rules adherence.
+
+---
+
+## Visual & UX Quality
+
+**NFR-023 — Core Visual Quality**
+Important player-facing V1 interfaces shall present a coherent fantasy identity with consistent colours, typography, spacing, components, and iconography.
+
+**NFR-024 — Information and State Clarity**
+Player-facing interfaces shall clearly distinguish narration, dialogue, player choices, and mechanics, and shall communicate authoritative state changes clearly.
+
+**NFR-025 — Accessible Interaction States**
+Important player-facing interfaces shall provide readable contrast, accessible interaction states, and designed loading, empty, disabled, success, error, and recovery states where applicable.
+
+**NFR-026 — Core Interface Review Coverage**
+Visual/UX review shall cover landing and campaign entry, character creation, the main campaign interface, character state and resources, dice and mechanical results, combat, inventory and equipment, spells and conditions, quests/objectives, save/load/error/recovery states, and responsive behaviour on supported screen sizes.
+
+**NFR-027 — V1 Visual Completion**
+Important player-facing features shall pass visual/UX review before satisfying the Definition of Done, and the V1 release shall not contain obviously unfinished placeholder UI.
+
+Elaborate animation, custom artwork for every entity, 3D environments, fully animated maps, generated voice/video, multiple complete visual themes, Dark Mode, and purely decorative effects are not required by these core quality requirements.
 
 ---
 

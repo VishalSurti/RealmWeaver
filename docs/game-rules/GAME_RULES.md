@@ -1,10 +1,10 @@
 # RealmWeaver — V1 Game Rules
 
 **Document Type:** Rules Index
-**Status:** M2.1 Rules Design Complete — Review Gate Pending
+**Status:** M2.1 Rules Design Complete — Group 9 Internal Review Passed — Completion Gate Pending
 **Milestone:** M2 — Technical Design & Architecture
 **Primary Rules Baseline:** SRD 5.1 / 2014-style mechanics with explicitly documented RealmWeaver adaptations
-**Last Reviewed:** 29 August 2026
+**Last Reviewed:** 31 August 2026
 
 ---
 
@@ -445,11 +445,19 @@ Covers:
 
 ## 4.9 Group 9 — AI / Rules Boundary
 
-Status: APPROVED
+Section Status: APPROVED
+
+Rules Design Status: COMPLETE
+
+Internal Review Status: PASSED
+
+Internal Review Gate: PASSED
+
+M2.1 Completion Gate: PENDING
 
 Specification:
 
-`09_AI_RULES_BOUNDARY.md`
+[09_AI_RULES_BOUNDARY.md](./09_AI_RULES_BOUNDARY.md)
 
 Covers:
 
@@ -510,6 +518,7 @@ Covers:
 * Bounded AI Retries
 * Retry-Safe Randomness
 * No Free Rerolls from Technical Failure
+* Randomness Bound to Validated Action Identity
 * Safe Fallback Behaviour
 * Stale-State Revalidation
 * Narration Regeneration
@@ -534,6 +543,8 @@ Covers:
 
 RealmWeaver treats visual quality as a first-class product requirement.
 
+Visual quality is mandatory for the core V1 player experience.
+
 The UI should:
 
 * Present a distinctive RealmWeaver fantasy identity
@@ -546,6 +557,8 @@ The UI should:
 * Permit suitable UI/component/animation libraries and development accelerators
 * Require explicit visual/UX review for important player-facing features
 
+Elaborate animations, custom artwork for every entity, 3D environments, fully animated maps, generated voice/video, multiple complete visual themes, Dark Mode and purely decorative effects remain optional or deferred.
+
 The governing visual principle is:
 
 > **The interface should make the player want to enter the world.**
@@ -557,22 +570,26 @@ The governing visual principle is:
 The complete lifecycle is:
 
 ```text
-PLAYER INTENT
+INTENT
         ↓
-INTERPRET / PROPOSE
+PROPOSE
         ↓
 VALIDATE
         ↓
 RESOLVE
         ↓
-COMMIT
+COMMIT / PERSIST
         ↓
 NARRATE
         ↓
-PERSIST / CONTINUE WORLD
+CONTINUE WORLD
 ```
 
 Persistent consequences cannot bypass RealmWeaver's authoritative state model.
+
+Resolve calculates the complete state change without making it authoritative. Commit/persist applies atomic durable persistence. Narration describes only successfully committed outcomes.
+
+Significant persistent content must be proposed, validated, materialised and committed/persisted before presentation as established reality. Rumours and other uncertain claims remain distinct from objective world truth.
 
 ---
 
@@ -756,7 +773,7 @@ The project should not rely on conversation history as the only record of an app
 
 ## Rules Design
 
-All required M2.1 rules groups are APPROVED:
+All required M2.1 rules-design sections are APPROVED:
 
 * Group 1 — Character Core
 * Group 2 — Checks & Saving Throws
@@ -768,22 +785,21 @@ All required M2.1 rules groups are APPROVED:
 * Group 8 — Conditions & Resting
 * Group 9 — AI / Rules Boundary
 
-The primary M2.1 rules-design stage is therefore complete.
+The primary M2.1 rules-design stage is complete. Group 9's internal consistency review and internal-review gate passed on 31 August 2026.
 
 ## Current Phase
 
-**REVIEW GATE PENDING**
+**GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW NEXT — M2.1 GATE PENDING**
 
 Remaining M2.1 work:
 
-1. Group 9 internal consistency review.
-2. Full Groups 1–9 cross-group consistency review.
-3. Terminology and cross-reference review.
-4. Weapon Mastery cross-group verification.
-5. V1 scope and deferred-mechanics review.
-6. SRD/IP/content-provenance audit.
-7. Required specification corrections.
-8. Final M2.1 completion gate.
+1. Full Groups 1–9 cross-group consistency review.
+2. Terminology and cross-reference review.
+3. Weapon Mastery cross-group verification.
+4. V1 scope and deferred-mechanics review.
+5. SRD/IP/content-provenance audit.
+6. Required specification corrections.
+7. Final M2.1 completion gate.
 
 M2.1 must not be marked COMPLETE until these review activities pass.
 
@@ -815,7 +831,7 @@ M2.1 — V1 Game Rules Specification is complete only when:
 
 Current gate status:
 
-> **NOT YET PASSED — RULES DESIGN COMPLETE, REVIEW PENDING**
+> **NOT YET PASSED — RULES DESIGN COMPLETE, GROUP 9 INTERNAL REVIEW PASSED, CROSS-GROUP REVIEW PENDING**
 
 ---
 # 14. Next Design Activity
@@ -824,13 +840,11 @@ Do not proceed directly to M2.2 yet.
 
 Continue with:
 
-> **M2.1 — Group 9 Internal Consistency Review**
+> **M2.1 — Groups 1–9 Cross-Group Consistency Review**
 
 Then:
 
 ```text
-Group 9 Internal Review
-        ↓
 Groups 1–9 Cross-Group Review
         ↓
 V1 / Deferred Mechanics Review
@@ -847,6 +861,3 @@ M2.2 — System Architecture
 The next major architecture activity after the M2.1 gate passes will be:
 
 > **M2.2 — System Architecture**
-
-```
-```

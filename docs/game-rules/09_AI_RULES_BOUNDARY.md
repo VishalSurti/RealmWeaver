@@ -3,8 +3,16 @@
 **Document Type:** Game Rules Specification  
 **Milestone:** M2.1 — V1 Game Rules Specification & Rules-Engine Boundary  
 **Group:** 9 — AI / Rules Boundary  
-**Status:** IN PROGRESS  
-**Last Reviewed:** 27 August 2026
+**Section Status:** 9A–9L APPROVED
+
+**Rules Design Status:** COMPLETE
+
+**Internal Review Status:** PASSED
+
+**Internal Review Gate:** PASSED
+
+**M2.1 Completion Gate:** PENDING
+**Last Reviewed:** 31 August 2026
 
 ---
 
@@ -1362,9 +1370,6 @@ Sections 9A–9B define the behavioural contract that those future systems must 
 
 ---
 
-Absolutely. Paste this **after the current 9B section** in `docs/game-rules/09_AI_RULES_BOUNDARY.md`.
-
-````markdown
 # 6. 9C — AI Mechanical Proposals
 
 ## 6.1 Status
@@ -1389,7 +1394,7 @@ AI:
 
 RealmWeaver:
 "Is that mechanic valid, and what is the authoritative result?"
-````
+```
 
 AI mechanical proposals allow RealmWeaver to preserve flexible tabletop-style interaction while ensuring that rules, legality and persistent state remain deterministic and authoritative.
 
@@ -2456,9 +2461,9 @@ Validate target
 Validate range
 Validate concentration requirements
         ↓
-Commit spell cast
-Consume resource
-Resolve effect
+Resolve complete spell effect and state change
+        ↓
+Commit / persist resource consumption and effects atomically
 ```
 
 RealmWeaver should not consume resources during preliminary validation.
@@ -3108,22 +3113,6 @@ RealmWeaver adopts the following requirements:
 
 ---
 
-# 8. Current Group 9 Progress
-
-Approved:
-
-* 9A — Authority Model
-* 9B — Player Intent Interpretation
-* 9C — AI Mechanical Proposals
-* 9D — Validation & Rejection
-
-Next:
-
-* 9E — Mechanical Resolution Pipeline
-* 9F — AI Narration Boundary
-
----
-
 # 9. 9E — Mechanical Resolution Pipeline
 
 ## 9.1 Status
@@ -3148,22 +3137,30 @@ The purpose of this pipeline is to ensure that:
 The canonical conceptual flow is:
 
 ```text
-PLAYER / NPC DECISION
+INTENT
         ↓
-INTERPRET / PROPOSE
+PROPOSE
         ↓
 VALIDATE
         ↓
 RESOLVE
         ↓
-COMMIT
+COMMIT / PERSIST
         ↓
 NARRATE
         ↓
-CONTINUE
-````
+CONTINUE WORLD
+```
 
 Not every interaction requires every stage.
+
+`RESOLVE` calculates the complete state change without making it authoritative.
+
+`COMMIT / PERSIST` applies that complete change through atomic durable persistence. State becomes authoritative only after this stage succeeds.
+
+Narration describes only successfully committed outcomes. A persistence failure must not be narrated as a completed outcome.
+
+Exact transaction technology remains deferred to M2.2 — System Architecture.
 
 ---
 
@@ -3186,7 +3183,7 @@ Mechanically relevant actions should conceptually follow:
         ↓
 7. DETERMINE CONSEQUENCES
         ↓
-8. COMMIT AUTHORITATIVE STATE
+8. COMMIT / PERSIST AUTHORITATIVE STATE
         ↓
 9. PRODUCE MECHANICAL RESULT
         ↓
@@ -3425,7 +3422,7 @@ The normal ordering should be:
 ```text
 RESOLVE
 ↓
-COMMIT
+COMMIT / PERSIST
 ↓
 NARRATE
 ```
@@ -3437,7 +3434,7 @@ RESOLVE
 ↓
 NARRATE
 ↓
-COMMIT
+COMMIT / PERSIST
 ```
 
 Narration should describe state that successfully became authoritative.
@@ -3997,27 +3994,33 @@ It does not establish those outcomes.
 
 ## 9.31 Narration May Create Future Proposals
 
-AI narration may introduce new narrative content that later requires authoritative materialisation.
+AI narration may introduce temporary sensory or atmospheric flavour without materialisation.
+
+Significant persistent content must be proposed, validated, materialised and committed/persisted before it is presented as established reality.
 
 Example:
 
 > A nervous young courier pushes through the tavern door.
 
-If the courier becomes relevant, this may create:
+If the courier remains incidental, no persistent state is required. If the courier becomes persistently relevant, RealmWeaver must complete:
 
 ```text
-Narrative Introduction
-↓
 NPC Proposal
 ↓
 Validation / Materialisation
 ↓
+Commit / Persist
+↓
 Authoritative NPC
+↓
+Presentation as Established Reality
 ```
 
-Narration may therefore lead to future proposals.
+Lightweight content that gains persistent significance through player interaction must be materialised before gaining persistent authority.
 
-It may not silently mutate existing authoritative mechanical or persistent state.
+Rumours, beliefs, allegations, predictions and uncertain information may be presented before their underlying truth is established only when clearly framed as claims. In that case, the authoritative fact is that the claim was made, not that its contents are objectively true.
+
+Failed significant-content materialisation must not produce player-visible established canon or require a silent retcon.
 
 ---
 
@@ -4716,7 +4719,7 @@ Relationship materially changes
 
 The exact relationship/reputation model is deferred to later architecture.
 
-The principle is that persistent narratively important NPC changes should eventually be materialised.
+The principle is that persistent narratively important NPC changes must be materialised and committed/persisted before they are presented as established changes.
 
 ---
 
@@ -4759,7 +4762,7 @@ Example significant world fact:
 
 > The king's hidden son lives in this village.
 
-This may affect future continuity and therefore should enter the appropriate proposal/materialisation process.
+This may affect future continuity and therefore must enter the proposal, validation, materialisation and commit/persistence process before it is presented as established reality.
 
 RealmWeaver should not persist every decorative detail, while important continuity-relevant facts should not exist solely in AI memory.
 
@@ -4797,7 +4800,7 @@ This allows open-ended interaction without requiring every scene object to be pr
 
 ## 10.30 Significant New Lore
 
-Major worldbuilding information that should persist across the campaign requires appropriate materialisation.
+Major worldbuilding information that should persist across the campaign requires proposal, validation, materialisation and commit/persistence before presentation as established reality.
 
 Examples include:
 
@@ -5048,11 +5051,19 @@ AI narration can never become a hidden path for authoritative state mutation.
 Mechanically or persistently significant changes must use the appropriate lifecycle:
 
 ```text
+INTENT
+↓
 PROPOSE
 ↓
 VALIDATE
 ↓
-COMMIT
+RESOLVE
+↓
+COMMIT / PERSIST
+↓
+NARRATE
+↓
+CONTINUE WORLD
 ```
 
 where applicable.
@@ -5122,12 +5133,12 @@ The governing relationship is:
 
 ```text
 AI:
-Decides what an NPC wants to do.
+Decides what an NPC wants to do and submits that intended action as a proposal.
 
 RealmWeaver:
 Determines whether the NPC can legally do it
-and resolves what mechanically happens.
-````
+and validates, resolves and commits/persists what mechanically happens.
+```
 
 NPC autonomy must remain constrained by:
 
@@ -5297,7 +5308,7 @@ NPC becomes scene-relevant
 ↓
 Repeated or important interaction occurs
 ↓
-NPC promoted/materialized
+NPC promoted/materialised
 ↓
 Persistent NPC state created
 ```
@@ -5338,7 +5349,7 @@ Mechanically relevant capabilities must originate from authoritative state.
 
 ## 11.9 Capabilities During NPC Creation
 
-Before an NPC is fully materialized, the AI may propose an intended role or capability profile.
+Before an NPC is fully materialised, the AI may propose an intended role or capability profile.
 
 Example:
 
@@ -5352,10 +5363,10 @@ RealmWeaver may then resolve that proposal into a supported mechanical profile.
 Conceptually:
 
 ```text
-Before Materialization:
+Before Materialisation:
 AI may propose capabilities
 
-After Materialization:
+After Materialisation:
 Authoritative NPC profile constrains capabilities
 ```
 
@@ -5428,7 +5439,7 @@ The principle is:
 
 ---
 
-# NPC Knowledge
+## NPC Knowledge
 
 ## 11.13 NPC Decisions Must Respect NPC Knowledge
 
@@ -5561,7 +5572,7 @@ Detailed communication, rumours and information-propagation architecture are def
 
 ---
 
-# NPC Social Behaviour
+## NPC Social Behaviour
 
 ## 11.18 NPC Dialogue Authority
 
@@ -5663,7 +5674,7 @@ NPCs should remain believable autonomous characters.
 
 ---
 
-# NPC Combat Authority
+## NPC Combat Authority
 
 ## 11.23 AI Selects NPC Combat Intent
 
@@ -5812,7 +5823,7 @@ RealmWeaver validates and resolves how that attempt occurs mechanically.
 
 ---
 
-# NPC Resources and Persistence
+## NPC Resources and Persistence
 
 ## 11.29 Persistent NPC Resources
 
@@ -5858,11 +5869,11 @@ This follows Group 8 recovery rules.
 
 ---
 
-## 11.31 Materializing Lightweight NPC Resources
+## 11.31 Materialising Lightweight NPC Resources
 
 RealmWeaver does not need to pre-generate every possession owned by every background NPC.
 
-Resources may be materialized when interaction makes them relevant.
+Resources may be materialised when interaction makes them relevant.
 
 Example:
 
@@ -5871,7 +5882,7 @@ Player attempts to pickpocket random merchant
 ↓
 Merchant possessions become mechanically relevant
 ↓
-RealmWeaver materializes plausible carried resources
+RealmWeaver materialises plausible carried resources
 ↓
 Validated resources become authoritative
 ```
@@ -5881,11 +5892,11 @@ These details must:
 * Fit existing context
 * Respect supported content
 * Be validated where mechanically relevant
-* Persist after materialization
+* Persist after materialisation
 
 ---
 
-## 11.32 Materialized State Cannot Be Rerolled for Convenience
+## 11.32 Materialised State Cannot Be Rerolled for Convenience
 
 Once an NPC detail has become authoritative, it should not be regenerated simply because another outcome would be convenient.
 
@@ -5906,11 +5917,11 @@ without an authoritative event explaining the change.
 
 The governing principle is:
 
-> **Once materialized, NPC state persists until changed through an authoritative event.**
+> **Once materialised, NPC state persists until changed through an authoritative event.**
 
 ---
 
-# NPC Goals and Off-Screen Progression
+## NPC Goals and Off-Screen Progression
 
 ## 11.33 Persistent NPC Goals
 
@@ -5993,13 +6004,13 @@ Proposed Action:
 NPC contacts an important witness
 ```
 
-RealmWeaver validates/materializes any persistent consequence.
+RealmWeaver validates/materialises any persistent consequence.
 
 AI proposals do not directly rewrite world state.
 
 ---
 
-# NPC Death and Removal
+## NPC Death and Removal
 
 ## 11.37 NPC Death Requires Authoritative State
 
@@ -6034,7 +6045,7 @@ AI memory or improvisation cannot override authoritative life/death state.
 
 ---
 
-# Allied NPCs and Controlled Creatures
+## Allied NPCs and Controlled Creatures
 
 ## 11.39 Allied NPCs Retain Agency
 
@@ -6072,7 +6083,7 @@ RealmWeaver determines the correct controller from authoritative mechanics.
 
 ---
 
-# NPC AI Failure Handling
+## NPC AI Failure Handling
 
 ## 11.41 Invalid NPC Proposals
 
@@ -6114,7 +6125,9 @@ Disengage
 Dodge
 ```
 
-The AI may be constrained to legal choices or RealmWeaver may use an appropriate safe deterministic fallback.
+The AI may be constrained to legal choices. If bounded AI recovery fails, RealmWeaver may use an appropriate safe deterministic fallback as an explicit failure-recovery exception to normal AI-owned NPC intent.
+
+A deterministic fallback must be legal, conservative and limited to existing supported mechanics. It does not transfer ordinary NPC decision authority from AI to RealmWeaver.
 
 Exact retry counts and fallback algorithms are deferred to Section 9K and later architecture.
 
@@ -6128,8 +6141,8 @@ RealmWeaver adopts the following requirements:
 2. NPC decisions remain mechanical proposals until RealmWeaver validates them.
 3. AI controls NPC intent; RealmWeaver controls mechanical legality and outcome.
 4. Continuity-relevant NPCs should have persistent authoritative identity and state.
-5. Lightweight NPCs are allowed and may later be promoted/materialized.
-6. AI cannot invent new mechanical capabilities for already-materialized NPCs.
+5. Lightweight NPCs are allowed and may later be promoted/materialised.
+6. AI cannot invent new mechanical capabilities for already-materialised NPCs.
 7. AI may propose capabilities during initial NPC creation, subject to validation.
 8. NPC tactics should reflect intelligence, training, personality, goals, fear and context.
 9. NPCs do not need to choose mathematically optimal actions.
@@ -6152,12 +6165,12 @@ RealmWeaver adopts the following requirements:
 26. NPC actions remain bound by action economy, positioning, resources and other mechanics.
 27. Important NPC resources persist.
 28. Important NPC injuries and recovery persist according to authoritative rules and time.
-29. Lightweight NPC possessions/resources may be materialized when relevant.
-30. Once materialized, NPC state cannot be rerolled or regenerated for convenience.
+29. Lightweight NPC possessions/resources may be materialised when relevant.
+30. Once materialised, NPC state cannot be rerolled or regenerated for convenience.
 31. Important NPCs may have persistent goals.
 32. Important NPC goals may progress off-screen as world time advances.
 33. Off-screen simulation should be selective rather than continuously simulate every NPC.
-34. AI may propose off-screen NPC actions; RealmWeaver validates/materializes consequences.
+34. AI may propose off-screen NPC actions; RealmWeaver validates/materialises consequences.
 35. AI cannot create significant NPC death through narration alone.
 36. Authoritative NPC death persists unless explicitly changed by valid mechanics or world events.
 37. Allied NPCs normally retain agency unless rules explicitly grant the player control.
@@ -6219,14 +6232,22 @@ CLASSIFY SIGNIFICANCE
         ↓
 VALIDATE AGAINST EXISTING WORLD
         ↓
-MATERIALIZE IF REQUIRED
+MATERIALISE IF REQUIRED
         ↓
-COMMIT
+COMMIT / PERSIST
         ↓
 AUTHORITATIVE WORLD STATE
+        ↓
+PRESENT AS ESTABLISHED REALITY
 ```
 
 Generated prose alone does not automatically create canon.
+
+Significant persistent NPCs, quests, promises, relationships, locations, rewards, injuries, deaths, statuses and consequential world facts must complete this lifecycle before they are presented as established reality.
+
+Rumours, beliefs, allegations, predictions and uncertain information may be presented earlier only when clearly framed as claims. The committed fact is that the claim exists or was communicated, not that its contents are objectively true.
+
+Temporary sensory and atmospheric flavour may remain non-materialised. If lightweight content gains persistent significance through player interaction, it must be materialised before gaining persistent authority.
 
 ---
 
@@ -6307,14 +6328,14 @@ Repeated interactions occur
 ↓
 Musician becomes player's informant
 ↓
-Persistent NPC materialized
+Persistent NPC materialised
 ```
 
 RealmWeaver should not require every generated detail to be persisted immediately.
 
 ---
 
-# Authoritative Canon
+## Authoritative Canon
 
 ## 12.6 RealmWeaver Owns Campaign Canon
 
@@ -6401,7 +6422,7 @@ The claim may exist without changing the objective state of the bridge.
 
 ---
 
-# Locations
+## Locations
 
 ## 12.9 Location Proposals
 
@@ -6427,7 +6448,7 @@ Location generation must respect relevant world constraints.
 
 ## 12.10 Persistent Locations
 
-Locations that become important to exploration, travel, quests or continuity should be materialized.
+Locations that become important to exploration, travel, quests or continuity should be materialised.
 
 Conceptual persistent location information may eventually include:
 
@@ -6460,7 +6481,7 @@ Once established as meaningful geography, future AI generation should preserve t
 
 ---
 
-# Factions and Organisations
+## Factions and Organisations
 
 ## 12.12 Faction Proposals
 
@@ -6527,7 +6548,7 @@ They should not exist solely as temporary AI prose when they influence future ga
 
 ---
 
-# Quests
+## Quests
 
 ## 12.15 Quest Proposals
 
@@ -6545,7 +6566,7 @@ The AI does not directly establish authoritative quest state.
 
 ## 12.16 Structured Quest State
 
-Once materialized, quests should use structured authoritative state.
+Once materialised, quests should use structured authoritative state.
 
 Conceptual quest information may include:
 
@@ -6612,7 +6633,7 @@ This allows quests to respond dynamically to open-world events.
 
 ---
 
-# Encounters
+## Encounters
 
 ## 12.19 Encounter Proposals
 
@@ -6680,7 +6701,7 @@ This does not permit AI to rewrite already-established creatures or locations si
 
 ---
 
-# Items and Rewards
+## Items and Rewards
 
 ## 12.23 Item Proposals
 
@@ -6722,7 +6743,7 @@ AI-generated prose cannot execute arbitrary rules.
 
 ## 12.25 Reward Validation
 
-AI-proposed rewards must be validated before authoritative materialization.
+AI-proposed rewards must be validated before authoritative materialisation.
 
 Validation may consider:
 
@@ -6765,7 +6786,7 @@ Uniqueness, ownership and location are authoritative state.
 
 ---
 
-# Lore and History
+## Lore and History
 
 ## 12.27 Historical and Cultural Lore
 
@@ -6857,7 +6878,7 @@ This is important for:
 
 ---
 
-# Hidden World Content
+## Hidden World Content
 
 ## 12.31 Undiscovered Authoritative Facts
 
@@ -6885,7 +6906,7 @@ AI may propose hidden facts such as:
 
 > The magistrate secretly funds the smugglers.
 
-If RealmWeaver validates and materializes the secret, the fact becomes authoritative world state.
+If RealmWeaver validates and materialises the secret, the fact becomes authoritative world state.
 
 It does not automatically become player knowledge.
 
@@ -6893,7 +6914,7 @@ Hidden-content access remains subject to the knowledge boundaries defined in Sec
 
 ---
 
-# Dynamic World State
+## Dynamic World State
 
 ## 12.33 World Entities May Change Over Time
 
@@ -6975,7 +6996,7 @@ Major world changes should not occur purely because the AI requires novelty.
 
 ---
 
-# Player Influence on Canon
+## Player Influence on Canon
 
 ## 12.36 Player-Created Canon
 
@@ -7000,7 +7021,7 @@ Likewise, if the player founds:
 
 > The Silver Company
 
-RealmWeaver may materialize that organisation as persistent world content.
+RealmWeaver may materialise that organisation as persistent world content.
 
 Player agency may therefore create canon through validated actions.
 
@@ -7032,7 +7053,7 @@ NPCs and factions may react to the claim according to context.
 
 ---
 
-# Consistent Generation
+## Consistent Generation
 
 ## 12.38 Relevant World Context
 
@@ -7124,7 +7145,7 @@ RealmWeaver should balance continuity with expansion.
 
 ---
 
-# World-Generation Profiles
+## World-Generation Profiles
 
 ## 12.42 World-Generation Profile Constraint
 
@@ -7181,7 +7202,7 @@ This allows coherent fantasy cultures while retaining creative flexibility.
 
 ---
 
-# Provenance
+## Provenance
 
 ## 12.44 Content Creation Provenance
 
@@ -7241,7 +7262,7 @@ RealmWeaver should preserve provenance rather than losing source information dur
 
 ---
 
-# Retcons and Revelation
+## Retcons and Revelation
 
 ## 12.46 No Silent Canon Retcon
 
@@ -7310,7 +7331,7 @@ RealmWeaver adopts the following requirements:
 12. Important factions should have persistent authoritative state.
 13. Meaningful faction relationships are world state.
 14. AI may propose quests.
-15. Materialized quests should use structured authoritative state.
+15. Materialised quests should use structured authoritative state.
 16. AI cannot independently complete or fail quests.
 17. Quest objectives may evolve through validated state changes.
 18. AI may propose combat, social, exploration, environmental and other encounters.
@@ -7367,7 +7388,7 @@ PLAYER CHARACTER KNOWLEDGE
 NPC KNOWLEDGE
 ≠
 AI / DM CONTEXT
-````
+```
 
 RealmWeaver may know a fact without every character knowing that fact.
 
@@ -7479,7 +7500,7 @@ RealmWeaver must support the principle that knowledge can be actor-specific.
 
 ---
 
-# Information Truth and Claim Status
+## Information Truth and Claim Status
 
 ## 13.6 Information Classification
 
@@ -7574,7 +7595,7 @@ RealmWeaver should not automatically correct an actor merely because the backend
 
 ---
 
-# Player Knowledge
+## Player Knowledge
 
 ## 13.9 Player Character Knowledge
 
@@ -7670,7 +7691,7 @@ Exact representation is deferred.
 
 ---
 
-# Stale and Outdated Knowledge
+## Stale and Outdated Knowledge
 
 ## 13.13 Knowledge May Become Outdated
 
@@ -7722,7 +7743,7 @@ Current omniscient world state must not automatically leak into character-facing
 
 ---
 
-# Observation and Discovery
+## Observation and Discovery
 
 ## 13.15 Direct Observation
 
@@ -7816,7 +7837,7 @@ This follows the hidden-roll principles established in Section 9E.
 
 ---
 
-# Partial Knowledge
+## Partial Knowledge
 
 ## 13.19 Partial Revelation
 
@@ -7865,7 +7886,7 @@ unless that information was legitimately discovered.
 
 ---
 
-# NPC Knowledge
+## NPC Knowledge
 
 ## 13.21 NPC-Specific Context
 
@@ -7946,7 +7967,7 @@ The backend may know the statement is false without revealing that fact to the p
 
 ---
 
-# Insight and Deception
+## Insight and Deception
 
 ## 13.24 Insight Is Not Mind Reading
 
@@ -8002,7 +8023,7 @@ Objective reality changes
 
 ---
 
-# Secrets
+## Secrets
 
 ## 13.27 Secret Access Boundaries
 
@@ -8067,7 +8088,7 @@ The player may later choose to share or conceal the information.
 
 ---
 
-# Information-Bearing Objects
+## Information-Bearing Objects
 
 ## 13.30 Persistent Information Sources
 
@@ -8125,7 +8146,7 @@ Reading or otherwise accessing the content may create new knowledge.
 
 ---
 
-# Location Knowledge
+## Location Knowledge
 
 ## 13.32 Existence and Position Are Separate
 
@@ -8159,7 +8180,7 @@ Navigation and map interfaces should respect applicable discovery/knowledge stat
 
 ---
 
-# Mechanical Information
+## Mechanical Information
 
 ## 13.34 Hidden Mechanical State
 
@@ -8223,7 +8244,7 @@ That discovered information may persist for future encounters.
 
 ---
 
-# DM-Level AI Context
+## DM-Level AI Context
 
 ## 13.37 DM Access to Hidden Information
 
@@ -8297,7 +8318,7 @@ Exact prompt and data structures are deferred.
 
 ---
 
-# Future Information
+## Future Information
 
 ## 13.40 Scheduled Events Are Not Character Knowledge
 
@@ -8343,7 +8364,7 @@ If a campaign deliberately defines a prophecy as an authoritative fixed event, t
 
 ---
 
-# Belief Correction
+## Belief Correction
 
 ## 13.42 Beliefs May Be Corrected
 
@@ -8509,7 +8530,7 @@ If an earlier narration established an important persistent fact:
 
 > Mira lost her left eye during the siege.
 
-and that fact matters to continuity, it should be materialized.
+and that fact matters to continuity, it should be materialised.
 
 Future correctness should not depend on the AI rereading an old conversation transcript.
 
@@ -8549,7 +8570,7 @@ It does not need direct access to every campaign record.
 
 ---
 
-# Context Layers
+## Context Layers
 
 ## 14.6 Layered Context
 
@@ -8645,7 +8666,7 @@ Task-specific context reduces leakage, cost and confusion.
 
 ---
 
-# Minimum Sufficient Context
+## Minimum Sufficient Context
 
 ## 14.9 Minimum Sufficient Context Principle
 
@@ -8702,7 +8723,7 @@ Correctness takes priority over token savings.
 
 ---
 
-# Memory Categories
+## Memory Categories
 
 ## 14.12 Memory Types
 
@@ -8790,7 +8811,7 @@ Exact models are deferred.
 
 ---
 
-# Event Memory
+## Event Memory
 
 ## 14.15 Not Every Event Requires Long-Term Memory
 
@@ -8850,7 +8871,7 @@ RealmWeaver should allow historical information to gain relevance later.
 
 ---
 
-# Summarisation
+## Summarisation
 
 ## 14.18 Long History Should Be Summarized
 
@@ -8923,7 +8944,7 @@ unless supported by authoritative state or validated events.
 
 ---
 
-# Context Retrieval
+## Context Retrieval
 
 ## 14.22 Retrieve Historical Information When Relevant
 
@@ -9016,7 +9037,7 @@ AUTHORITATIVE STATE
 
 ---
 
-# Memory Versus Authority
+## Memory Versus Authority
 
 ## 14.26 Narrative Memory Is Supporting Context
 
@@ -9046,27 +9067,27 @@ RealmWeaver must not overwrite authoritative state solely because an old narrati
 
 ## 14.27 Conflict Priority
 
-Context conflicts should resolve toward authoritative state.
+Context conflicts should resolve toward authoritative RealmWeaver state.
 
 Conceptually:
 
 ```text
-CURRENT AUTHORITATIVE STATE
+CURRENT / VERSIONED AUTHORITATIVE STATE AND FACTS
         >
-STRUCTURED PERSISTENT FACTS
-        >
-VALIDATED EVENT HISTORY
+VALIDATED AUTHORITATIVE EVENT HISTORY
         >
 MEMORY SUMMARIES
         >
 RAW OLD AI NARRATION
 ```
 
-This expresses authority direction rather than locking a specific implementation.
+Structured current state and structured persistent facts are both authoritative RealmWeaver state. Validated event history remains authoritative history, but it does not overwrite a later valid state transition concerning the same fact.
+
+This expresses authority direction and temporal precedence rather than locking a specific implementation.
 
 ---
 
-# Session and Provider Independence
+## Session and Provider Independence
 
 ## 14.28 Session Persistence
 
@@ -9128,7 +9149,7 @@ LLM CONTEXT WINDOW
 
 ---
 
-# Player Corrections
+## Player Corrections
 
 ## 14.31 Player Memory Corrections
 
@@ -9161,7 +9182,7 @@ Changes to authoritative state require appropriate validation, verification or a
 
 ---
 
-# AI Memory Proposals
+## AI Memory Proposals
 
 ## 14.33 AI May Propose Memory Updates
 
@@ -9207,7 +9228,7 @@ Context omission and state deletion are different operations.
 
 ---
 
-# Compression and Retention
+## Compression and Retention
 
 ## 14.36 Low-Value History May Be Compressed
 
@@ -9269,7 +9290,7 @@ Detailed retention policies are deferred.
 
 ---
 
-# Context Safety
+## Context Safety
 
 ## 14.39 Knowledge Filtering During Context Assembly
 
@@ -9331,7 +9352,7 @@ This reduces cross-role leakage and improves observability.
 
 ---
 
-# Memory Update Timing
+## Memory Update Timing
 
 ## 14.42 Mechanical Memory Follows Commitment
 
@@ -9370,7 +9391,7 @@ AI may propose such persistence where appropriate.
 
 ---
 
-# Missing Information
+## Missing Information
 
 ## 14.44 No Confident Fabrication From Missing Context
 
@@ -9408,7 +9429,7 @@ The answer may remain unknown or trigger a valid world-content proposal under Se
 
 ---
 
-# Latency and Cost
+## Latency and Cost
 
 ## 14.46 Efficient Context Assembly
 
@@ -9516,13 +9537,13 @@ TECHNICAL FAILURE MUST NOT CREATE FREE REROLLS.
 
 WHEN SYSTEMS DISAGREE,
 AUTHORITATIVE REALMWEAVER STATE WINS.
-````
+```
 
 Failures are expected operational conditions that must be handled safely rather than allowed to damage persistent campaigns.
 
 ---
 
-# Failure Categories
+## Failure Categories
 
 ## 15.3 Conceptual Failure Types
 
@@ -9584,7 +9605,7 @@ SYSTEM FAILURE
 
 ---
 
-# Coherent Mechanical State
+## Coherent Mechanical State
 
 ## 15.5 Coherent Multi-State Commitment
 
@@ -9668,7 +9689,7 @@ The behavioural requirement is:
 
 ---
 
-# Action Identity and Idempotency
+## Action Identity and Idempotency
 
 ## 15.8 Significant Action Identity
 
@@ -9751,7 +9772,7 @@ It must not:
 
 ---
 
-# AI Output Failure
+## AI Output Failure
 
 ## 15.11 Malformed AI Output
 
@@ -9849,7 +9870,7 @@ Recovery context should avoid unnecessary full-context repetition where practica
 
 ---
 
-# Fallback Behaviour
+## Fallback Behaviour
 
 ## 15.15 Task-Specific Fallbacks
 
@@ -9876,7 +9897,7 @@ Display committed mechanical result.
 Possible fallback:
 
 ```text
-Do not materialize new content.
+Do not materialise new content.
 ```
 
 ### Intent-Interpretation Failure
@@ -9909,7 +9930,7 @@ Fallback behaviour must remain mechanically valid and state-safe.
 
 ## 15.17 Conservative Mechanical Fallbacks
 
-For AI-controlled actors, safe fallback actions should use existing supported mechanics.
+For AI-controlled actors, safe deterministic fallback actions are a bounded failure-recovery exception used only after AI recovery fails. They should use existing supported mechanics.
 
 Depending on circumstances, fallback behaviour may include actions such as:
 
@@ -9920,9 +9941,11 @@ Depending on circumstances, fallback behaviour may include actions such as:
 
 Fallback logic must not invent new abilities or resources.
 
+Fallback logic must remain legal and conservative and must not replace normal AI-owned NPC intent outside failure recovery.
+
 ---
 
-# Player-Facing Failure Behaviour
+## Player-Facing Failure Behaviour
 
 ## 15.18 Player-Friendly Error Presentation
 
@@ -9983,7 +10006,7 @@ RealmWeaver must distinguish this from resubmitting an already-completed action.
 
 ---
 
-# Stale State and Paused Resolution
+## Stale State and Paused Resolution
 
 ## 15.22 Resolution Uses Authoritative State
 
@@ -10033,20 +10056,22 @@ Exact state versioning, locking or concurrency mechanisms are deferred to later 
 
 ---
 
-# Randomness and Retry
+## Randomness and Retry
 
-## 15.25 Committed Random Results Cannot Change
+## 15.25 Randomness Is Bound to the Validated Action
 
-Once a random result belongs to a committed action:
+Once RealmWeaver generates randomness for a validated action, the result is bound to that action's unique identity:
 
 ```text
 Attack Roll:
 17
 ```
 
-all retries must continue to use that same result.
+All technical resubmissions and persistence retries of that same action must continue to use that result.
 
-A retry cannot reroll committed randomness.
+A retry cannot reroll bound randomness, whether or not the action has already committed.
+
+Failed validation produces no unnecessary random result.
 
 ---
 
@@ -10063,7 +10088,7 @@ Commit:
 Failed
 ```
 
-then, where practical, retrying the same action should reuse the already-generated resolution data:
+then retrying the same action must reuse the already-generated resolution data:
 
 ```text
 Retry ACTION XYZ
@@ -10073,13 +10098,17 @@ Reuse Roll 17
 
 Technical failure should not alter fate or create free rerolls.
 
+If the bound result cannot be recovered, RealmWeaver must fail safely and reconcile authoritative state rather than silently reroll.
+
 Detailed random/event persistence is deferred.
 
 ---
 
 ## 15.27 New Gameplay Attempts Are Different
 
-A genuinely new action is different from a technical retry.
+A new random result is permitted only when the earlier action was conclusively cancelled while uncommitted and the player or AI then submits a materially different validated action.
+
+Cosmetic rewording or technical resubmission does not create a new action.
 
 If the rules permit another attempt:
 
@@ -10087,11 +10116,11 @@ If the rules permit another attempt:
 NEW ACTION
 ```
 
-then new randomness may be generated normally.
+then new randomness may be generated normally only when it is a genuinely new validated action under this rule.
 
 ---
 
-# Narration Consistency Recovery
+## Narration Consistency Recovery
 
 ## 15.28 Narration Regeneration Preserves Facts
 
@@ -10141,7 +10170,7 @@ It is not permission to mutate campaign reality.
 
 ---
 
-# Context and Memory Failure
+## Context and Memory Failure
 
 ## 15.30 Missing Memory Cannot Be Fabricated
 
@@ -10184,11 +10213,11 @@ depending on the operation.
 
 ---
 
-# Content and World Failure
+## Content and World Failure
 
 ## 15.33 No Partial Persistent Content
 
-If materialization of important generated content fails, RealmWeaver should not leave an invalid partially-created entity where required information is missing.
+If materialisation of important generated content fails, RealmWeaver should not leave an invalid partially-created entity where required information is missing.
 
 Example:
 
@@ -10202,11 +10231,11 @@ should not become authoritative persistent canon.
 
 ---
 
-## 15.34 Unmaterialized Content Remains Non-Authoritative
+## 15.34 Unmaterialised Content Remains Non-Authoritative
 
 If generated content fails validation or persistence, its appearance in AI output alone does not make it reliable campaign canon.
 
-Materialization/commit determines authoritative persistence.
+Materialisation/commit determines authoritative persistence.
 
 ---
 
@@ -10235,7 +10264,7 @@ Exact event scheduling behaviour will be designed later.
 
 ---
 
-# Recovery and Auditability
+## Recovery and Auditability
 
 ## 15.37 Failure Traceability
 
@@ -10296,7 +10325,7 @@ Frontend state management details are deferred.
 
 ---
 
-# Cross-System Consistency
+## Cross-System Consistency
 
 ## 15.40 Authoritative Priority
 
@@ -10347,7 +10376,7 @@ The preferred architecture should prevent such cases by committing before narrat
 
 ---
 
-# Campaign Save Integrity
+## Campaign Save Integrity
 
 ## 15.43 Valid Save State
 
@@ -10387,7 +10416,7 @@ Detailed backup, migration and recovery architecture is deferred.
 
 ---
 
-# Degraded Operation
+## Degraded Operation
 
 ## 15.46 Limited AI-Outage Behaviour
 
@@ -10414,7 +10443,7 @@ The AI provider must not become the sole gateway to RealmWeaver state.
 
 ---
 
-# Recovery Tools
+## Recovery Tools
 
 ## 15.48 Explicit Recovery Operations
 
@@ -10488,16 +10517,16 @@ RealmWeaver adopts the following requirements:
 21. Mechanical resolution must operate against known authoritative state.
 22. Relevant assumptions should be revalidated if state may have changed before commitment.
 23. Paused resolution pipelines must account for state changes before resuming.
-24. Retries never reroll already-committed random results.
-25. Technical commit failure should reuse already-generated resolution randomness for the same action where practical.
-26. Genuine new gameplay attempts receive new randomness where applicable.
+24. Once generated for a validated action, randomness is bound to that action's unique identity.
+25. Technical or persistence retries of the same action must reuse its bound randomness.
+26. A new roll is allowed only after a conclusively cancelled, uncommitted action is followed by a materially different validated action.
 27. Narration regeneration preserves all committed mechanical facts.
 28. Mechanical state never changes merely to match incorrect AI prose.
 29. Memory retrieval failure must not result in fabricated previous events.
 30. Stale summaries cannot override current authoritative state.
 31. Missing critical context should fail safely rather than force AI guessing.
 32. Failed persistent world/content creation must not leave invalid partial canon.
-33. Unmaterialized content remains non-authoritative.
+33. Failed significant-content materialisation must not produce player-visible established canon or silent retcons.
 34. Scheduled world events must not silently disappear because their processing failed.
 35. Critical unresolved events may constrain dependent time progression until safely handled.
 36. Significant failures should be traceable for development and debugging.
@@ -10565,7 +10594,7 @@ REALMWEAVER PRESERVES THE WORLD.
 
 ---
 
-# Narrative-First Experience
+## Narrative-First Experience
 
 ## 16.3 Narrative as Primary Interaction
 
@@ -10630,7 +10659,7 @@ RealmWeaver should combine immersion with mechanical transparency.
 
 ---
 
-# Latency and AI Usage
+## Latency and AI Usage
 
 ## 16.5 Local Deterministic Resolution
 
@@ -10687,7 +10716,7 @@ AI intent/proposal where required
 ↓
 LOCAL deterministic validation/resolution
 ↓
-COMMIT
+COMMIT / PERSIST
 ↓
 PRIMARY narration generation
 ```
@@ -10747,7 +10776,7 @@ Creative actions should continue through RealmWeaver's interpretation/proposal p
 
 ---
 
-# Responsiveness
+## Responsiveness
 
 ## 16.10 Immediate Action Acknowledgement
 
@@ -10805,7 +10834,7 @@ It does not alter any authority boundaries or permit streamed prose to become au
 
 ---
 
-# Dice Experience
+## Dice Experience
 
 ## 16.13 Visible Dice Feedback
 
@@ -10850,7 +10879,7 @@ It does not create a competing roll.
 
 ---
 
-# Interruptions and Meaningful Choices
+## Interruptions and Meaningful Choices
 
 ## 16.16 Clear Reaction Windows
 
@@ -10907,7 +10936,7 @@ Automation must not remove meaningful player agency.
 
 ---
 
-# Error Experience
+## Error Experience
 
 ## 16.19 Helpful Rule Rejections
 
@@ -10958,7 +10987,7 @@ Narration may then be retried/regenerated without rerunning mechanics.
 
 ---
 
-# Direct Structured State Access
+## Direct Structured State Access
 
 ## 16.22 Inspectable Character and Campaign State
 
@@ -11015,7 +11044,7 @@ It does not replace it.
 
 ---
 
-# Player Agency and Automation
+## Player Agency and Automation
 
 ## 16.25 Automate Rules Administration
 
@@ -11056,7 +11085,7 @@ Player agency remains a core product requirement.
 
 ---
 
-# UI and Backend Separation
+## UI and Backend Separation
 
 ## 16.28 UI Reads Authoritative State
 
@@ -11104,7 +11133,7 @@ Both must describe the same authoritative event.
 
 ---
 
-# Long-Running Campaign UX
+## Long-Running Campaign UX
 
 ## 16.30 Automatic Campaign Resume Context
 
@@ -11152,11 +11181,11 @@ merely because RealmWeaver stores those facts.
 
 ---
 
-# Generated Content UX
+## Generated Content UX
 
 ## 16.33 Generated Content Should Feel Native
 
-Valid AI-generated/materialized content should integrate naturally into RealmWeaver.
+Valid AI-generated/materialised content should integrate naturally into RealmWeaver.
 
 The player should not need to care whether an NPC, quest or location originated from:
 
@@ -11178,7 +11207,7 @@ A mechanic that is not implemented/supported in the current ruleset should not b
 
 ---
 
-# Performance Priorities
+## Performance Priorities
 
 ## 16.35 Correctness Before Speed
 
@@ -11237,11 +11266,13 @@ Processing effort should be proportional to gameplay significance.
 
 ---
 
-# Visual Quality and RealmWeaver Identity
+## Visual Quality and RealmWeaver Identity
 
 ## 16.38 Visual Quality Is a First-Class Requirement
 
 RealmWeaver's visual presentation is a first-class product requirement rather than an optional final styling phase.
+
+Visual quality is mandatory for the core V1 player experience.
 
 A player-facing feature is not considered production-quality solely because it functions correctly.
 
@@ -11250,6 +11281,30 @@ RealmWeaver should present a distinctive, polished and cohesive fantasy RPG expe
 The visual objective is:
 
 > **The interface should make the player want to enter the world.**
+
+Mandatory visual/UX review areas include:
+
+* Landing and campaign entry
+* Character creation
+* Main campaign/narration interface
+* Character sheet and resources
+* Dice and mechanical-result presentation
+* Combat status and actions
+* Inventory and equipment
+* Spells and conditions
+* Quest/objective tracking
+* Save, loading, error and recovery states
+* Responsive behaviour on supported screen sizes
+
+Mandatory quality expectations include:
+
+* A coherent fantasy identity
+* Consistent colours, typography, spacing, components and iconography
+* Clear distinction between narration, dialogue, player choices and mechanics
+* Clear presentation of authoritative state changes
+* Readable contrast and accessible interaction states
+* Designed loading, empty, disabled, success and error states
+* No obviously unfinished placeholder UI in the V1 release
 
 ---
 
@@ -11417,9 +11472,11 @@ Review should consider:
 
 This requirement should later be reflected in RealmWeaver's implementation Definition of Done.
 
+The mandatory quality standard does not require elaborate animations or cinematic transitions, custom artwork for every entity, 3D environments, fully animated maps, generated video or voice presentation, multiple complete visual themes, Dark Mode, or purely decorative effects without usability value. These remain optional or deferred.
+
 ---
 
-# Final Authority Contract
+## Final Authority Contract
 
 ## 16.47 Player Contract
 
@@ -11476,7 +11533,7 @@ Resources
 Conditions
 Progression
 Quest state
-Materialized world canon
+Materialised world canon
 Commit consistency
 Retry consistency
 ```
@@ -11527,7 +11584,7 @@ REALMWEAVER
 resolves rules and controlled randomness
         ↓
 REALMWEAVER
-commits authoritative state
+commits/persists authoritative state
         ↓
 AI
 narrates committed outcome
@@ -11557,7 +11614,7 @@ REALMWEAVER
 validates and resolves
         ↓
 REALMWEAVER
-commits
+commits/persists
         ↓
 AI
 narrates
@@ -11576,7 +11633,7 @@ REALMWEAVER VALIDATION
         ↓
 MECHANICAL RESOLUTION
         ↓
-COMMIT
+COMMIT / PERSIST
         ↓
 AI NARRATION
 where useful
@@ -11619,7 +11676,7 @@ RealmWeaver adopts the following requirements:
 27. Campaign resume should reconstruct relevant persisted context automatically.
 28. Optional campaign recaps may be generated from authoritative/relevant memory.
 29. Resume recaps must respect hidden-information boundaries.
-30. Materialized generated content should integrate naturally into the player experience.
+30. Materialised generated content should integrate naturally into the player experience.
 31. Unsupported mechanics should not be presented as though they are available.
 32. Correctness takes priority over latency.
 33. Correctness should not justify unnecessary processing or AI calls.
@@ -11664,11 +11721,19 @@ THE PLAYER WANT TO ENTER THE WORLD.
 
 ---
 
-# 17. Group 9 — Completion Status
+# 17. Group 9 — Review Status
 
 ## 17.1 Status
 
-**ALL GROUP 9 SECTIONS APPROVED**
+**SECTIONS 9A–9L APPROVED**
+
+**RULES DESIGN COMPLETE**
+
+**INTERNAL CONSISTENCY REVIEW PASSED**
+
+**INTERNAL REVIEW GATE PASSED**
+
+**M2.1 COMPLETION GATE PENDING**
 
 Completed:
 
@@ -11731,40 +11796,40 @@ and preserves campaign continuity.
 ## 17.3 Complete End-to-End Principle
 
 ```text
-PLAYER INTENT
+INTENT
         ↓
-INTERPRET / PROPOSE
+PROPOSE
         ↓
 VALIDATE
         ↓
 RESOLVE
         ↓
-COMMIT
+COMMIT / PERSIST
         ↓
 NARRATE
         ↓
-PERSIST / CONTINUE WORLD
+CONTINUE WORLD
 ```
 
 Persistent mechanical or world consequences cannot bypass this authority model.
+
+Resolve calculates the complete state change without making it authoritative. Commit/persist applies that change through atomic durable persistence; only then does the state become authoritative and available for narration.
 
 ---
 
 ## 17.4 Next M2.1 Steps
 
-With Group 9 complete, the next work is:
+With Group 9 rules design complete and its internal consistency review passed, the remaining work is:
 
-1. Perform a **Group 9 internal consistency review** across Sections 9A–9L.
-2. Resolve any duplicated, conflicting or ambiguous rules.
-3. Perform the **full M2.1 cross-group consistency review** across Groups 1–9.
-4. Verify cross-file terminology and authority boundaries.
-5. Review Weapon Mastery amendments against affected groups.
-6. Review spell, condition, rest, equipment, NPC and world-state interactions.
-7. Update the main game-rules/index documentation as required.
-8. Update `PROJECT_STATUS.md`.
-9. Perform the planned **SRD/IP/content-provenance audit** before implementation begins.
-10. Complete the M2.1 gate.
-11. Proceed into the remaining M2 technical architecture milestones.
+1. Perform the **full M2.1 cross-group consistency review** across Groups 1–9.
+2. Verify cross-file terminology and authority boundaries.
+3. Review Weapon Mastery amendments against affected groups.
+4. Review spell, condition, rest, equipment, NPC and world-state interactions.
+5. Update the main game-rules/index documentation as required.
+6. Update `PROJECT_STATUS.md`.
+7. Perform the planned **SRD/IP/content-provenance audit** before implementation begins.
+8. Complete the M2.1 gate.
+9. Proceed into the remaining M2 technical architecture milestones.
 
 ---
 
@@ -11797,9 +11862,9 @@ Unknown or unsupported source material should be resolved before production impl
 
 ---
 
-## 17.6 M2.1 Group 9 Gate
+## 17.6 Group 9 Internal Review Gate
 
-Group 9 is ready for consistency review when:
+The Group 9 internal consistency review evaluated whether:
 
 * All 9A–9L sections exist in `09_AI_RULES_BOUNDARY.md`.
 * All sections are marked APPROVED.
@@ -11825,7 +11890,4 @@ RealmWeaver preserves truth.
 * UI state derives from authoritative RealmWeaver state.
 * Visual quality is recognized as a first-class player-facing requirement.
 
-Once these checks pass, Group 9 is considered complete and ready for the M2.1 consistency-review stage.
-
-```
-```
+These checks passed on 31 August 2026. The Group 9 internal-review gate is PASSED. The M2.1 completion gate remains PENDING, and the next approved activity is the Groups 1–9 cross-group consistency review.

@@ -21,7 +21,8 @@ If authoritative documents conflict, stop and report the conflict with the affec
 - M1 — Product Foundation is complete.
 - M2 — Technical Design & Architecture is active.
 - M2.1 rules design is documented, but its completion gate has not passed.
-- The next approved activity is the Group 9 internal consistency review.
+- The Group 9 internal consistency review and internal-review gate have passed.
+- The next approved activity is the Groups 1–9 cross-group consistency review.
 - Production coding is not currently authorized.
 
 Production coding may begin only after the required documentation gates—including the SRD/IP/content-provenance audit—are complete and the user explicitly approves implementation.
