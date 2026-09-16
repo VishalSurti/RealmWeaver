@@ -2068,7 +2068,7 @@ Choose Weapon Masteries
 
 Longsword — Sap
 Greatsword — Graze
-Longbow — applicable Mastery
+Longbow — Slow
 Battleaxe — Topple
 
 The player makes the selection.
@@ -2235,6 +2235,8 @@ Initial supported options may include:
 * Two-Weapon Fighting
 
 The choice is mechanically validated.
+
+Two-Weapon Fighting allows the character to add the normal ability modifier to the damage of the one additional Light-weapon attack granted by the shared two-weapon fighting rule. It does not grant another additional attack or remove the shared once-per-turn limit.
 
 ### 9.2.4 Second Wind
 

@@ -502,17 +502,14 @@ Future UI/preferences may allow players to choose between:
 
 ## 7C.7 Resource Mutation
 
-A spell slot is consumed only after:
+A spell-slot expenditure is a provisional part of the complete spell-resolution transition. RealmWeaver resolves that expenditure together with the spell effects, conditions, concentration changes and other related state changes only after:
 
 1. the proposed cast has been validated;
-2. required player choices have been resolved;
-3. the spell cast is committed as a valid game action.
+2. required player choices have been resolved.
 
-Invalid or rejected casts consume no spell slot.
+The complete transition is then committed/persisted atomically and durably. Only that successful commit/persistence makes the spell-slot expenditure and related spell outcome authoritative.
 
-RealmWeaver follows the general rule:
-
-**Validate first → mutate state second.**
+Invalid or rejected casts and failed persistence consume no spell slot and establish no spell outcome.
 
 ---
 
@@ -640,7 +637,7 @@ This principle should also guide other campaign interfaces such as inventory, go
 
 ## 7C.13 AI Resource Authority
 
-The AI may narrate the use or restoration of a resource only after RealmWeaver has validated the corresponding mechanical event.
+The AI may narrate the use or restoration of a resource only after RealmWeaver has validated and resolved the complete proposed mechanical event and committed/persisted it atomically and durably.
 
 The AI may not directly:
 
@@ -666,7 +663,7 @@ Narrative events such as shrines, blessings, magical locations, quests, or artif
 8. If multiple meaningfully different slot choices exist, the player chooses.
 9. If only one valid choice exists, RealmWeaver may automatically select it.
 10. If higher slots provide no mechanical benefit, RealmWeaver may automatically use the lowest valid slot.
-11. Slots are consumed only after successful validation and action commitment.
+11. Proposed slot expenditure is resolved with the complete spell transition and becomes authoritative only through the same atomic durable commit/persistence.
 12. Invalid/rejected casts consume no resources.
 13. Valid long rests restore normal Wizard/Cleric spell slots.
 14. Wizard supports Arcane Recovery using SRD 5.1 / 2014-style mechanics.
@@ -755,7 +752,7 @@ Shield is available.
 
 If the player chooses to cast the spell:
 
-**Validate → consume Reaction/resource → apply spell → recalculate affected mechanics → update state → AI narrates**
+**Validate → resolve the complete spell outcome, including proposed Reaction/resource expenditure and affected mechanics → commit/persist the complete state change atomically and durably → AI narrates**
 
 RealmWeaver must not automatically spend a player's Reaction or spell slot without player permission.
 
@@ -913,19 +910,18 @@ Spellcasting should conceptually follow:
 ↓
 **Cast Validated**
 ↓
-**Commit Action**
+**Resolve Complete Mechanical State Change**
+including Action/Reaction, resources, components, charges and effects
 ↓
-**Consume Action/Reaction**
-↓
-**Consume Required Resources**
-↓
-**Resolve Mechanics**
-↓
-**Update Persistent Game State**
+**Commit / Persist Atomically and Durably**
 ↓
 **AI Narrates Resolved Result**
 
 Validation must occur before authoritative state mutation.
+
+Resolution calculates the complete state change without making it authoritative. Failed commit/persistence consumes no resource, establishes no outcome and must not be narrated as completed. Technical retries reuse the bound or committed result and do not reroll, re-resolve or duplicate the cast.
+
+A character wearing armour or using a shield without proficiency cannot cast spells while that equipment remains equipped. This restriction applies independently of the campaign's Full or Simplified Components mode.
 
 ---
 
@@ -1341,16 +1337,16 @@ Preserving exact range supports:
 
 ## 7F.2 RealmWeaver Distance Bands
 
-V1 uses simplified player-facing distance concepts including:
+V1 uses the shared mechanical distance concepts:
 
-* **Near**
-* **Short**
-* **Long**
-* **Beyond**
+* **Engaged — approximately 0–5 feet**
+* **Near — over 5–30 feet**
+* **Far — over 30–60 feet**
+* **Distant — over 60 feet**
 
 These provide a readable abstraction over exact tabletop measurements.
 
-The precise shared mapping and positional implementation must remain consistent with RealmWeaver's Combat and Movement systems.
+Exact numerical spell range remains authoritative. A displayed distance band must not expand a spell's legal numerical range.
 
 ---
 
@@ -1359,9 +1355,9 @@ The precise shared mapping and positional implementation must remain consistent 
 The UI may display simplified information such as:
 
 ```text
-Cultist — Near
-Goblin — Short
-Archer — Long
+Cultist — Engaged
+Goblin — Near
+Archer — Far
 ```
 
 RealmWeaver may maintain more precise underlying positional information where required for deterministic mechanical resolution.
@@ -1662,7 +1658,7 @@ For example:
 ```text
 Fireball
 
-Range: Long
+Range: Distant (150 ft)
 Area: 20-ft radius
 Target: Area
 Save: Dexterity
@@ -1684,9 +1680,9 @@ This allows newer players to use the simplified RealmWeaver abstraction while ex
 ## 7F Approved Decisions
 
 1. Preserve exact SRD range values in structured Spell Definitions.
-2. Use Near/Short/Long as the primary player-facing distance abstraction, with Beyond representing targets outside normal current reach where appropriate.
+2. Use Engaged/Near/Far/Distant as the shared player-facing and mechanical distance abstraction.
 3. RealmWeaver may maintain more precise underlying positional state than the UI exposes.
-4. Touch spells require appropriate Near/contact range.
+4. Touch spells require appropriate Engaged/contact range.
 5. Self, Touch, Ranged, and Self-originating area spells are distinct targeting concepts.
 6. Range validation is deterministic.
 7. AI narration cannot independently alter authoritative positioning.
@@ -1810,9 +1806,30 @@ This may interact with:
 
 RealmWeaver should preserve mechanical legality while avoiding unnecessary player micromanagement.
 
-Where a legal hand/equipment adjustment can reasonably occur under existing action rules, the player should not be forced to manually describe every minor hand movement.
+Where a legal hand/equipment adjustment can occur through the character's one permitted free interaction, the player should not be forced to manually describe it. RealmWeaver may resolve one unambiguous legal transition automatically, but must not perform multiple transitions or silently restore a prior hand state.
 
-The exact equipment/action implementation is deferred to the relevant architecture/UI milestones.
+For Full Components mode, the following hand-state rules are authoritative for ordinary substitutable Material components:
+
+| Current Hand State | V-only | S-only | M-only | S+M |
+| ------------------ | ------ | ------ | ------ | --- |
+| Both hands empty | Legal | Legal | Illegal without a Material source | Illegal without a Material source |
+| One one-handed weapon; other hand empty | Legal | Legal | Illegal without a Material source | Illegal without a Material source |
+| Weapon and ordinary shield | Legal | Illegal | Illegal | Illegal |
+| Two one-handed weapons | Legal | Illegal | Illegal | Illegal |
+| Accessible worn component pouch and at least one empty hand | Legal | Legal | Legal | Legal |
+| Held valid focus and other hand empty | Legal | Legal using the empty hand | Legal | Legal |
+| Weapon and permitted shield-mounted focus | Legal | Illegal | Legal | Legal |
+| Permitted shield-mounted focus and other hand empty | Legal | Legal | Legal | Legal |
+| Two-Handed weapon actively wielded | Legal | Illegal | Illegal | Illegal |
+| Two-Handed weapon held in one hand but not actively used | Legal | Legal | Illegal without a Material source | Illegal without a Material source |
+
+A focus-held hand may satisfy Material and combined Somatic-and-Material requirements, but cannot satisfy an S-only spell unless that hand is otherwise free or an explicit feature permits it. A shield-focus hand remains occupied.
+
+An accessible worn component pouch requires a free hand but no separate draw interaction.
+
+One permitted free interaction may perform exactly one equipment or wield-state transition, including drawing, stowing or dropping one item, or releasing or regripping a Two-Handed weapon. Later regripping is a separate transition. A cast that requires multiple adjustments is illegal unless another rule grants the required interactions.
+
+Exact UI controls and state representation remain deferred to the relevant architecture/UI milestones.
 
 ---
 
@@ -1953,15 +1970,9 @@ material:
     consumed = true
 ```
 
-Consumed material components are removed from authoritative inventory only after:
+Consumed material components are included in the spell's complete resolved state change only after validation and all required player choices are complete.
 
-1. the spell has passed validation;
-2. all required player choices are complete;
-3. the spell cast has been committed.
-
-RealmWeaver follows:
-
-**Validate first → mutate inventory second.**
+The component removal, resource use and spell effects commit/persist atomically and durably. Failed persistence removes no component and establishes no spell outcome.
 
 Invalid or cancelled spell casts consume nothing.
 
@@ -2258,12 +2269,7 @@ Casting Hold Person will end Bless.
 [Cancel]
 ```
 
-If the player confirms:
-
-1. the previous concentration ends;
-2. its dependent effects end;
-3. the new spell is committed;
-4. the new concentration state begins.
+If the player confirms, RealmWeaver resolves the previous concentration ending, its dependent effects ending, the new spell, its resource expenditure and the new concentration state as one complete proposed transition. The complete transition is then committed/persisted atomically and durably before narration.
 
 The AI cannot decide which concentration spell the player values more.
 
@@ -2606,7 +2612,7 @@ Conceptually:
 ↓
 **Determine final damage**
 ↓
-**Update HP and related state**
+**Determine proposed HP and related state changes**
 
 Magic must not maintain a separate independent damage engine.
 
@@ -2644,6 +2650,8 @@ RealmWeaver deterministically resolves interactions with:
 * Damage immunity
 * Damage vulnerability
 * Normal damage
+
+Spell damage uses the shared Combat damage pipeline. Each damage-type component is resolved separately; spell or Saving Throw outcomes and explicit modifiers apply before Immunity, Resistance or Vulnerability. Immunity produces zero. Resistance and Vulnerability applying to the same component cancel before rounding; otherwise Resistance halves once and rounds down, while Vulnerability doubles once. Final components are summed before damage is applied to Temporary HP and then HP.
 
 For example:
 
@@ -2810,9 +2818,9 @@ Applicable damage normally interacts with Temporary HP before reducing ordinary 
 
 ## 7I.12 Temporary HP Replacement
 
-Temporary HP does not normally stack by simple addition.
+Temporary HP never stacks by simple addition.
 
-If a character already has Temporary HP and gains another source, RealmWeaver applies the appropriate replacement/choice behaviour under the applicable rules.
+If a creature already has Temporary HP and receives another source, its controlling player chooses whether to retain the existing amount or replace it with the new amount. AI-controlled creatures make the same choice through bounded actor authority. An explicit feature may override this general rule.
 
 For example:
 
@@ -2824,7 +2832,7 @@ Result:
 Do not automatically become 13
 ```
 
-The exact handling follows the standard rule or any explicit feature exception.
+The two amounts are never added together unless an explicit feature overrides the general rule.
 
 ---
 
@@ -3080,7 +3088,7 @@ For example, one area spell may:
 * apply or remove conditions;
 * create world/combat events.
 
-RealmWeaver should eventually process the committed spell resolution as a coherent mechanical transaction so that partial state updates do not leave campaign state inconsistent.
+RealmWeaver must resolve all connected spell consequences as one complete state change and then commit/persist that change atomically and durably. Partial state updates must not become authoritative.
 
 The exact database/transaction implementation is deferred to architecture.
 
@@ -3110,7 +3118,7 @@ The exact database/transaction implementation is deferred to architecture.
 20. RealmWeaver retains rolled/calculated amounts separately from actual HP state changes where useful.
 21. Mechanical spell outcomes should be compact and expandable in the campaign UI.
 22. AI narrates already-resolved mechanical outcomes.
-23. Multi-target and multi-effect spell resolutions should eventually be processed atomically by the backend.
+23. Multi-target and multi-effect spell resolutions must commit/persist atomically and durably after complete resolution.
 
 ---
 # 7J — Cantrips, Ritual Casting & Special Casting
@@ -3809,9 +3817,11 @@ recharge_rule
 
 Item activation follows:
 
-**Validate → commit activation → consume charges → resolve effect**
+**Validate → resolve activation, charge use and effect → commit/persist atomically and durably → narrate**
 
 Invalid or cancelled item uses do not consume charges.
+
+Failed persistence also consumes no charge and establishes no item effect. Technical retries reuse the bound or committed result rather than resolving the activation again.
 
 ---
 
@@ -4408,8 +4418,8 @@ Bloodied
 
 Relevant Positions:
 Fighter — Near
-Rogue — Short
-Exit — Long
+Rogue — Far
+Exit — Distant
 ```
 
 Context-selection and token-management strategy are deferred to the AI architecture milestone.
@@ -4503,6 +4513,8 @@ Rules Engine
 ↓
 Mechanical Resolution
 ↓
+Atomic Durable Commit / Persistence
+↓
 AI Narration
 ```
 
@@ -4527,17 +4539,17 @@ Roll Damage/Healing
 ↓
 Apply Resistance/Immunity/Vulnerability
 ↓
-Update HP
+Resolve HP Change
 ↓
-Apply Conditions
+Resolve Conditions
 ↓
-Trigger Concentration Checks
+Resolve Concentration Checks
 ↓
-Create/Remove Ongoing Effects
+Resolve Ongoing Effect Changes
 ↓
-Consume Resources
+Resolve Resource Expenditure
 ↓
-Commit State
+Commit/Persist Complete State Change Atomically and Durably
 ```
 
 The AI receives the resolved result afterward.
@@ -4869,7 +4881,7 @@ Player Casts Fireball
 ↓
 Mechanics Resolve
 ↓
-Authoritative State Commits
+Complete State Commits/Persists Atomically and Durably
 ↓
 AI Generation Times Out
 ```
@@ -5148,4 +5160,3 @@ Where practical, the target architecture should aim for approximately **one main
 Structured UI actions may bypass AI intent interpretation entirely and enter the deterministic rules pipeline directly.
 
 The complete AI orchestration, context-management, latency, streaming, and model-selection strategy is deferred to the architecture/AI milestones.
-

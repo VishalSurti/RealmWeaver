@@ -749,6 +749,17 @@ Examples:
 * Weapon Mastery effects may modify combat, movement, action economy and temporary effect state.
 * Temporary effects modify effective state without overwriting authoritative base statistics.
 
+The consolidated combat-domain corrections establish that:
+
+* significant combat, item, spell, resource, damage and Condition changes resolve completely before atomic durable commit/persistence and narration;
+* Combat, Magic and Conditions share the Engaged/Near/Far/Distant distance model while exact numerical range remains authoritative;
+* Reactions refresh at the start of the creature's turn, and Opportunity Attacks require willing movement out of effective reach;
+* forced movement and teleportation do not trigger Opportunity Attacks;
+* supported weapons, properties and Weapon Mastery mappings are self-contained in `06_EQUIPMENT_AND_INVENTORY.md`;
+* complete Mastery effect semantics are owned by `04_COMBAT.md`;
+* Full Components hand legality is owned by `07_MAGIC.md` and uses authoritative equipment state;
+* damage, death-state and Temporary HP rules resolve deterministically through the shared Combat rules.
+
 Before M2.1 is considered complete, all nine rules groups require a consistency review.
 
 ---
@@ -789,17 +800,20 @@ The primary M2.1 rules-design stage is complete. Group 9's internal consistency 
 
 ## Current Phase
 
-**GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — PASS 2 NEXT — M2.1 GATE PENDING**
+**GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — REVIEW BATCH 1 IN PROGRESS — M2.1 GATE PENDING**
 
 Cross-group review progress:
 
-* Pass 0 — Baseline and Source-of-Truth Map: COMPLETE — FINDINGS RECORDED
-* Pass 1 — Character Foundations, Checks, Saves, Dice, and Inspiration: COMPLETE — APPROVED CORRECTIONS APPLIED
-* Passes 2–10: OUTSTANDING
+* Foundation Review — Character Mathematics, Checks, Saves, Dice, and Inspiration: COMPLETE AND COMMITTED
+* Review Batch 1 — Combat and State Effects: IN PROGRESS — APPROVED CORRECTIONS APPLIED; FINAL VERIFICATION OUTSTANDING
+* Review Batch 2 — Progression, Recovery, Persistence, and AI Lifecycle: OUTSTANDING
+* Review Batch 3 — Scope, Authority, Terminology, and Final Consolidation: OUTSTANDING
 
-Pass 1 recorded the approved rules for contested-check ties, passive checks, ordinary Saving Throw natural results, Halfling Lucky, level-up Hit Point rerolls, validated manual-dice retries, and Inspiration's mandatory Core V1 status.
+The previously completed Foundation Review recorded the approved rules for contested-check ties, passive checks, ordinary Saving Throw natural results, Halfling Lucky, level-up Hit Point rerolls, validated manual-dice retries, and Inspiration's mandatory Core V1 status.
 
-The Pass 0 findings remain open. Completing Pass 1 does not complete or pass the full Groups 1–9 cross-group review.
+Review Batch 1 remains in progress. The approved corrections for `CG-CMB-001` through `CG-CMB-014` have been incorporated into the affected rules specifications, but neither Review Batch 1 nor the complete Groups 1–9 cross-group review has been marked passed or complete. The A–D labels used during the combat work were decision sub-batches within Review Batch 1, not separate review milestones.
+
+The earlier baseline-preparation findings remain open for the applicable later review work. Completing the Foundation Review does not complete or pass the full Groups 1–9 cross-group review.
 
 Remaining M2.1 work:
 
@@ -850,9 +864,9 @@ Do not proceed directly to M2.2 yet.
 
 Continue with:
 
-> **Pass 2 — Combat, Equipment, Inventory, and Action-Economy Consistency**
+> **Complete final verification of Review Batch 1 — Combat and State Effects**
 
-This is the next bounded pass within the still-pending M2.1 Groups 1–9 cross-group consistency review.
+This is the current review batch within the still-pending M2.1 Groups 1–9 cross-group consistency review.
 
 Then:
 

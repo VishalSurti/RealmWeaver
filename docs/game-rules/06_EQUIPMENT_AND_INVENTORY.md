@@ -44,12 +44,11 @@ Player Intent
 → AI Interpretation  
 → Structured Action  
 → Validation  
-→ Mechanical Resolution  
-→ State Change  
-→ Persistence  
+→ Resolve Complete State Change
+→ Atomic Durable Commit / Persistence
 → AI Narration
 
-Validation should occur before final narration wherever possible.
+Validation occurs before resolution, and narration occurs only after successful commit/persistence.
 
 ### 1.3 Persistent Item State
 
@@ -336,18 +335,23 @@ V1 supports appropriate simple and martial weapon categories required by support
 
 ## 4.3 Weapon Properties
 
-RealmWeaver should structurally support relevant properties such as:
+Core V1 uses the following deterministic weapon properties:
 
-* Light
-* Finesse
-* Versatile
-* Two-Handed
-* Heavy
-* Reach
-* Thrown
-* Ammunition
-* Loading
-* Other supported properties
+* **Finesse:** permits Strength or Dexterity for the attack roll; the same chosen ability modifier applies to damage.
+* **Heavy:** a Small creature has Disadvantage on attack rolls with the weapon unless an explicit feature removes that penalty.
+* **Light:** qualifies the weapon for the approved additional Light-weapon attack when all two-weapon fighting requirements are satisfied.
+* **Loading:** the weapon may fire only once when used through an Action, Bonus Action or Reaction, regardless of normally available attacks, unless an explicit feature overrides this limit.
+* **Reach:** adds 5 feet to effective melee reach and Opportunity Attack reach while the weapon is actively used.
+* **Thrown:** permits a ranged weapon attack using the same ability modifier the weapon would use for a melee attack; Finesse still permits the approved Strength/Dexterity choice.
+* **Two-Handed:** requires two hands while actively used.
+* **Versatile:** uses its approved one-handed or two-handed damage configuration according to authoritative wield state.
+* **Ammunition:** requires the correct accessible ammunition and a hand capable of loading it.
+
+For a weapon with a normal and long range:
+
+* an attack within normal range has no range penalty;
+* an attack beyond normal range and within long range has Disadvantage; and
+* an attack beyond long range is invalid.
 
 ## 4.4 Weapon Proficiency
 
@@ -386,46 +390,48 @@ Class access and Mastery Capacity are defined in `05_CLASSES_AND_PROGRESSION.md`
 
 Mastery combat resolution is defined in `04_COMBAT.md`.
 
-## 4.4B Standard Weapon Mastery Mapping
+## 4.4B Supported Core V1 Weapons and Weapon Mastery Mapping
 
-RealmWeaver uses the canonical revised-rules Weapon Mastery mapping for supported standard weapon types rather than inventing a separate V1 mapping.
+The following table is the complete, authoritative and self-contained supported Core V1 weapon-to-Mastery mapping. Each supported weapon has exactly one default Mastery property.
 
-Examples include:
+| Weapon         | Relevant Properties                         | Mastery |
+| -------------- | ------------------------------------------- | ------- |
+| Club           | Light                                       | Slow    |
+| Dagger         | Finesse, Light, Thrown 20/60                | Nick    |
+| Greatclub      | Two-Handed                                  | Push    |
+| Handaxe        | Light, Thrown 20/60                         | Vex     |
+| Javelin        | Thrown 30/120                               | Slow    |
+| Light Hammer   | Light, Thrown 20/60                         | Nick    |
+| Mace           | —                                           | Sap     |
+| Quarterstaff   | Versatile 1d6/1d8                           | Topple  |
+| Sickle         | Light                                       | Nick    |
+| Spear          | Thrown 20/60, Versatile 1d6/1d8             | Sap     |
+| Dart           | Finesse, Thrown 20/60                       | Vex     |
+| Light Crossbow | Ammunition 80/320, Loading, Two-Handed      | Slow    |
+| Shortbow       | Ammunition 80/320, Two-Handed               | Vex     |
+| Sling          | Ammunition 30/120                           | Slow    |
+| Battleaxe      | Versatile 1d8/1d10                          | Topple  |
+| Flail          | —                                           | Sap     |
+| Glaive         | Heavy, Reach, Two-Handed                    | Graze   |
+| Greataxe       | Heavy, Two-Handed                           | Cleave  |
+| Greatsword     | Heavy, Two-Handed                           | Graze   |
+| Halberd        | Heavy, Reach, Two-Handed                    | Cleave  |
+| Longbow        | Ammunition 150/600, Heavy, Two-Handed       | Slow    |
+| Longsword      | Versatile 1d8/1d10                          | Sap     |
+| Maul           | Heavy, Two-Handed                           | Topple  |
+| Morningstar    | —                                           | Sap     |
+| Pike           | Heavy, Reach, Two-Handed                    | Push    |
+| Rapier         | Finesse                                     | Vex     |
+| Scimitar       | Finesse, Light                              | Nick    |
+| Shortsword     | Finesse, Light                              | Vex     |
+| Trident        | Thrown 20/60, Versatile 1d8/1d10            | Topple  |
+| Warhammer      | Versatile 1d8/1d10                          | Push    |
 
-| Weapon         | Mastery |
-| -------------- | ------- |
-| Club           | Slow    |
-| Dagger         | Nick    |
-| Greatclub      | Push    |
-| Handaxe        | Vex     |
-| Javelin        | Slow    |
-| Light Hammer   | Nick    |
-| Mace           | Sap     |
-| Quarterstaff   | Topple  |
-| Sickle         | Nick    |
-| Spear          | Sap     |
-| Dart           | Vex     |
-| Light Crossbow | Slow    |
-| Shortbow       | Vex     |
-| Sling          | Slow    |
-| Battleaxe      | Topple  |
-| Flail          | Sap     |
-| Glaive         | Graze   |
-| Greataxe       | Cleave  |
-| Greatsword     | Graze   |
-| Halberd        | Cleave  |
-| Lance          | Topple  |
-| Longsword      | Sap     |
-| Maul           | Topple  |
-| Morningstar    | Sap     |
-| Pike           | Push    |
-| Rapier         | Vex     |
-| Scimitar       | Nick    |
-| Shortsword     | Vex     |
-| Trident        | Topple  |
-| Warhammer      | Push    |
+Lance is deferred from Core V1 because its Special property depends on mounted-combat rules that are outside current V1 scope.
 
-For any supported V1 weapon not represented above, RealmWeaver should use the applicable canonical revised-rules mapping rather than AI-generated assignment.
+Heavy Crossbow is contextual-only wording elsewhere in the rules and is unsupported in Core V1.
+
+Weapons not represented in this table are not supported Core V1 weapons and do not receive an inferred or AI-generated Mastery mapping.
 
 Weapon Mastery mappings are authoritative rules data.
 
@@ -447,13 +453,21 @@ The AI narrates the result.
 
 ## 4.6 Finesse Weapons
 
-Finesse weapons allow the supported choice between relevant ability modifiers.
-
-The rules engine determines the valid calculation.
+Finesse weapons permit Strength or Dexterity for the attack roll. The same chosen ability modifier applies to that attack's damage.
 
 ## 4.7 Versatile Weapons
 
-Versatile weapons support appropriate one-handed and two-handed damage configurations.
+Versatile weapons use these approved one-handed and two-handed damage configurations:
+
+| Weapon       | One Hand | Two Hands |
+| ------------ | -------- | --------- |
+| Quarterstaff | 1d6      | 1d8       |
+| Spear        | 1d6      | 1d8       |
+| Battleaxe    | 1d8      | 1d10      |
+| Longsword    | 1d8      | 1d10      |
+| Trident      | 1d8      | 1d10      |
+| Warhammer    | 1d8      | 1d10      |
+
 The applicable damage is determined from authoritative current wield/hand state rather than merely from the weapon being equipped.
 
 ## 4.8 Two-Handed Weapons
@@ -480,25 +494,27 @@ Off Hand:
 Eligible Light Weapon
 ```
 
-The Combat system determines the resulting Bonus Action attack and damage rules.
+After attacking as part of the Attack Action with an eligible Light melee weapon held in one hand, a character may make one additional attack as a Bonus Action with a different eligible Light melee weapon held in the other hand.
 
-More advanced dual-wielding features may be added in later versions.
+The additional attack uses the normal attack modifier. Its damage excludes a positive ability modifier unless a feature permits it, while a negative modifier still applies. The Two-Weapon Fighting style permits the normal ability modifier on that damage.
+
+A weapon used through this rule may be thrown only if it has both Light and Thrown. The additional Light-weapon attack occurs at most once per turn.
 
 Two-weapon fighting requires the applicable weapons to be actually wielded in valid hand states.
 
 Possessing two eligible Light weapons in inventory, or merely having them equipped, does not automatically satisfy this requirement.
 
-The Nick Weapon Mastery property integrates with these rules through `04_COMBAT.md`.
+Nick moves that one qualifying additional attack into the Attack Action instead of consuming the Bonus Action. It does not create another additional attack.
 
 ## 4.10 Ammunition
 
-Ranged weapons requiring ammunition consume appropriate ammunition according to their weapon rules.
+An ammunition attack requires the correct accessible ammunition and a hand capable of loading it.
 
-Ammunition is authoritative inventory state.
+Ammunition is authoritative inventory state. An ammunition-based weapon may be equipped and wielded while still being unable to make an attack because the required ammunition or loading hand is unavailable.
 
-An ammunition-based weapon may be equipped and wielded while still being unable to make an attack because the required ammunition is unavailable.
+RealmWeaver validates ammunition before resolving the attack. One ammunition item is included in the complete resolved state change for every attack actually made, hit or miss, and is consumed only when that result commits/persists successfully.
 
-RealmWeaver validates ammunition before resolving the attack.
+Invalid, cancelled or failed-persistence attacks consume no ammunition. Ordinary expended ammunition is not recoverable in Core V1. Special ammunition requires an explicit recovery rule.
 
 ## 4.11 Improvised Weapon Use
 
@@ -598,19 +614,28 @@ Greatsword + Shield
 
 RealmWeaver uses **Option A** for non-proficient armour.
 
-Characters may wear armour they are not proficient with where the supported rules permit it, but the appropriate non-proficiency penalties apply.
+Characters may wear armour they are not proficient with where the supported rules permit it, but the following non-proficiency penalties apply.
 
 RealmWeaver does not simply prevent equipping it.
 
+While wearing armour without proficiency, a character:
+
+* has Disadvantage on ability checks involving Strength or Dexterity;
+* has Disadvantage on Saving Throws involving Strength or Dexterity;
+* has Disadvantage on attack rolls involving Strength or Dexterity; and
+* cannot cast spells.
+
 ## 5.9 Shield Proficiency
 
-Shield proficiency follows the same principle.
+Shield proficiency follows the same principle. These consequences apply while a non-proficient shield is equipped and do not automatically unequip it.
 
 ## 5.10 Strength Requirements
 
 Some Heavy Armour may have Strength requirements.
 
-Failure to meet the requirement applies the supported mechanical consequence rather than automatically preventing the armour from being worn.
+Failure to meet the requirement reduces the wearer's Speed by 10 feet rather than automatically preventing the armour from being worn.
+
+The penalty applies while the relevant Heavy Armour is equipped. It is independent of armour proficiency and does not overwrite base Speed.
 
 ## 5.11 Stealth
 
@@ -852,6 +877,10 @@ Complex loadout changes may require additional interactions/actions.
 
 RealmWeaver should avoid unnecessary hand-movement micromanagement while preserving meaningful action economy.
 
+A creature may normally make only one permitted free equipment or wield-state transition on its turn. Drawing, stowing or dropping one item, or releasing or regripping a Two-Handed weapon, each uses that interaction.
+
+The system must not silently perform multiple transitions, return an item to a previous hand state or regrip a weapon without the required later interaction.
+
 Detailed combat interaction costs are defined in `04_COMBAT.md`.
 
 ## 6.6 Dropping Items
@@ -861,6 +890,8 @@ Dropped items transfer from the character to the current world location.
 They are not deleted.
 
 If the dropped item was wielded, its wield state immediately ends.
+
+Dropping an item consumes the creature's permitted free interaction.
 
 Dropping a weapon does not remove the character's proficiency or Weapon Mastery training for that weapon type.
 
@@ -1060,7 +1091,11 @@ An AI-generated or custom weapon may change its Mastery property only through va
 
 ## 6.21 Thrown Weapons and Physical Item State
 
-When a physical weapon with the Thrown property is thrown, that specific Item Instance leaves the character's wield state.
+A Thrown weapon makes a ranged weapon attack using the same ability modifier it would use for a melee attack. Finesse still permits the approved Strength/Dexterity choice.
+
+An attack within the weapon's normal range has no range penalty. An attack beyond normal range and within long range has Disadvantage. An attack beyond long range is invalid.
+
+When a physical weapon with the Thrown property is used for an attack that commits/persists successfully, that specific Item Instance leaves the character's wield state and occupies its resolved world location.
 
 Conceptually:
 
@@ -1075,7 +1110,7 @@ Current Scene / Battlefield
 ```
 The character cannot repeatedly throw the same physical Item Instance without retrieving it unless a supported rule or magical property explicitly returns or recreates the weapon.
 
-A mastered Thrown weapon may still use its Weapon Mastery property where the applicable Mastery rule permits it.
+A mastered Thrown weapon may still use its Weapon Mastery property when that property's explicit trigger is satisfied.
 
 Multiple copies of the same weapon type may exist as separate Item Instances where individual state matters.
 
@@ -1461,7 +1496,11 @@ Mechanically significant effects must be mapped to supported content or validate
 
 ## 8.21 Atomic Item Use
 
-Mechanically significant item use should update the item and affected game state atomically where practical.
+Mechanically significant item use resolves the complete state change, including item or resource consumption and all affected game state, before making any part authoritative.
+
+The related changes commit/persist atomically and durably as an all-or-nothing authoritative state change. Narration occurs only after successful commit/persistence.
+
+Failed persistence does not consume the item, establish the outcome or narrate completion. Technical retries reuse the bound or committed result and do not reroll, re-resolve or duplicate the item use.
 
 ---
 
@@ -1783,7 +1822,7 @@ Transactions validate all relevant requirements before execution.
 
 ## 10.4 Atomic Transactions
 
-Mechanically significant transactions should be atomic.
+Mechanically significant transactions must resolve completely and commit/persist atomically and durably.
 
 Example:
 
@@ -2604,4 +2643,3 @@ Approved subsections:
 Next Rules Group:
 
 > **Group 7 — Magic**
-

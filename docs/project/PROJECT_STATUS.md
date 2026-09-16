@@ -6,9 +6,9 @@
 **Current Milestone:** M2 — Technical Design & Architecture
 **Milestone Status:** IN PROGRESS
 **Current Activity:** M2.1 — V1 Game Rules Specification & Rules-Engine Boundary
-**Next Activity:** Pass 2 — Combat, Equipment, Inventory, and Action-Economy Consistency
+**Next Activity:** Complete final verification of Review Batch 1 — Combat and State Effects
 
-**Current Progress:** Sections 9A–9L APPROVED; Group 9 rules design COMPLETE; internal consistency review PASSED; cross-group review Passes 0–1 COMPLETE; Passes 2–10 OUTSTANDING
+**Current Progress:** Sections 9A–9L APPROVED; Group 9 rules design COMPLETE; internal consistency review PASSED; Foundation Review COMPLETE AND COMMITTED; Review Batch 1 IN PROGRESS; Review Batches 2–3 OUTSTANDING
 
 **Group 9 Internal Review Gate:** PASSED
 
@@ -133,7 +133,7 @@ No major production implementation should begin until the relevant architectural
 
 ## Status
 
-**RULES DESIGN COMPLETE — GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — PASS 2 NEXT — M2.1 GATE PENDING**
+**RULES DESIGN COMPLETE — GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — REVIEW BATCH 1 IN PROGRESS — M2.1 GATE PENDING**
 
 Authoritative rules index:
 
@@ -287,27 +287,44 @@ All nine detailed rules groups have approved rules-design sections.
 
 Group 9 rules design is complete. Its internal consistency review and internal-review gate passed on 31 August 2026.
 
-The Groups 1–9 cross-group consistency review is being performed through bounded Passes 0–10:
+The Groups 1–9 cross-group consistency review uses this approved bounded structure:
 
-* Pass 0 — Baseline and Source-of-Truth Map: COMPLETE — FINDINGS RECORDED
-* Pass 1 — Character Foundations, Checks, Saves, Dice, and Inspiration: COMPLETE — APPROVED CORRECTIONS APPLIED AND VERIFIED
-* Passes 2–10: OUTSTANDING
+* Foundation Review — Character Mathematics, Checks, Saves, Dice, and Inspiration: COMPLETE AND COMMITTED
+* Review Batch 1 — Combat and State Effects: IN PROGRESS — APPROVED CORRECTIONS APPLIED; FINAL VERIFICATION OUTSTANDING
+* Review Batch 2 — Progression, Recovery, Persistence, and AI Lifecycle: OUTSTANDING
+* Review Batch 3 — Scope, Authority, Terminology, and Final Consolidation: OUTSTANDING
 
-Pass 1 resolved `CG-FND-001` through `CG-FND-006`. Completing this pass does not complete or pass the overall Groups 1–9 cross-group review.
+The previously completed Foundation Review resolved `CG-FND-001` through `CG-FND-006`. The earlier baseline-preparation findings remain open for the applicable later review work. Completing the Foundation Review does not complete or pass the overall Groups 1–9 cross-group review.
 
 ### Consolidated Cross-Group Findings Ledger
 
 | Finding | Origin | Status | Summary |
 | --- | --- | --- | --- |
-| `CG-BASE-001` | Pass 0 | OPEN | Universal source-of-truth hierarchy conflicts with the approved domain-specific ownership model. |
-| `CG-BASE-002` | Pass 0 | OPEN | Current technical source-of-truth wording may overstate the authority of the rules index. |
-| `CG-BASE-003` | Pass 0 | OPEN | V1 scope and requirements use inconsistent requiredness for identified progression and campaign options. |
-| `CG-FND-001` | Pass 1 | RESOLVED | Contested-check ties preserve the pre-contest status quo. |
-| `CG-FND-002` | Pass 1 | RESOLVED | Passive checks use all normal modifiers with non-stacking `+5` Advantage and `−5` Disadvantage adjustments. |
-| `CG-FND-003` | Pass 1 | RESOLVED | Ordinary Saving Throws resolve natural 1 and natural 20 through the final modified total. |
-| `CG-FND-004` | Pass 1 | RESOLVED | Halfling Lucky and level-up Hit Point rerolls have explicit timing, replacement, repetition, and retry rules. |
-| `CG-FND-005` | Pass 1 | RESOLVED | Validated manual results and their complete resolution records remain bound across technical retries. |
-| `CG-FND-006` | Pass 1 | RESOLVED | Inspiration is mandatory Core V1 functionality. |
+| `CG-BASE-001` | Baseline preparation | OPEN | Universal source-of-truth hierarchy conflicts with the approved domain-specific ownership model. |
+| `CG-BASE-002` | Baseline preparation | OPEN | Current technical source-of-truth wording may overstate the authority of the rules index. |
+| `CG-BASE-003` | Baseline preparation | OPEN | V1 scope and requirements use inconsistent requiredness for identified progression and campaign options. |
+| `CG-FND-001` | Foundation Review | RESOLVED | Contested-check ties preserve the pre-contest status quo. |
+| `CG-FND-002` | Foundation Review | RESOLVED | Passive checks use all normal modifiers with non-stacking `+5` Advantage and `−5` Disadvantage adjustments. |
+| `CG-FND-003` | Foundation Review | RESOLVED | Ordinary Saving Throws resolve natural 1 and natural 20 through the final modified total. |
+| `CG-FND-004` | Foundation Review | RESOLVED | Halfling Lucky and level-up Hit Point rerolls have explicit timing, replacement, repetition, and retry rules. |
+| `CG-FND-005` | Foundation Review | RESOLVED | Validated manual results and their complete resolution records remain bound across technical retries. |
+| `CG-FND-006` | Foundation Review | RESOLVED | Inspiration is mandatory Core V1 functionality. |
+| `CG-CMB-001` | Review Batch 1 | RESOLVED | Spell and magic-item flows resolve completely before atomic durable commit/persistence and narration. |
+| `CG-CMB-002` | Review Batch 1 | RESOLVED | Mechanically significant item and spell changes commit/persist atomically rather than optionally or eventually. |
+| `CG-CMB-003` | Review Batch 1 | RESOLVED | General combat flows include the durable commit/persistence boundary before narration. |
+| `CG-CMB-004` | Review Batch 1 | RESOLVED | Combat, Magic and Conditions use the shared Engaged/Near/Far/Distant distance model. |
+| `CG-CMB-005` | Review Batch 1 | RESOLVED | A creature regains its Reaction at the start of its turn. |
+| `CG-CMB-006` | Review Batch 1 | RESOLVED | Opportunity Attacks require willing movement out of effective reach; forced movement and teleportation do not trigger. |
+| `CG-CMB-007` | Review Batch 1 | RESOLVED | Two-weapon fighting, its damage rule, its once-per-turn limit and Nick integration are explicit. |
+| `CG-CMB-008` | Review Batch 1 | RESOLVED | Reach, Ammunition, Loading, range and ammunition-recovery behaviour are explicit. |
+| `CG-CMB-009` | Review Batch 1 | RESOLVED | Armour/shield non-proficiency and Heavy Armour Strength consequences are explicit. |
+| `CG-CMB-010` | Review Batch 1 | RESOLVED | All eight Weapon Mastery properties and the supported Core V1 weapon mapping are self-contained. |
+| `CG-CMB-011` | Review Batch 1 | RESOLVED | Full Components hand-state legality and permitted equipment transitions are explicit. |
+| `CG-CMB-012` | Review Batch 1 | RESOLVED | The shared damage pipeline defines modifier, immunity, Resistance, Vulnerability and rounding order. |
+| `CG-CMB-013` | Review Batch 1 | RESOLVED | Damage-at-zero, Death Saving Throw, stabilisation and reset transitions are explicit. |
+| `CG-CMB-014` | Review Batch 1 | RESOLVED | Temporary HP retain-or-replace behaviour is explicit and never stacks by default. |
+
+Resolving these individual findings does not complete or pass Review Batch 1, the full Groups 1–9 cross-group review or the M2.1 completion gate. The A–D labels used during the combat work were decision sub-batches within Review Batch 1, not separate review milestones.
 
 Remaining work before the M2.1 gate:
 
@@ -713,9 +730,9 @@ The primary rules-design stage of M2.1 is complete. The Group 9 internal consist
 
 The immediate next activity is:
 
-> **Pass 2 — Combat, Equipment, Inventory, and Action-Economy Consistency**
+> **Complete final verification of Review Batch 1 — Combat and State Effects**
 
-Pass 2 is the next bounded pass within the still-pending M2.1 Groups 1–9 cross-group consistency review. Do not begin Pass 3 or treat the overall review as passed merely because Passes 0 and 1 are complete.
+Review Batch 1 remains in progress within the still-pending M2.1 Groups 1–9 cross-group consistency review. Its individual findings have approved corrections, but Review Batch 1 and the overall review have not been marked passed or complete.
 
 Review Groups 1–9 for cross-group contradictions, ambiguous interactions, terminology consistency, source-of-truth alignment, and affected cross-file rules including Weapon Mastery.
 
@@ -773,7 +790,7 @@ Before M2.1 can be marked COMPLETE:
 
 Until those checks are complete, M2.1 remains:
 
-> **RULES DESIGN COMPLETE — GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW PENDING — M2.1 GATE PENDING**
+> **RULES DESIGN COMPLETE — GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — M2.1 GATE PENDING**
 
 # 19. Project Resume Instructions
 
@@ -816,11 +833,11 @@ At every major milestone:
 
 ## Starting Point
 
-> **Pass 2 — Combat, Equipment, Inventory, and Action-Economy Consistency**
+> **Complete final verification of Review Batch 1 — Combat and State Effects**
 
 ## Current Stopping Point
 
-> **M1 complete. M2 active. Sections 9A–9L approved. Group 9 rules design complete. Group 9 internal consistency review and internal-review gate passed on 31 August 2026. Cross-group review Passes 0 and 1 complete; Passes 2–10 outstanding. Pass 2 is next. M2.1 gate pending. Production coding not authorized.**
+> **M1 complete. M2 active. Sections 9A–9L approved. Group 9 rules design complete. Group 9 internal consistency review and internal-review gate passed on 31 August 2026. Foundation Review complete and committed; Review Batch 1 in progress with approved corrections applied; Review Batches 2 and 3 outstanding. M2.1 gate pending. Production coding not authorized.**
 
 ## Current Authoritative M2 Specification
 
@@ -845,7 +862,7 @@ Repository documentation remains authoritative over conversation history or assi
 
 **M2.1 Groups 1–9 Rules Design:** APPROVED
 
-**Weapon Mastery Cross-Group Amendment:** APPROVED AND INCORPORATED
+**Weapon Mastery Cross-Group Rules:** APPROVED — CONSOLIDATED CORRECTIONS APPLIED — REVIEW BATCH 1 STILL IN PROGRESS
 
 **Group 9 Rules Design:** COMPLETE
 

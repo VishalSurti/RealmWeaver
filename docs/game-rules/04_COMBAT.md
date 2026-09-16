@@ -120,7 +120,7 @@ A normal combat turn may provide:
 * Movement
 * 1 Action
 * 1 Bonus Action
-* 1 Reaction per round
+* 1 Reaction, which refreshes at the start of the creature's turn
 * Reasonable free interaction
 
 The engine tracks what remains available.
@@ -197,6 +197,8 @@ Retrieving or preparing a weapon that is merely stored in general inventory may 
 
 The combat system validates the requested equipment transition before the weapon becomes available for an attack.
 
+A creature may normally perform only one permitted free equipment or wield-state interaction on its turn. Drawing, stowing or dropping one item, or releasing or regripping a Two-Handed weapon, each uses that interaction. The system must not silently perform multiple transitions or restore a prior hand state without another permitted interaction.
+
 Detailed inventory, equipment and wield-state rules are defined in `06_EQUIPMENT_AND_INVENTORY.md`.
 
 ---
@@ -223,7 +225,7 @@ When used:
 reaction_available = false
 ```
 
-The Reaction becomes available again according to the relevant combat timing rules.
+The Reaction becomes available again at the start of that creature's turn. Once spent, it remains unavailable until the start of its next turn unless an explicit feature states otherwise.
 
 ---
 
@@ -269,11 +271,13 @@ It uses abstract distance bands:
 | Distance Band | Approximate Meaning    |
 | ------------- | ---------------------- |
 | Engaged       | Approximately 0–5 ft   |
-| Near          | Approximately 5–30 ft  |
-| Far           | Approximately 30–60 ft |
-| Distant       | Approximately 60+ ft   |
+| Near          | Over 5–30 ft           |
+| Far           | Over 30–60 ft          |
+| Distant       | Over 60 ft             |
 
 The combat engine stores relevant positional relationships.
+
+Exact numerical range remains authoritative. A player-facing distance band must not expand a spell, weapon or effect beyond its legal numerical range.
 
 ---
 
@@ -431,7 +435,13 @@ The AI does not simply decide that a character is hidden.
 
 Basic Opportunity Attacks are supported in V1.
 
-If a creature leaves an Engaged relationship without using a mechanic such as Disengage, an eligible opponent may use its Reaction for an Opportunity Attack.
+An eligible opponent may use its Reaction for an Opportunity Attack immediately before a creature willingly leaves that opponent's effective reach using its own movement, Action, Bonus Action or Reaction.
+
+Effective reach is normally 5 feet. An actively used Reach weapon extends the attacker's effective reach by 5 feet for this purpose.
+
+Disengage prevents the normal Opportunity Attack trigger.
+
+Forced movement, including Push, does not trigger an Opportunity Attack. Teleportation also does not trigger an Opportunity Attack.
 
 ---
 
@@ -439,8 +449,9 @@ If a creature leaves an Engaged relationship without using a mechanic such as Di
 
 The engine determines:
 
-* Whether the creatures were Engaged
+* Whether the creature was within the attacker's effective reach
 * Whether the movement qualifies
+* Whether the movement is willing rather than forced or teleportation
 * Whether the attacker has a Reaction available
 * Whether the attacker is capable of making the attack
 * Whether another mechanic prevents the Opportunity Attack
@@ -482,6 +493,8 @@ Rules Validation
     ↓
 Mechanical Resolution
     ↓
+Atomic Durable Commit / Persistence
+    ↓
 AI Narration
 ```
 
@@ -519,7 +532,7 @@ The player may successfully:
 * Trigger an Opportunity Attack
 * Lose the remaining intended attack opportunity
 
-The AI narrates the mechanically resolved sequence.
+The complete mechanically resolved sequence is committed/persisted atomically before the AI narrates it. If persistence fails, no component becomes authoritative and the uncommitted outcome is not narrated as completed.
 
 ---
 
@@ -620,7 +633,22 @@ Example:
 
 **Longsword: 1d8 + STR Modifier**
 
-The engine applies the resulting damage to authoritative HP state.
+The engine resolves the resulting proposed change to HP state. That change becomes authoritative only through the required atomic durable commit/persistence boundary.
+
+## 9.5A Shared Damage Pipeline
+
+Each damage-type component is resolved separately in this order:
+
+1. Determine rolled or base damage.
+2. Apply the spell, feature or Saving Throw outcome.
+3. Apply explicit additive or subtractive modifiers.
+4. Apply Immunity, producing zero where applicable.
+5. If both Resistance and Vulnerability apply to the same component, they cancel before rounding and leave that component unchanged.
+6. Otherwise, apply Resistance once by halving and rounding down, or apply Vulnerability once by doubling.
+7. Sum the final components.
+8. Resolve the resulting proposed reductions to Temporary HP and then Current HP.
+
+The complete damage result and all related consequences are resolved before being committed/persisted atomically.
 
 ---
 
@@ -654,7 +682,7 @@ V1 only needs to implement the subset required by supported content.
 
 ### Status: APPROVED
 
-Resistance reduces eligible incoming damage according to the supported rule.
+Resistance halves eligible incoming damage once, rounding down, unless Vulnerability also applies to the same damage component.
 
 The rules engine determines whether Resistance applies.
 
@@ -664,7 +692,7 @@ The rules engine determines whether Resistance applies.
 
 ### Status: APPROVED
 
-Vulnerability increases eligible incoming damage according to the supported rule.
+Vulnerability doubles eligible incoming damage once unless Resistance also applies to the same damage component.
 
 ---
 
@@ -672,7 +700,7 @@ Vulnerability increases eligible incoming damage according to the supported rule
 
 ### Status: APPROVED
 
-Immunity prevents eligible damage entirely.
+Immunity prevents eligible damage entirely and is applied before Resistance or Vulnerability.
 
 ---
 
@@ -720,6 +748,20 @@ Attack Action
 ```
 
 An unused Bonus Action does not automatically grant another Attack Action.
+
+## 9.13 Two-Weapon Fighting
+
+After attacking as part of the Attack Action with an eligible Light melee weapon held in one hand, a character may make one additional attack as a Bonus Action with a different eligible Light melee weapon held in the other hand.
+
+The additional attack:
+
+* uses the normal attack modifier;
+* does not add a positive ability modifier to damage unless a feature permits it;
+* still applies a negative ability modifier to damage;
+* may use a thrown weapon only when that weapon has both the Light and Thrown properties; and
+* may occur at most once per turn, whether made through a Bonus Action or Nick.
+
+The Two-Weapon Fighting style permits the normal ability modifier to be added to the additional attack's damage.
 
 ---
 
@@ -800,9 +842,9 @@ Mastery Eligibility Checked
         ↓
 Mastery Trigger Evaluated
         ↓
-Mastery Effect Resolved
+Complete Attack / Mastery Transition Resolved
         ↓
-Mechanical State Committed
+Complete Transition Committed/Persisted Atomically and Durably
         ↓
 AI Narrates Validated Result
 ```
@@ -811,13 +853,13 @@ AI Narrates Validated Result
 
 ### Status: APPROVED
 
-Cleave permits a qualifying weapon attack to create an additional attack opportunity against another valid nearby creature according to the adopted Mastery rule.
+After a qualifying hit, Cleave permits the weapon attack to create an additional attack opportunity against another valid nearby creature once per turn.
 
 RealmWeaver adapts Cleave to the distance-band system.
 
-A secondary Cleave target must occupy an appropriate immediate melee relationship with the original target and attacker.
+A secondary Cleave target must be a different creature within 5 feet of the original target and within the weapon's effective reach of the attacker.
 
-In V1 this normally requires the secondary target to be within the relevant Engaged/Near melee cluster as determined by authoritative combat positioning.
+On a hit, the secondary attack deals the weapon's damage dice without adding a positive ability modifier. A negative ability modifier still applies. Selecting the secondary target is optional.
 
 The rules engine validates:
 
@@ -852,7 +894,9 @@ Resolve Graze Effect
 
 Graze does not convert the miss into a normal hit.
 
-Its resulting damage or other mechanical effect follows the adopted Weapon Mastery rule and is resolved deterministically.
+Graze deals damage equal to the ability modifier used for the attack, with a minimum of zero, using the weapon's damage type.
+
+Graze does not activate hit-triggered effects and does not receive additional damage modifiers unless an explicit rule names Graze.
 
 The AI cannot grant Graze damage to an attack made with an unmastered weapon.
 
@@ -861,7 +905,7 @@ The AI cannot grant Graze damage to an attack made with an unmastered weapon.
 
 Nick integrates with RealmWeaver's Light weapon and two-weapon fighting rules.
 
-When its requirements are satisfied, Nick allows the applicable additional Light-weapon attack to occur without consuming the Bonus Action normally associated with that attack.
+When its requirements are satisfied, Nick moves the one qualifying additional Light-weapon attack into the Attack Action instead of consuming the Bonus Action normally associated with that attack.
 
 RealmWeaver validates:
 
@@ -874,22 +918,18 @@ Action economy
 Mastery eligibility
 Any applicable once-per-turn restriction
 
-Nick does not create unlimited additional attacks.
-
-It modifies the action-economy treatment of the qualifying additional attack according to the adopted rule.
+Nick does not create another additional attack. The qualifying additional Light-weapon attack remains limited to once per turn, and all Light-weapon and hand-state requirements continue to apply.
 
 ## 9A.7 Push
 
 ### Status: APPROVED
 
-Push applies forced movement according to the adopted Weapon Mastery rule.
-
-RealmWeaver preserves the canonical numerical forced-movement distance internally rather than automatically translating Push into one complete distance-band transition.
+After a qualifying hit, Push optionally moves a Large-or-smaller target up to 10 feet directly away from the attacker.
 
 Conceptually:
 
 Push Effect
-→ canonical forced movement distance
+→ up to 10 feet directly away
 → positioning system evaluates result
 
 Depending on the target's existing position, the result may:
@@ -904,12 +944,14 @@ The AI cannot independently determine the mechanical destination.
 
 Authoritative positioning determines the result.
 
+Push is forced movement and does not trigger Opportunity Attacks.
+
 ## 9A.8 Sap
 ### Status: APPROVED
 
-Sap creates a temporary structured combat effect according to the adopted Mastery rule.
+Sap creates a temporary structured combat effect.
 
-A qualifying Sap hit applies the appropriate disadvantage effect to the target's next qualifying attack.
+A qualifying Sap hit gives the target Disadvantage on its next attack roll made before the start of the attacker's next turn.
 
 Conceptually:
 
@@ -927,12 +969,12 @@ Sap is not represented as a permanent statistic change.
 
 Its source, target, duration/consumption rule and active state are tracked mechanically.
 
+The effect ends after affecting that attack or when the attacker's next turn starts. Repeated Sap applications do not create multiple levels of Disadvantage.
+
 ## 9A.9 Slow
 ### Status: APPROVED
 
-Slow temporarily reduces the target's effective movement according to the adopted Mastery rule.
-
-RealmWeaver preserves the canonical numerical movement reduction internally.
+After a qualifying hit, Slow temporarily reduces the target's effective Speed by 10 feet until the start of the attacker's next turn.
 
 Example:
 
@@ -946,12 +988,16 @@ Slow does not overwrite base Speed.
 
 When Slow expires, its modifier is removed and effective Speed is recalculated from the unchanged base value and any other active modifiers.
 
-Repeated Slow applications follow the adopted stacking, replacement and duration rules and do not automatically accumulate into unlimited movement reduction.
+Repeated Slow Mastery applications do not stack. Differently named Speed modifiers may coexist according to their own rules.
 
 ## 9A.10 Topple
 ### Status: APPROVED
 
 Topple uses RealmWeaver's existing Saving Throw and Condition systems.
+
+After a qualifying hit, the target makes a Constitution Saving Throw against:
+
+**8 + Attacker's Proficiency Bonus + Ability Modifier Used for the Attack**
 
 Conceptually:
 
@@ -983,7 +1029,7 @@ The AI cannot narratively override the Saving Throw result.
 ## 9A.11 Vex
 ### Status: APPROVED
 
-Vex creates a temporary target-specific advantage effect according to the adopted Mastery rule.
+After a qualifying hit that deals damage, Vex creates a temporary target-specific Advantage effect for the attacker.
 
 Conceptually:
 
@@ -1001,7 +1047,9 @@ Vex is associated with the appropriate source and target.
 
 A Vex effect created against one creature does not grant advantage against another creature.
 
-The effect expires or is consumed according to the adopted timing rule.
+The effect grants Advantage on the attacker's next attack roll against that target before the end of the attacker's next turn. It ends after granting that Advantage or when the attacker's next turn ends.
+
+Repeated Vex applications by the same attacker against the same target refresh rather than stack.
 
 ## 9A.12 Mastery Effects and Conditions
 ### Status: APPROVED
@@ -1211,7 +1259,9 @@ Attack Validation
 Attack / Damage / Mastery /
 Condition / Movement Resolution
         ↓
-State Commit
+Complete Proposed Transition Resolved
+        ↓
+Complete Transition Committed/Persisted Atomically and Durably
         ↓
 Structured Mechanical Result
         ↓
@@ -1442,6 +1492,8 @@ These are outside initial V1.
 
 Incoming damage is applied to Temporary HP before Current HP.
 
+Temporary HP never stacks. When a creature receives new Temporary HP while it already has Temporary HP, its controlling player chooses whether to retain the existing amount or replace it with the new amount. AI-controlled creatures make the same choice through bounded actor authority. An explicit feature may override this general rule.
+
 Example:
 
 ```text
@@ -1492,7 +1544,7 @@ they become Unconscious unless another supported mechanic produces a different r
 
 ### Status: APPROVED
 
-An unconscious character at 0 HP makes Death Saving Throws.
+A living, unstable character that starts its turn at 0 HP makes one Death Saving Throw.
 
 Baseline:
 
@@ -1507,6 +1559,10 @@ Three failures:
 
 > **Dead**
 
+A stable creature remains Unconscious at 0 HP and stops making Death Saving Throws.
+
+Death Save successes and failures reset when the creature stabilises or regains any HP.
+
 ---
 
 ## 11.5 Natural 20 Death Save
@@ -1517,7 +1573,7 @@ A Natural 20 on a Death Saving Throw restores:
 
 **1 HP**
 
-and allows the character to regain consciousness according to supported rules.
+and ends the ordinary 0-HP Unconscious state.
 
 ---
 
@@ -1535,9 +1591,11 @@ A Natural 1 on a Death Saving Throw counts as:
 
 ### Status: APPROVED
 
-Taking damage while at 0 HP may cause Death Save Failures according to supported rules.
+Taking damage while at 0 HP causes one Death Save Failure. Damage from a Critical Hit causes two Death Save Failures instead.
 
-The engine determines how many failures occur.
+Massive-damage instant death remains independently applicable.
+
+Damage, Death Save Failures, death, Conditions, concentration consequences and all related state changes are resolved together and then committed/persisted atomically.
 
 ---
 
@@ -1940,7 +1998,7 @@ Examples:
 
 ### Status: APPROVED
 
-When combat ends, RealmWeaver should resolve and persist the mechanical aftermath before normal narrative play resumes.
+When combat ends, RealmWeaver should resolve the complete proposed mechanical aftermath and commit/persist it atomically and durably before normal narrative play resumes.
 
 The system should:
 
@@ -1956,10 +2014,10 @@ The system should:
 10. Update quests.
 11. Update progression.
 12. Apply NPC/world consequences.
-13. Save authoritative state.
+13. Commit/persist the complete resolved aftermath atomically and durably.
 14. Return to normal narrative play.
 
-The AI narrates the aftermath after state finalisation.
+The AI narrates the aftermath only after the complete state transition commits/persists successfully.
 
 ---
 
@@ -2371,7 +2429,9 @@ Combat Ends
     ↓
 Mechanical Finalisation
     ↓
-Persist State
+Resolve Complete Proposed Transition
+    ↓
+Commit / Persist Complete State Atomically and Durably
     ↓
 Build Updated Context
     ↓
@@ -2483,7 +2543,9 @@ Rules engine validates:
         ↓
 Resolve required checks / attacks / damage
         ↓
-Update authoritative state
+Resolve complete state change
+        ↓
+Commit / persist authoritative state atomically and durably
         ↓
 AI narrates result
 ```
@@ -2507,10 +2569,14 @@ Invalid?
         ↓
 Mechanical resolution
         ↓
-Update state
+Resolve complete state change
+        ↓
+Commit / persist authoritative state atomically and durably
         ↓
 AI narrates visible result
 ```
+
+If commit/persistence fails, the action does not consume resources, establish an authoritative outcome or produce completed-outcome narration. Technical retries reuse the bound or committed result and do not reroll, re-resolve or duplicate the action.
 
 ---
 

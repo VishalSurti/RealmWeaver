@@ -69,7 +69,9 @@ Effect requests CONDITION_APPLIED
         ↓
 RealmWeaver validates target/rules
         ↓
-Condition stored
+Complete condition state change resolved
+        ↓
+Condition state committed/persisted atomically and durably
         ↓
 AI narrates outcome
 ```
@@ -248,7 +250,9 @@ REALMWEAVER validates mechanics
         ↓
 RULES ENGINE resolves result
         ↓
-CONDITION STATE changes
+Complete condition state change resolved
+        ↓
+Condition state committed/persisted atomically and durably
         ↓
 AI narrates validated outcome
 ```
@@ -340,14 +344,14 @@ The AI may narrate fear but does not decide whether the mechanical restriction a
 
 ## 8B.6 Grappled
 
-A grappled creature has its movement speed reduced to zero.
+A grappled creature has its movement speed reduced to zero. Applying and maintaining Grappled requires an Engaged relationship between the grappler and target.
 
 The condition ends if:
 
 * the grappler becomes incapacitated; or
 * an effect removes the grappled creature from the grappler's effective reach.
 
-Because RealmWeaver uses distance-band combat, grapple reach and forced separation must be interpreted through the distance-band movement model.
+Forced separation that ends the Engaged relationship ends Grappled.
 
 ---
 
@@ -387,9 +391,9 @@ A paralyzed creature:
 * automatically fails Strength saving throws;
 * automatically fails Dexterity saving throws;
 * grants advantage to attack rolls against it;
-* suffers critical hits from applicable attacks made within the baseline close-range requirement.
+* suffers critical hits from applicable attacks made while the attacker is Engaged with it.
 
-RealmWeaver's distance-band system must translate the close-range critical-hit requirement consistently.
+Near, Far and Distant attackers do not satisfy this close-range automatic-critical requirement.
 
 ---
 
@@ -430,11 +434,11 @@ A prone creature:
 
 * has restricted movement;
 * has disadvantage on its own attack rolls;
-* grants advantage or disadvantage to attackers depending on the applicable attack distance/rule.
+* grants Advantage to attackers that are Engaged with it and Disadvantage to attackers at Near, Far or Distant range, subject to any explicit overriding rule.
 
 Standing up consumes the appropriate portion of movement capacity.
 
-Because RealmWeaver uses distance bands rather than exact grid movement, standing and attack-distance effects are translated through the movement/distance-band system.
+Standing and attack-distance effects use the authoritative movement and shared Engaged/Near/Far/Distant system.
 
 ---
 
@@ -477,9 +481,15 @@ An unconscious creature:
 * automatically fails Strength saving throws;
 * automatically fails Dexterity saving throws;
 * grants advantage to attack rolls against it;
-* suffers critical hits from applicable close-range attacks under the baseline rules.
+* suffers critical hits from applicable attacks made while the attacker is Engaged with it.
 
-Unconscious interacts with the separate death/dying system where applicable.
+Near, Far and Distant attackers do not satisfy this close-range automatic-critical requirement.
+
+A living, unstable creature starting its turn at 0 HP makes one Death Saving Throw. Three successes stabilise it at 0 HP; it remains Unconscious and stops making Death Saving Throws. Regaining any HP ends the ordinary 0-HP Unconscious state. Death Save successes and failures reset on stabilisation or regaining HP.
+
+Damage at 0 HP causes one Death Save Failure, or two when the damage is from a Critical Hit. Massive-damage instant death remains independently applicable.
+
+Related damage, failures, death, Conditions, concentration consequences and state changes resolve together before being committed/persisted atomically and durably.
 
 ---
 
@@ -926,17 +936,21 @@ REALMWEAVER VALIDATES
       ↓
 IMMUNITY / RULE CHECKS
       ↓
-CONDITION INSTANCE CREATED
+CONDITION APPLICATION RESOLVED
       ↓
-RULE EFFECTS ACTIVE
+APPLICATION COMMITTED/PERSISTED ATOMICALLY AND DURABLY
       ↓
-DURATION / SAVE / SOURCE TRACKED
+AI NARRATES VALIDATED APPLICATION
+      ↓
+RULE EFFECTS ACTIVE; DURATION / SAVE / SOURCE TRACKED
       ↓
 REMOVAL TRIGGER OCCURS
       ↓
-CONDITION REMOVED
+CONDITION REMOVAL RESOLVED
       ↓
-AI NARRATES VALIDATED STATE
+REMOVAL COMMITTED/PERSISTED ATOMICALLY AND DURABLY
+      ↓
+AI NARRATES VALIDATED REMOVAL
 ```
 
 This keeps condition handling deterministic while allowing the AI DM to provide flexible narrative presentation.
@@ -2930,12 +2944,10 @@ requests Long Rest
 REALMWEAVER
 validates eligibility
       ↓
-REST BEGINS
+REST ACTIVITY AND ELAPSED-TIME CONSEQUENCES RESOLVED
       ↓
-CAMPAIGN TIME ADVANCES
-      ↓
-WORLD / REST RISK SYSTEM
-evaluates possible events
+EACH SIGNIFICANT REST/TIME TRANSITION
+COMMITTED/PERSISTED ATOMICALLY AND DURABLY
       ↓
 possible validated interruption
       ↓
@@ -2943,15 +2955,20 @@ REST STILL VALID?
    ↙             ↘
  NO              YES
  ↓                ↓
-FAIL         8h completed
+FAIL         completion requirements satisfied
                   ↓
-          RECOVERY TRANSACTION
+          COMPLETE REST RECOVERY
+             RESOLVED
                   ↓
-             STATE COMMIT
+       COMPLETE REST TRANSITION
+       COMMITTED/PERSISTED
+       ATOMICALLY AND DURABLY
                   ↓
                  AI
           narrates outcome
 ```
+
+Failed persistence does not complete the rest, restore HP or resources, establish related state changes or permit completed-outcome narration.
 ---
 
 Absolutely. Below is the remaining approved content for **8G — Hit Dice & Recovery Rules, 8H — Rest Restrictions, Interruptions & Campaign Time, and 8I — AI, NPCs, Persistence & Validation**.
@@ -3435,14 +3452,14 @@ available:
 
 ## 8G.23 AI Failure Does Not Reroll Hit Dice
 
-Once a Hit Die roll and healing result have been committed, subsequent AI failure does not cause the roll to occur again.
+Once a Hit Die roll, provisional Hit Die expenditure and healing result have been committed/persisted atomically and durably, subsequent AI failure does not cause the roll to occur again.
 
 Example:
 
 ```text
 Hit Die rolled
 ↓
-Healing committed
+Complete Hit Die transition committed/persisted atomically and durably
 ↓
 AI narration fails
 ```
@@ -3466,14 +3483,18 @@ calculate healing
 ↓
 cap at effective max HP
 ↓
-consume Hit Die
+resolve proposed Hit Die expenditure
 ↓
-update HP
+resolve proposed HP change
+↓
+commit/persist the complete transition atomically and durably
 ```
 
 is handled through deterministic rules and dice systems.
 
 No LLM call is required.
+
+Failed persistence consumes no Hit Die, restores no HP and establishes no completed recovery outcome.
 
 ---
 
@@ -4280,7 +4301,7 @@ CONDITION_APPLIED
 PRONE
 ```
 
-The AI then narrates the validated result.
+RealmWeaver resolves the complete proposed condition transition and commits/persists it atomically and durably. The AI then narrates the committed result.
 
 ---
 
@@ -4356,7 +4377,7 @@ effects:
 - PRONE applied
 ```
 
-The AI narrates this outcome but cannot contradict it.
+The structured result is presented as established state only after the complete proposed transition commits/persists atomically and durably. The AI narrates this committed outcome but cannot contradict it.
 
 ---
 
@@ -4789,7 +4810,7 @@ RealmWeaver then evaluates whether the proposal meets the relevant mechanical th
 
 ## 8I.25 AI Failure and Committed State
 
-If RealmWeaver successfully resolves a mechanical event and the subsequent AI narration fails, the mechanical state remains committed.
+If RealmWeaver successfully resolves a complete proposed mechanical event, commits/persists it atomically and durably, and the subsequent AI narration fails, the committed mechanical state remains valid.
 
 Example:
 
@@ -4888,7 +4909,11 @@ RealmWeaver gathers relevant state
 ↓
 Rules resolve mechanics
 ↓
-Structured result
+Complete proposed state transition resolved
+↓
+Complete transition committed/persisted atomically and durably
+↓
+Structured committed result
 ↓
 One primary AI narrative call
 ```
@@ -5090,13 +5115,13 @@ Exact close-range requirements from the 2014 baseline are translated through Rea
 
 Examples include:
 
-* qualifying close-range attacks against Paralyzed targets use **Near**;
-* qualifying close-range attacks against Unconscious targets use **Near**;
-* Prone attacker-distance effects use **Near** versus farther distance bands;
-* Grappled uses an appropriate Near/engaged relationship;
+* qualifying close-range attacks against Paralyzed targets require **Engaged**;
+* qualifying close-range attacks against Unconscious targets require **Engaged**;
+* Prone close-range attacker benefits require **Engaged**;
+* Grappled requires and maintains **Engaged**;
 * Frightened movement restrictions prohibit reducing distance toward the fear source.
 
-Exact spatial implementation remains shared with Combat/Positioning architecture.
+Exact numerical positioning remains authoritative within the shared Combat/Positioning rules and must not expand legal range through a displayed band.
 
 ### Environmental Countermeasures
 
@@ -5193,4 +5218,3 @@ RealmWeaver remains authoritative over:
 * mechanical outcomes.
 
 ```
-
