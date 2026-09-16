@@ -486,6 +486,21 @@ The AI shall decide intent for AI-controlled NPCs and submit intended actions as
 
 A deterministic NPC fallback may be used only as bounded, legal, conservative failure recovery after AI recovery fails.
 
+**FR-122 — Rest Qualification and Recovery**
+The system shall deterministically enforce Trance duration, Long Rest starting-HP qualification, food/drink qualification for Exhaustion reduction, accumulated strenuous-interruption thresholds, stable-at-0-HP natural recovery, supported class-resource recharge rules, and applicable recovery limits.
+
+**FR-123 — Level-Up Integrity**
+The system shall prevent level-up commitment during active or paused Rests, while a character is dead, or while a living character is at 0 HP. Level-up shall preserve earned progression and pending choices, make only newly granted count-based capacity immediately available, and recalculate Current HP against Effective Maximum HP where applicable.
+
+**FR-124 — Progression Reward Identity and Entitlements**
+XP and milestone rewards shall have stable source identities, duplicate prevention, durable ledgers, and atomic commit/persistence boundaries. Milestone level-up rewards shall be persistent ordered entitlements consumed one at a time, and failed reward persistence shall remain recoverably pending without loss or duplication.
+
+**FR-125 — Durable Paused Activities and Choices**
+Mechanically significant paused activities and unresolved choices shall persist elapsed authoritative time, processed events, bound randomness/results and meaningful choices across technical retries and save/load. Resumption shall continue from committed state without replay, and closed choice boundaries shall not reopen retroactively.
+
+**FR-126 — Ordered Time and Recovery Lifecycle**
+Rest and other timed recovery activities shall validate and begin, advance authoritative time through ordered durable transitions, process expirations, scheduled events and interruptions, confirm qualification, resolve completed recovery, commit/persist atomically and durably, and narrate only afterward.
+
 ---
 
 # 4. Non-Functional Requirements

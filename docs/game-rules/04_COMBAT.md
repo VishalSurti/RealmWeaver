@@ -1563,6 +1563,10 @@ A stable creature remains Unconscious at 0 HP and stops making Death Saving Thro
 
 Death Save successes and failures reset when the creature stabilises or regains any HP.
 
+When a living stable creature remains at 0 HP, RealmWeaver binds one `1d4`-hour natural-recovery result to that recovery event and durably schedules it. Technical retries and save/load reuse the same bound duration rather than rolling again. When the scheduled time is reached, the creature regains 1 HP only if it is still alive, stable and at 0 HP; otherwise the pending recovery ends without restoring HP.
+
+The recovery and all related state changes resolve completely before committing/persisting atomically and durably. Failed persistence does not restore HP or produce completed-recovery narration.
+
 ---
 
 ## 11.5 Natural 20 Death Save
@@ -2079,6 +2083,8 @@ Encounter outcomes may instead contribute toward:
 * Quest progression
 * Story progression
 * Other persisted accomplishments
+
+Any XP or milestone reward produced by combat follows the progression reward lifecycle in `05_CLASSES_AND_PROGRESSION.md`: validate the stable reward source, resolve eligibility and reward consequences, commit/persist the reward and ledger entry atomically and durably, then notify or narrate. Retrying the combat outcome must not duplicate the reward.
 
 ---
 

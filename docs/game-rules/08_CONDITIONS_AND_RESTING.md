@@ -487,6 +487,8 @@ Near, Far and Distant attackers do not satisfy this close-range automatic-critic
 
 A living, unstable creature starting its turn at 0 HP makes one Death Saving Throw. Three successes stabilise it at 0 HP; it remains Unconscious and stops making Death Saving Throws. Regaining any HP ends the ordinary 0-HP Unconscious state. Death Save successes and failures reset on stabilisation or regaining HP.
 
+For a living stable creature that remains at 0 HP, RealmWeaver binds and durably schedules one `1d4`-hour natural-recovery result. Retries and save/load reuse that bound duration. When it triggers, the creature regains 1 HP only if it is still alive, stable and at 0 HP; otherwise the pending recovery closes without healing. The recovery becomes authoritative only through atomic durable commit/persistence.
+
 Damage at 0 HP causes one Death Save Failure, or two when the damage is from a Critical Hit. Massive-damage instant death remains independently applicable.
 
 Related damage, failures, death, Conditions, concentration consequences and state changes resolve together before being committed/persisted atomically and durably.
@@ -977,7 +979,7 @@ RealmWeaver tracks Exhaustion as an authoritative level:
 
 ```text
 exhaustion_level = 0..6
-````
+```
 
 The effects of Exhaustion are cumulative.
 
@@ -1765,20 +1767,22 @@ Hit Dice spending should occur during the successful rest-completion phase rathe
 Flow:
 
 ```text
-1 hour successfully completed
+1 hour qualification satisfied
         ↓
-Short Rest completion phase
+Open durable Short Rest completion choices
         ↓
-Player chooses Hit Dice
+Player spends Hit Dice sequentially, makes another available completion choice, or explicitly declines/continues
         ↓
-HP updated
+Resolve complete proposed recovery and resource transition
         ↓
-Short-rest resources restored
+Commit/persist atomically and durably
         ↓
 SHORT_REST_COMPLETED
 ```
 
 This prevents spending Hit Dice during a rest that later fails.
+
+The completion-choice boundary and any bound Hit Die results persist across technical retries and save/load while unresolved. Once the player explicitly declines further choices, confirms completion or continues gameplay beyond this boundary, it closes; choices cannot be applied retroactively. Failed persistence consumes no Hit Die, restores no HP or resource and does not complete the Rest.
 
 ---
 
@@ -2078,6 +2082,10 @@ Light activity may include:
 * keeping watch;
 * other compatible activity.
 
+An eligible Elf may instead satisfy the Long Rest duration requirement through four qualifying hours of Trance. Trance changes only the qualifying duration: every other Long Rest rule, recovery amount, ordered time/event processing requirement and the one-benefit-per-24-hours restriction still applies.
+
+A creature must have at least 1 HP when the Long Rest begins to receive its completion benefits. A creature beginning the Rest at 0 HP may still pass time or receive other valid care, but that activity does not qualify it for Long Rest benefits.
+
 ---
 
 ## 8F.2 Long Rests Advance Campaign Time
@@ -2259,7 +2267,7 @@ Exhaustion 2
 
 A Long Rest does not normally reset Exhaustion to zero.
 
-Applicable survival requirements such as food/water may affect qualification where required by the adopted rules.
+Reducing Exhaustion through a Long Rest requires the character to have consumed the applicable food and drink. A Long Rest may otherwise complete without that Exhaustion reduction when this requirement is not met.
 
 ---
 
@@ -2293,6 +2301,8 @@ LONG REST COMPLETE
 ```
 
 If the player does not modify preparation, the existing valid preparation remains.
+
+The preparation opportunity opens only after Long Rest recovery commits/persists successfully. It is a durable meaningful-choice boundary: the player may change preparation or explicitly continue with the existing preparation. The opportunity persists across retry and save/load while unresolved, but closes once the player declines, confirms changes or continues gameplay beyond that boundary. It cannot be invoked retroactively after gameplay continues.
 
 V1 abstracts unnecessary minute-by-minute preparation bookkeeping.
 
@@ -2507,7 +2517,7 @@ Accumulated strenuous activity:
 tracked by RealmWeaver
 ```
 
-If the applicable rest-breaking threshold is reached, the Long Rest fails.
+The Long Rest fails when qualifying strenuous interruptions accumulate to one hour during that Rest. Shorter qualifying interruptions advance authoritative campaign time and remain durably recorded, but do not automatically fail the Rest. The accumulated total persists across pauses, retries and save/load and is not replayed or reset unless that Rest ends.
 
 ---
 
@@ -2610,10 +2620,10 @@ Exhaustion reduced if eligible
         ↓
 applicable conditions/effects processed
         ↓
-state committed
+complete recovery committed/persisted atomically and durably
 ```
 
-The exact transaction architecture is deferred to implementation design.
+Failed persistence establishes no recovery, resource restoration, Exhaustion reduction or completed-rest outcome, and produces no completed-outcome narration.
 
 ---
 
@@ -2944,36 +2954,35 @@ requests Long Rest
 REALMWEAVER
 validates eligibility
       ↓
-REST ACTIVITY AND ELAPSED-TIME CONSEQUENCES RESOLVED
+REST ACTIVITY BEGINS THROUGH
+ATOMIC DURABLE COMMIT/PERSISTENCE
       ↓
-EACH SIGNIFICANT REST/TIME TRANSITION
-COMMITTED/PERSISTED ATOMICALLY AND DURABLY
+ADVANCE AUTHORITATIVE TIME THROUGH
+ORDERED DURABLE TRANSITIONS
       ↓
-possible validated interruption
+PROCESS EXPIRATIONS, SCHEDULED EVENTS
+AND INTERRUPTIONS IN ORDER
       ↓
-REST STILL VALID?
+COMMIT/PERSIST EACH SIGNIFICANT
+TIME/EVENT TRANSITION ATOMICALLY AND DURABLY
+      ↓
+CONFIRM REST QUALIFICATION
    ↙             ↘
  NO              YES
  ↓                ↓
-FAIL         completion requirements satisfied
-                  ↓
-          COMPLETE REST RECOVERY
-             RESOLVED
-                  ↓
-       COMPLETE REST TRANSITION
-       COMMITTED/PERSISTED
-       ATOMICALLY AND DURABLY
-                  ↓
-                 AI
-          narrates outcome
+RESOLVE AND       RESOLVE COMPLETE
+COMMIT/PERSIST    REST RECOVERY
+FAILED REST       ↓
+ATOMICALLY AND    COMMIT/PERSIST RECOVERY
+DURABLY           ATOMICALLY AND DURABLY
+   ↓               ↓
+NARRATE FAILURE   NARRATE COMPLETION
 ```
 
 Failed persistence does not complete the rest, restore HP or resources, establish related state changes or permit completed-outcome narration.
+
 ---
 
-Absolutely. Below is the remaining approved content for **8G — Hit Dice & Recovery Rules, 8H — Rest Restrictions, Interruptions & Campaign Time, and 8I — AI, NPCs, Persistence & Validation**.
-
-````markdown
 # 8G — Hit Dice & Recovery Rules
 
 ## 8G.1 Class Hit Dice
@@ -2996,7 +3005,7 @@ Level 5 Fighter
 
 Maximum Hit Dice:
 5d10
-````
+```
 
 ---
 
@@ -3529,6 +3538,8 @@ COMPLETED
 FAILED
 CANCELLED
 ```
+
+`ACTIVE` and `PAUSED` activities are authoritative durable state. Unresolved activities retain elapsed campaign time, processed events, accumulated interruption time, bound randomness/results and unresolved meaningful choices across technical retries and save/load. Resuming continues from the committed point rather than restarting or replaying time, events or rolls.
 
 The final schema is deferred to architecture.
 
@@ -5044,10 +5055,10 @@ DICE SYSTEM
 resolves check
         ↓
 RULES ENGINE
-applies PRONE
+resolves complete proposed PRONE transition
         ↓
-PERSISTENT STATE
-stores condition
+COMMIT / PERSIST
+atomically and durably
         ↓
 MECHANICAL HISTORY
 records event
@@ -5068,16 +5079,17 @@ REALMWEAVER
 validates Long Rest
         ↓
 WORLD / TIME SYSTEM
-advances time and evaluates risk
+advances authoritative time through ordered durable transitions
         ↓
-possible validated events
+processes expirations, scheduled events and interruptions
         ↓
-REST COMPLETES
+REST QUALIFICATION CONFIRMED
         ↓
 RECOVERY ENGINE
-restores applicable state
+resolves complete proposed recovery
         ↓
-STATE COMMIT
+COMMIT / PERSIST
+atomically and durably
         ↓
 AI DM
 narrates night / morning
@@ -5216,5 +5228,3 @@ RealmWeaver remains authoritative over:
 * time advancement;
 * persistent state;
 * mechanical outcomes.
-
-```

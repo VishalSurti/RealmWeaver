@@ -541,7 +541,7 @@ Complete resting rules are defined separately.
 
 Wizard supports **Arcane Recovery** using the SRD 5.1 / 2014-style rule.
 
-Once per applicable recovery period, following a qualifying short rest, a Wizard may recover expended spell slots.
+At qualifying Short Rest completion, a Wizard may optionally use Arcane Recovery if it has not already been used that day.
 
 The combined slot levels recovered may not exceed:
 
@@ -560,6 +560,8 @@ For guaranteed V1 levels:
 | 5            |                                3 |
 
 The player may choose an eligible combination of expended slots within the permitted total.
+
+No recovered spell slot may be 6th level or higher. The choice, recovered slots and Arcane Recovery use are one complete proposed transition that commits/persists atomically and durably; declining leaves Arcane Recovery unused.
 
 ---
 
@@ -825,6 +827,8 @@ Conceptually, an in-progress cast may retain:
 * interruption state.
 
 RealmWeaver, not AI memory, determines whether an extended cast successfully completes.
+
+An unresolved extended cast is durable paused activity state. It retains elapsed authoritative time, any bound randomness or resolved events, its interruption state and unresolved meaningful choices across technical retries and save/load. Resuming continues from the committed activity state; it does not restart elapsed time, replay events or reroll bound results. Cancellation or mechanical failure closes the activity according to its rule.
 
 ---
 
@@ -3289,6 +3293,8 @@ RealmWeaver, rather than AI memory, determines:
 * whether an interruption occurred;
 * whether the ritual successfully completed.
 
+An interrupted ritual uses the durable paused-activity contract from 7D. Resuming continues from committed elapsed time and prior results rather than restarting the ritual or replaying time and events.
+
 ---
 
 ## 7J.8 Ritual Casting UI
@@ -4012,6 +4018,8 @@ RealmWeaver determines:
 * whether sufficient time/activity occurred;
 * whether the attunement limit permits another item;
 * when the state transition completes.
+
+An unresolved attunement activity persists its elapsed time, interruptions, bound results and meaningful choices across retries and save/load. Resuming continues from the committed activity state rather than restarting or duplicating time advancement.
 
 ---
 

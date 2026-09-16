@@ -22,8 +22,9 @@ If authoritative documents conflict, stop and report the conflict with the affec
 - M2 — Technical Design & Architecture is active.
 - M2.1 rules design is documented, but its completion gate has not passed.
 - The Group 9 internal consistency review and internal-review gate have passed.
-- The Groups 1–9 cross-group consistency review is in progress: the Foundation Review is complete and committed; Review Batch 1 is in progress; Review Batches 2 and 3 are outstanding.
-- The next approved activity is to complete final verification of Review Batch 1 — Combat and State Effects.
+- The Groups 1–9 cross-group consistency review is in progress: the Foundation Review is complete, passed and committed; Review Batch 1 — Combat and State Effects is complete and passed; Review Batch 2 — Progression, Recovery, Persistence, and AI Lifecycle has its approved corrections implemented with independent verification pending; Review Batch 3 — Scope, Authority, Terminology, and Final Consolidation is outstanding.
+- The next approved activity is Independent verification of Review Batch 2.
+- The SRD/IP/content-provenance audit remains outstanding, and M2.2 — System Architecture remains blocked until the complete M2.1 gate passes.
 - Production coding is not currently authorized.
 
 Production coding may begin only after the required documentation gates—including the SRD/IP/content-provenance audit—are complete and the user explicitly approves implementation.

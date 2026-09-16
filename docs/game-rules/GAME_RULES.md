@@ -800,18 +800,20 @@ The primary M2.1 rules-design stage is complete. Group 9's internal consistency 
 
 ## Current Phase
 
-**GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — REVIEW BATCH 1 IN PROGRESS — M2.1 GATE PENDING**
+**GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — REVIEW BATCH 1 PASSED — REVIEW BATCH 2 IN PROGRESS — M2.1 GATE PENDING**
 
 Cross-group review progress:
 
-* Foundation Review — Character Mathematics, Checks, Saves, Dice, and Inspiration: COMPLETE AND COMMITTED
-* Review Batch 1 — Combat and State Effects: IN PROGRESS — APPROVED CORRECTIONS APPLIED; FINAL VERIFICATION OUTSTANDING
-* Review Batch 2 — Progression, Recovery, Persistence, and AI Lifecycle: OUTSTANDING
+* Foundation Review — Character Mathematics, Checks, Saves, Dice, and Inspiration: COMPLETE, PASSED AND COMMITTED
+* Review Batch 1 — Combat and State Effects: COMPLETE AND PASSED
+* Review Batch 2 — Progression, Recovery, Persistence, and AI Lifecycle: IN PROGRESS — APPROVED CORRECTIONS APPLIED; INDEPENDENT VERIFICATION PENDING
 * Review Batch 3 — Scope, Authority, Terminology, and Final Consolidation: OUTSTANDING
 
 The previously completed Foundation Review recorded the approved rules for contested-check ties, passive checks, ordinary Saving Throw natural results, Halfling Lucky, level-up Hit Point rerolls, validated manual-dice retries, and Inspiration's mandatory Core V1 status.
 
-Review Batch 1 remains in progress. The approved corrections for `CG-CMB-001` through `CG-CMB-014` have been incorporated into the affected rules specifications, but neither Review Batch 1 nor the complete Groups 1–9 cross-group review has been marked passed or complete. The A–D labels used during the combat work were decision sub-batches within Review Batch 1, not separate review milestones.
+Review Batch 1 is complete and passed. The approved corrections for `CG-CMB-001` through `CG-CMB-014` have been incorporated into the affected rules specifications. The complete Groups 1–9 cross-group review remains in progress. The A–D labels used during the combat work were decision sub-batches within Review Batch 1, not separate review milestones.
+
+Review Batch 2 remains in progress. The approved corrections for `CG-PRP-001` through `CG-PRP-014` define Trance and Rest qualification, stable natural recovery, class-resource recharge, level-up eligibility and capacity, ordered milestone entitlements, reward idempotency, durable paused activities and ordered time/recovery transitions. These corrections await independent verification; Review Batch 2 and the complete cross-group review are not passed or complete.
 
 The earlier baseline-preparation findings remain open for the applicable later review work. Completing the Foundation Review does not complete or pass the full Groups 1–9 cross-group review.
 
@@ -864,9 +866,9 @@ Do not proceed directly to M2.2 yet.
 
 Continue with:
 
-> **Complete final verification of Review Batch 1 — Combat and State Effects**
+> **Independent verification of Review Batch 2**
 
-This is the current review batch within the still-pending M2.1 Groups 1–9 cross-group consistency review.
+This verification is the next activity within the still-pending M2.1 Groups 1–9 cross-group consistency review. Review Batch 1 remains complete and passed.
 
 Then:
 

@@ -666,6 +666,8 @@ The engine evaluates those conditions.
 
 Trance is represented as a Species feature relevant to rest and sleep mechanics.
 
+An eligible Elf may satisfy the duration requirement of a Long Rest through four qualifying hours of Trance. Every other Long Rest qualification rule, recovery amount, event-processing requirement and the one-benefit-per-24-hours restriction remains unchanged.
+
 Detailed rest interaction is defined under Group 8.
 
 No Elf subspecies are required in V1.
@@ -1005,11 +1007,13 @@ A future explicit game mechanic may alter identity/history state, but the player
 
 ### Status: APPROVED
 
-Reaching the relevant XP threshold or completing a valid Milestone grants:
+Reaching the relevant XP threshold or holding the next unconsumed ordered milestone entitlement makes the character eligible for:
 
 > **Level Up Available**
 
 It does not immediately modify the character.
+
+A dead character or a living character at 0 HP cannot commit a level-up. Earned XP, milestone rewards, ordered level-up entitlements and pending selections remain persisted until the character is alive and has at least 1 HP.
 
 ---
 
@@ -1022,12 +1026,15 @@ Level-up should occur at a mechanically appropriate narrative point outside acti
 Examples:
 
 * After combat
-* During rest
+* Before a Rest begins
+* After a Rest completes or fails
 * Between major scenes
 * Session end
 * Session start
 
 RealmWeaver should not unlock new mechanics halfway through an unresolved combat turn.
+
+A level-up cannot commit while a Rest is `ACTIVE` or `PAUSED`. Pending level-up work and selections remain recoverable, but no progression mutation becomes authoritative until the Rest completes or fails.
 
 ---
 
@@ -1053,7 +1060,7 @@ The AI cannot silently or forcibly level the character.
 
 ### Status: APPROVED
 
-A level-up is applied as one authoritative transaction.
+A level-up follows `VALIDATE → RESOLVE the complete proposed level-up → COMMIT/PERSIST atomically and durably → NARRATE`. It is applied as one authoritative transition.
 
 Potential changes include:
 
@@ -1163,6 +1170,8 @@ After:
 
 The character is not otherwise fully healed.
 
+If an active effect changes Effective Maximum HP, RealmWeaver first applies the level-up change to Maximum HP, recalculates Effective Maximum HP from the updated value and active modifiers, and caps the resulting Current HP at that recalculated effective maximum. This calculation is part of the same atomic level-up transition.
+
 ---
 
 ## 5.8 Resource Restoration
@@ -1173,7 +1182,7 @@ Level-up does not automatically function as a Long Rest.
 
 Spent resources do not automatically refill.
 
-New capacity may be added where the level grants it.
+When a committed level-up grants new count-based resource capacity, that newly granted capacity becomes immediately available. Previously spent capacity remains spent; only the newly added capacity is available. This is not a general refill and does not restore pre-existing expended uses or slots.
 
 ---
 
@@ -1374,18 +1383,26 @@ Player / World Event
         ↓
 Structured Event
         ↓
-Progression Service
+Progression Rules
         ↓
 Eligibility / Significance
         ↓
 XP Calculation
         ↓
-Duplicate Prevention
+Stable Source Identity / Duplicate Prevention
         ↓
-Award
+Resolve Reward and Eligibility
+        ↓
+Commit/Persist Reward and Ledger Atomically and Durably
+        ↓
+Notify Player
 ```
 
 The AI may help classify ambiguous narrative events.
+
+Each XP award has a stable source identity. Validation determines whether that source is eligible and whether an existing committed or pending result already represents it. A retry reuses that result rather than recalculating or duplicating the award.
+
+If the reward and its ledger record cannot commit coherently, no partial award becomes authoritative. The award remains recoverably pending for the same source identity until it can be safely committed or explicitly rejected.
 
 ---
 
@@ -1508,6 +1525,8 @@ RealmWeaver maintains an auditable XP event history containing information such 
 
 This helps prevent duplicate rewards.
 
+The XP change, level-eligibility consequences and ledger entry commit/persist as one atomic durable transition before player notification or narration.
+
 ---
 
 # 7. Milestone Progression & Adventure Leads
@@ -1539,7 +1558,8 @@ Milestone
 ├── significance
 ├── source
 ├── completion_conditions
-└── level_reward
+├── reward_identity
+└── level_up_entitlement
 ```
 
 ---
@@ -1556,11 +1576,9 @@ Example:
 INCOMPLETE → COMPLETE
 ```
 
-This may produce:
+When a completed milestone grants progression, it creates one persistent ordered level-up entitlement with a stable reward identity. The player remains free to postpone consuming that entitlement.
 
-> **Level Up Available**
-
-The player remains free to postpone the level-up.
+Entitlements are consumed one at a time by successful level-up commits. A failed or cancelled level-up consumes no entitlement. Technical retries and duplicate milestone events reuse the existing entitlement or pending reward result rather than creating another.
 
 ---
 
@@ -1582,8 +1600,9 @@ Dynamic milestones must be:
 
 1. Proposed
 2. Validated
-3. Persisted
-4. Significant enough to qualify
+3. Significant enough to qualify
+4. Resolved with any resulting entitlement
+5. Committed/persisted atomically and durably with its reward identity and ledger record
 
 ---
 
@@ -1593,7 +1612,7 @@ Dynamic milestones must be:
 
 Milestone significance should increase appropriately with:
 
-* Current character level
+* Current character level plus already queued level-up entitlements
 * Campaign stage
 * Narrative impact
 * Danger
@@ -1603,6 +1622,8 @@ Milestone significance should increase appropriately with:
 A milestone suitable for level 2 may not be sufficient for level 9.
 
 Higher-level advancement generally requires greater accomplishments.
+
+Significance evaluation and entitlement creation must enforce the supported progression limit. Queued entitlements cannot be used to bypass that limit.
 
 ---
 
@@ -1619,6 +1640,8 @@ A single milestone grants at most one level-up in V1.
 ### Status: APPROVED
 
 A completed milestone cannot grant progression twice.
+
+Milestone rewards use stable source and reward identities. Duplicate retries reuse the committed entitlement or recoverably pending result. If milestone completion, entitlement creation and their ledger record cannot commit coherently, the reward remains recoverably pending rather than disappearing or duplicating.
 
 ---
 
@@ -2253,11 +2276,15 @@ The rules engine tracks:
 * Healing result
 * Recharge
 
+All expended Second Wind uses recover when a qualifying Short or Long Rest completes successfully.
+
 ### 9.2.5 Action Surge
 
 At Fighter level 2, Action Surge grants an additional Action according to the supported rule.
 
 The AI does not independently grant extra Actions.
+
+All expended Action Surge uses recover when a qualifying Short or Long Rest completes successfully.
 
 ### 9.2.6 Champion
 
@@ -2458,6 +2485,8 @@ The engine tracks:
 * Recharge
 * Availability
 
+All expended Channel Divinity uses recover when a qualifying Short or Long Rest completes successfully.
+
 ### 9.4.7 Ability Score Improvement
 
 At Cleric level 4, the standard ASI rules apply.
@@ -2514,6 +2543,8 @@ Maximum and remaining slots are tracked deterministically by spell level.
 ### 9.5.5 Arcane Recovery
 
 Arcane Recovery restores limited expended spell-slot capacity according to the supported class rule.
+
+At qualifying Short Rest completion, the player may optionally use Arcane Recovery if it has not already been used that day. The chosen combination follows the documented combined-slot-level limit, and no recovered slot may be 6th level or higher.
 
 The engine tracks:
 

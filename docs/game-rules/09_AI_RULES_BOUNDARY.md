@@ -10054,6 +10054,12 @@ must not blindly resume against an obsolete snapshot.
 
 Exact state versioning, locking or concurrency mechanisms are deferred to later architecture.
 
+Paused mechanically significant activities are durable authoritative state. They retain elapsed campaign time, already processed scheduled events, accumulated interruption time, bound randomness and results, and unresolved meaningful player choices across technical retries and save/load.
+
+Resuming continues from the last committed/persisted point. It must not restart the activity, replay elapsed time or events, reroll bound randomness, duplicate rewards or resource changes, or reopen a choice after the player explicitly declined, confirmed it or continued gameplay beyond its relevant boundary.
+
+If state changes while paused, RealmWeaver revalidates affected assumptions before further resolution. The resumed transition still follows `VALIDATE → RESOLVE → COMMIT/PERSIST → NARRATE`.
+
 ---
 
 ## Randomness and Retry

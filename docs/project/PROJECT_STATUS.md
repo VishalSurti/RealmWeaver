@@ -6,9 +6,9 @@
 **Current Milestone:** M2 — Technical Design & Architecture
 **Milestone Status:** IN PROGRESS
 **Current Activity:** M2.1 — V1 Game Rules Specification & Rules-Engine Boundary
-**Next Activity:** Complete final verification of Review Batch 1 — Combat and State Effects
+**Next Activity:** Independent verification of Review Batch 2
 
-**Current Progress:** Sections 9A–9L APPROVED; Group 9 rules design COMPLETE; internal consistency review PASSED; Foundation Review COMPLETE AND COMMITTED; Review Batch 1 IN PROGRESS; Review Batches 2–3 OUTSTANDING
+**Current Progress:** Sections 9A–9L APPROVED; Group 9 rules design COMPLETE; internal consistency review PASSED; Foundation Review COMPLETE, PASSED AND COMMITTED; Review Batch 1 COMPLETE AND PASSED; Review Batch 2 IN PROGRESS — CORRECTIONS APPLIED, INDEPENDENT VERIFICATION PENDING; Review Batch 3 OUTSTANDING
 
 **Group 9 Internal Review Gate:** PASSED
 
@@ -133,7 +133,7 @@ No major production implementation should begin until the relevant architectural
 
 ## Status
 
-**RULES DESIGN COMPLETE — GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — REVIEW BATCH 1 IN PROGRESS — M2.1 GATE PENDING**
+**RULES DESIGN COMPLETE — GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — REVIEW BATCH 1 PASSED — REVIEW BATCH 2 IN PROGRESS — M2.1 GATE PENDING**
 
 Authoritative rules index:
 
@@ -289,9 +289,9 @@ Group 9 rules design is complete. Its internal consistency review and internal-r
 
 The Groups 1–9 cross-group consistency review uses this approved bounded structure:
 
-* Foundation Review — Character Mathematics, Checks, Saves, Dice, and Inspiration: COMPLETE AND COMMITTED
-* Review Batch 1 — Combat and State Effects: IN PROGRESS — APPROVED CORRECTIONS APPLIED; FINAL VERIFICATION OUTSTANDING
-* Review Batch 2 — Progression, Recovery, Persistence, and AI Lifecycle: OUTSTANDING
+* Foundation Review — Character Mathematics, Checks, Saves, Dice, and Inspiration: COMPLETE, PASSED AND COMMITTED
+* Review Batch 1 — Combat and State Effects: COMPLETE AND PASSED
+* Review Batch 2 — Progression, Recovery, Persistence, and AI Lifecycle: IN PROGRESS — APPROVED CORRECTIONS APPLIED; INDEPENDENT VERIFICATION PENDING
 * Review Batch 3 — Scope, Authority, Terminology, and Final Consolidation: OUTSTANDING
 
 The previously completed Foundation Review resolved `CG-FND-001` through `CG-FND-006`. The earlier baseline-preparation findings remain open for the applicable later review work. Completing the Foundation Review does not complete or pass the overall Groups 1–9 cross-group review.
@@ -323,8 +323,24 @@ The previously completed Foundation Review resolved `CG-FND-001` through `CG-FND
 | `CG-CMB-012` | Review Batch 1 | RESOLVED | The shared damage pipeline defines modifier, immunity, Resistance, Vulnerability and rounding order. |
 | `CG-CMB-013` | Review Batch 1 | RESOLVED | Damage-at-zero, Death Saving Throw, stabilisation and reset transitions are explicit. |
 | `CG-CMB-014` | Review Batch 1 | RESOLVED | Temporary HP retain-or-replace behaviour is explicit and never stacks by default. |
+| `CG-PRP-001` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Trance provides an eligible four-hour Long Rest duration without changing other Long Rest rules. |
+| `CG-PRP-002` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Stable-at-0-HP natural recovery uses one bound, durable and retry-safe `1d4`-hour result. |
+| `CG-PRP-003` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Long Rest benefits require at least 1 HP at start; Exhaustion reduction requires applicable food and drink. |
+| `CG-PRP-004` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | One accumulated hour of qualifying strenuous interruption fails a Long Rest. |
+| `CG-PRP-005` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Second Wind, Action Surge, Channel Divinity and Arcane Recovery have explicit recharge rules. |
+| `CG-PRP-006` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Newly granted count-based level-up capacity becomes available without refilling spent capacity. |
+| `CG-PRP-007` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Level-up HP changes recalculate Effective Maximum HP and cap Current HP accordingly. |
+| `CG-PRP-008` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Level-up cannot commit during an `ACTIVE` or `PAUSED` Rest. |
+| `CG-PRP-009` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Dead and 0-HP living characters retain progression but cannot commit level-up. |
+| `CG-PRP-010` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Milestone rewards create persistent ordered entitlements with stable identities and one-at-a-time consumption. |
+| `CG-PRP-011` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | XP/milestone rewards use stable identities, atomic durable ledgers and retry-safe pending results. |
+| `CG-PRP-012` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Paused activities and meaningful choices persist and resume without replay or retroactive reopening. |
+| `CG-PRP-013` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Rest time, events, qualification, recovery, commit/persistence and narration use the approved order. |
+| `CG-PRP-014` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Group 8 conversational wrapper and unmatched Markdown fences were removed. |
 
-Resolving these individual findings does not complete or pass Review Batch 1, the full Groups 1–9 cross-group review or the M2.1 completion gate. The A–D labels used during the combat work were decision sub-batches within Review Batch 1, not separate review milestones.
+Review Batch 1 is complete and passed. This does not complete or pass the full Groups 1–9 cross-group review or the M2.1 completion gate. The A–D labels used during the combat work were decision sub-batches within Review Batch 1, not separate review milestones.
+
+Applying the approved Review Batch 2 corrections does not pass Review Batch 2. Independent verification remains required before its status may change.
 
 Remaining work before the M2.1 gate:
 
@@ -730,9 +746,9 @@ The primary rules-design stage of M2.1 is complete. The Group 9 internal consist
 
 The immediate next activity is:
 
-> **Complete final verification of Review Batch 1 — Combat and State Effects**
+> **Independent verification of Review Batch 2**
 
-Review Batch 1 remains in progress within the still-pending M2.1 Groups 1–9 cross-group consistency review. Its individual findings have approved corrections, but Review Batch 1 and the overall review have not been marked passed or complete.
+Review Batch 2 remains in progress within the still-pending M2.1 Groups 1–9 cross-group consistency review. Its approved corrections are applied, but independent verification is pending. Review Batch 1 is complete and passed; Review Batch 2 and the overall review have not been marked passed or complete.
 
 Review Groups 1–9 for cross-group contradictions, ambiguous interactions, terminology consistency, source-of-truth alignment, and affected cross-file rules including Weapon Mastery.
 
@@ -833,11 +849,11 @@ At every major milestone:
 
 ## Starting Point
 
-> **Complete final verification of Review Batch 1 — Combat and State Effects**
+> **Independent verification of Review Batch 2**
 
 ## Current Stopping Point
 
-> **M1 complete. M2 active. Sections 9A–9L approved. Group 9 rules design complete. Group 9 internal consistency review and internal-review gate passed on 31 August 2026. Foundation Review complete and committed; Review Batch 1 in progress with approved corrections applied; Review Batches 2 and 3 outstanding. M2.1 gate pending. Production coding not authorized.**
+> **M1 complete. M2 active. Sections 9A–9L approved. Group 9 rules design complete. Group 9 internal consistency review and internal-review gate passed on 31 August 2026. Foundation Review complete, passed and committed; Review Batch 1 complete and passed; Review Batch 2 in progress with approved corrections applied and independent verification pending; Review Batch 3 outstanding. M2.1 gate pending. Production coding not authorized.**
 
 ## Current Authoritative M2 Specification
 
