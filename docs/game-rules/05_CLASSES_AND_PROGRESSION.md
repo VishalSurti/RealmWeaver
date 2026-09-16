@@ -371,8 +371,10 @@ Example:
 Second Wind
 uses_max = 1
 uses_remaining = 1
-recharge = appropriate_rest
+recharge = SHORT_OR_LONG_REST_COMPLETION
 ```
+
+Second Wind recharges on completion of a Short Rest or Long Rest.
 
 Passive features may instead modify existing mechanics.
 
@@ -1088,7 +1090,7 @@ Either the full valid level-up succeeds or the previous valid character state re
 
 ### Status: APPROVED
 
-Incomplete selections may be stored separately as pending state.
+Incomplete selections are durably persisted as pending state.
 
 Example:
 
@@ -1103,6 +1105,8 @@ completed:
 remaining:
 - spell selections
 ```
+
+Legitimately earned level-up entitlement/state and unresolved choices remain durably persisted until the level-up completes, is cancelled where the rules permit, or is otherwise resolved according to authoritative rules. Save/load resumes the same pending level-up state and must not lose, duplicate, reroll or re-grant the level-up.
 
 Pending selections do not partially mutate the authoritative character.
 
@@ -2854,7 +2858,7 @@ Examples:
 
 If a level-up transaction fails, the previous valid character state remains authoritative.
 
-Pending progression state remains recoverable where possible.
+Legitimately earned progression state and unresolved level-up choices remain durably persisted. Save/load and technical retries resume the same pending state without losing, duplicating, rerolling or re-granting the level-up. That state remains pending until the level-up completes, is cancelled where the rules permit, or is otherwise resolved according to authoritative rules.
 
 ---
 

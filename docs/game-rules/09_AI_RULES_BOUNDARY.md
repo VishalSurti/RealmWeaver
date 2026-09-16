@@ -3754,15 +3754,23 @@ Example:
 ```text
 Short Rest
 ↓
-Validate
+Validate Rest
 ↓
-Resolve resource recovery
+Begin authoritative Rest activity
 ↓
-Advance world clock
+Advance and durably record campaign time
 ↓
-Process applicable world events
+Process expirations and scheduled world events
 ↓
-Commit
+Resolve applicable interruption outcomes
+↓
+Confirm Rest still qualifies
+↓
+Resolve applicable recovery and completion choices
+↓
+Commit/persist completed-rest recovery and resulting state atomically and durably
+↓
+Narrate committed outcome
 ```
 
 Detailed scheduling architecture is deferred to later M2 design.

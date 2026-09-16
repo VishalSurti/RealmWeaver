@@ -1818,10 +1818,10 @@ Exact hidden encounter probabilities remain hidden.
 
 ## 8E.20 Short Rest Completion UI
 
-After successful completion:
+After qualifying Short Rest time is secured and time, scheduled events and interruptions are resolved, RealmWeaver confirms that the Rest still qualifies and opens its completion-choice window:
 
 ```text
-SHORT REST COMPLETE
+SHORT REST COMPLETION CHOICES
 
 Time Passed:
 1 hour
@@ -1834,11 +1834,21 @@ Hit Dice:
 
 [Spend Hit Die]
 
-Resources Restored:
+Pending Eligible Resource Recovery:
 [...]
 
+[Use Arcane Recovery]
+[Decline Optional Choices]
 [Finish]
 ```
+
+The player may spend eligible Hit Dice, use Arcane Recovery if eligible, or decline optional choices. Selecting **Finish** or otherwise continuing closes the window and treats remaining optional choices as declined. RealmWeaver then resolves the resulting recovery/state and commits/persists it atomically and durably as one coherent transition. Only after that commit succeeds may the interface present:
+
+```text
+SHORT REST COMPLETE
+```
+
+Save/load while completion choices remain pending resumes the same choice state without replaying elapsed time, interruptions, scheduled events, rolls or already-bound results.
 
 The interface should make mechanical consequences clear without permanently occupying campaign space.
 
