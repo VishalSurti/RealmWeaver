@@ -789,7 +789,17 @@ The primary M2.1 rules-design stage is complete. Group 9's internal consistency 
 
 ## Current Phase
 
-**GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW NEXT — M2.1 GATE PENDING**
+**GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — PASS 2 NEXT — M2.1 GATE PENDING**
+
+Cross-group review progress:
+
+* Pass 0 — Baseline and Source-of-Truth Map: COMPLETE — FINDINGS RECORDED
+* Pass 1 — Character Foundations, Checks, Saves, Dice, and Inspiration: COMPLETE — APPROVED CORRECTIONS APPLIED
+* Passes 2–10: OUTSTANDING
+
+Pass 1 recorded the approved rules for contested-check ties, passive checks, ordinary Saving Throw natural results, Halfling Lucky, level-up Hit Point rerolls, validated manual-dice retries, and Inspiration's mandatory Core V1 status.
+
+The Pass 0 findings remain open. Completing Pass 1 does not complete or pass the full Groups 1–9 cross-group review.
 
 Remaining M2.1 work:
 
@@ -840,7 +850,9 @@ Do not proceed directly to M2.2 yet.
 
 Continue with:
 
-> **M2.1 — Groups 1–9 Cross-Group Consistency Review**
+> **Pass 2 — Combat, Equipment, Inventory, and Action-Economy Consistency**
+
+This is the next bounded pass within the still-pending M2.1 Groups 1–9 cross-group consistency review.
 
 Then:
 

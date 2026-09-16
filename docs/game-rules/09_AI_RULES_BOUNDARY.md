@@ -10073,6 +10073,20 @@ A retry cannot reroll bound randomness, whether or not the action has already co
 
 Failed validation produces no unnecessary random result.
 
+Once a manually entered physical-die result is successfully validated for an action, it also becomes part of that action's bound resolution record and is equivalent to system-generated randomness for retry purposes.
+
+A technical retry must reuse the same bound:
+
+* Raw result
+* Modifiers
+* Player choices
+* Reroll or replacement-roll sequence
+* Computed outcome
+
+It must not request or accept a replacement roll for the same action.
+
+If a submitted manual result was never successfully validated, it has not yet become bound and may be submitted again for validation.
+
 ---
 
 ## 15.26 Technical Failure Should Not Grant a Free Reroll
@@ -10100,6 +10114,8 @@ Technical failure should not alter fate or create free rerolls.
 
 If the bound result cannot be recovered, RealmWeaver must fail safely and reconcile authoritative state rather than silently reroll.
 
+The same safe-failure rule applies when a validated manual result or any other part of the bound resolution record cannot be recovered.
+
 Detailed random/event persistence is deferred.
 
 ---
@@ -10107,6 +10123,8 @@ Detailed random/event persistence is deferred.
 ## 15.27 New Gameplay Attempts Are Different
 
 A new random result is permitted only when the earlier action was conclusively cancelled while uncommitted and the player or AI then submits a materially different validated action.
+
+A new manual result follows the same rule. It is permitted only for a genuinely new action after conclusive cancellation or materially changed circumstances, with no committed effect from the earlier action.
 
 Cosmetic rewording or technical resubmission does not create a new action.
 
@@ -10854,6 +10872,8 @@ Total:
 ```
 
 This supports player trust and tabletop identity.
+
+When manual dice are involved, the UI must distinguish a technical retry from a request for a genuinely new roll. A technical retry reuses the validated result and bound resolution record rather than asking for or accepting replacement dice.
 
 ---
 

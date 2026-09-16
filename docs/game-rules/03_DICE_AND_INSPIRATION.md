@@ -409,7 +409,27 @@ Detailed rules are defined in:
 
 ---
 
-## 9.2 Attack Rolls
+## 9.2 Saving Throws
+
+For ordinary Saving Throws:
+
+* Natural 20 is not automatic success.
+* Natural 1 is not automatic failure.
+* Applicable modifiers are added and the final total is compared to the DC.
+
+Attack Rolls and Death Saving Throws retain their specific natural-roll rules.
+
+A specific feature may override the ordinary rule only when it explicitly says so.
+
+Automatic and validated manual dice modes use the same rule. Technical retries reuse the result already bound to the action.
+
+Detailed rules are defined in:
+
+`02_CHECKS_AND_SAVES.md`
+
+---
+
+## 9.3 Attack Rolls
 
 Attack-roll Natural 20 and Natural 1 behaviour is defined in:
 
@@ -424,7 +444,7 @@ Supported class or other features may modify these rules.
 
 ---
 
-## 9.3 Feature-Based Dice Overrides
+## 9.4 Feature-Based Dice Overrides
 
 ### Status: APPROVED
 
@@ -463,7 +483,20 @@ The AI cannot arbitrarily grant rerolls.
 
 ## 10.2 Example — Halfling Lucky
 
-An eligible Natural 1 may trigger Halfling Lucky according to the supported Species rule.
+When an eligible Ability Check, Attack Roll or Saving Throw produces a Natural 1, a player with Halfling Lucky may choose to reroll it.
+
+The choice occurs after seeing the raw Natural 1 but before modifiers are applied and before final resolution.
+
+If Lucky is used:
+
+* The replacement roll must be used.
+* Lucky applies only once to that triggering roll.
+* If the replacement is also a Natural 1, it must be used and cannot trigger Lucky again for that roll.
+* Another feature may alter the replacement only when it explicitly permits that interaction.
+
+Automatic Dice mode must offer the player this decision. Manual Dice mode follows the validated manual-roll authority rules.
+
+Technical retries preserve the original result, the Lucky decision and the replacement-roll sequence.
 
 Conceptually:
 
@@ -472,9 +505,9 @@ d20 = 1
 ↓
 Halfling Lucky detected
 ↓
-Reroll eligible
+Player chooses whether to reroll
 ↓
-New d20 result
+If accepted, new d20 result is mandatory
 ```
 
 The exact Species rule is defined in:
@@ -485,7 +518,11 @@ The exact Species rule is defined in:
 
 ## 10.3 Example — Level-Up HP Natural 1
 
-When using rolled HP during level-up, a Natural 1 on the class Hit Die is rejected and rerolled according to the approved progression rules.
+When using rolled HP during level-up, a Natural 1 on the class Hit Die is rejected and rerolled until the result is 2 or higher.
+
+The first result of 2 or higher is mandatory and final. The Constitution Modifier is added afterward, and the final Hit Point increase has a minimum of 1 after all calculations.
+
+A technical retry preserves the complete bound roll sequence.
 
 This rule is defined in:
 
@@ -611,6 +648,8 @@ Internal storage must not leak hidden information to the player interface.
 ---
 
 # 13. Inspiration
+
+Inspiration is a mandatory Core V1 mechanic. Core V1 supports earning, tracking, spending, validating, resolving, persisting and displaying Inspiration according to the approved rules in this section.
 
 ## 13.1 Inspiration Capacity
 

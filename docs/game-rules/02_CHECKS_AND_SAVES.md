@@ -424,7 +424,17 @@ Examples may include:
 
 Each participant makes the appropriate mechanical check.
 
-The rules engine compares the results and determines the winner.
+The rules engine compares the results and determines the winner or tie outcome.
+
+If the totals are tied, the pre-contest status quo is preserved:
+
+* The initiating actor does not change the contested state.
+* There is no automatic reroll.
+* The AI and UI must not secretly select a winner.
+
+A new attempt is permitted only when circumstances have materially changed or another valid opportunity arises.
+
+A specific documented rule may explicitly override this general tie rule.
 
 The AI narrates the outcome after resolution.
 
@@ -440,9 +450,9 @@ RealmWeaver V1 supports at minimum:
 
 **Passive Perception**
 
-Baseline calculation:
+Calculation:
 
-**10 + applicable modifiers**
+**10 + all normally applicable modifiers**
 
 Applicable modifiers may include:
 
@@ -450,6 +460,16 @@ Applicable modifiers may include:
 * Proficiency
 * Expertise
 * Other supported effects
+
+For a passive check:
+
+* Advantage contributes **+5**.
+* Disadvantage contributes **−5**.
+* Multiple Advantage sources do not stack.
+* Multiple Disadvantage sources do not stack.
+* Opposing Advantage and Disadvantage sources cancel according to the approved Advantage/Disadvantage rules.
+
+Passive checks do not roll dice. They cannot consume Inspiration or use rerolls.
 
 ---
 
@@ -485,7 +505,7 @@ The player should not be notified that a hidden passive comparison occurred if d
 
 ---
 
-# 9. Natural 20 and Natural 1 on Ability Checks
+# 9. Natural 20 and Natural 1 on Ability Checks and Saving Throws
 
 ## 9.1 Natural 20
 
@@ -516,6 +536,24 @@ Attack-roll Natural 20 and Natural 1 behaviour is different.
 Combat-specific rules are defined in:
 
 `04_COMBAT.md`
+
+---
+
+## 9.4 Natural 20 and Natural 1 on Ordinary Saving Throws
+
+### Status: APPROVED
+
+An ordinary Saving Throw does not automatically succeed on a Natural 20 or automatically fail on a Natural 1.
+
+Applicable modifiers are added and the final total is compared to the DC normally.
+
+This rule applies equally to automatic and validated manual dice results.
+
+Attack Rolls and Death Saving Throws retain their specific natural-roll rules defined in `04_COMBAT.md`.
+
+A specific feature may override the ordinary Saving Throw rule only when it explicitly says so.
+
+Technical retries reuse the result already bound to the action according to `09_AI_RULES_BOUNDARY.md`.
 
 ---
 
@@ -728,7 +766,7 @@ Approved areas:
 5. Saving Throws
 6. Contested Checks
 7. Passive Checks
-8. Natural 20 / Natural 1 Ability Check Behaviour
+8. Natural 20 / Natural 1 Ability Check and Saving Throw Behaviour
 9. Narrative Degrees of Success and Failure
 10. Free-Text Action Resolution
 

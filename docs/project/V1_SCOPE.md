@@ -117,6 +117,7 @@ This is expected to include concepts such as:
 * Damage and healing.
 * Initiative.
 * Advantage/disadvantage where applicable.
+* Inspiration, including earning, tracking, spending, validation, resolution, persistence and display according to the approved Group 3 rules.
 * Character progression.
 
 The exact mechanics and rule interpretations will be formally defined during technical/game-rules design.

@@ -6,9 +6,9 @@
 **Current Milestone:** M2 — Technical Design & Architecture
 **Milestone Status:** IN PROGRESS
 **Current Activity:** M2.1 — V1 Game Rules Specification & Rules-Engine Boundary
-**Next Activity:** Groups 1–9 cross-group consistency review
+**Next Activity:** Pass 2 — Combat, Equipment, Inventory, and Action-Economy Consistency
 
-**Current Progress:** Sections 9A–9L APPROVED; Group 9 rules design COMPLETE; internal consistency review PASSED
+**Current Progress:** Sections 9A–9L APPROVED; Group 9 rules design COMPLETE; internal consistency review PASSED; cross-group review Passes 0–1 COMPLETE; Passes 2–10 OUTSTANDING
 
 **Group 9 Internal Review Gate:** PASSED
 
@@ -133,7 +133,7 @@ No major production implementation should begin until the relevant architectural
 
 ## Status
 
-**RULES DESIGN COMPLETE — GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW NEXT — M2.1 GATE PENDING**
+**RULES DESIGN COMPLETE — GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — PASS 2 NEXT — M2.1 GATE PENDING**
 
 Authoritative rules index:
 
@@ -286,6 +286,28 @@ Visual quality, a coherent RealmWeaver visual identity, accessibility, responsiv
 All nine detailed rules groups have approved rules-design sections.
 
 Group 9 rules design is complete. Its internal consistency review and internal-review gate passed on 31 August 2026.
+
+The Groups 1–9 cross-group consistency review is being performed through bounded Passes 0–10:
+
+* Pass 0 — Baseline and Source-of-Truth Map: COMPLETE — FINDINGS RECORDED
+* Pass 1 — Character Foundations, Checks, Saves, Dice, and Inspiration: COMPLETE — APPROVED CORRECTIONS APPLIED AND VERIFIED
+* Passes 2–10: OUTSTANDING
+
+Pass 1 resolved `CG-FND-001` through `CG-FND-006`. Completing this pass does not complete or pass the overall Groups 1–9 cross-group review.
+
+### Consolidated Cross-Group Findings Ledger
+
+| Finding | Origin | Status | Summary |
+| --- | --- | --- | --- |
+| `CG-BASE-001` | Pass 0 | OPEN | Universal source-of-truth hierarchy conflicts with the approved domain-specific ownership model. |
+| `CG-BASE-002` | Pass 0 | OPEN | Current technical source-of-truth wording may overstate the authority of the rules index. |
+| `CG-BASE-003` | Pass 0 | OPEN | V1 scope and requirements use inconsistent requiredness for identified progression and campaign options. |
+| `CG-FND-001` | Pass 1 | RESOLVED | Contested-check ties preserve the pre-contest status quo. |
+| `CG-FND-002` | Pass 1 | RESOLVED | Passive checks use all normal modifiers with non-stacking `+5` Advantage and `−5` Disadvantage adjustments. |
+| `CG-FND-003` | Pass 1 | RESOLVED | Ordinary Saving Throws resolve natural 1 and natural 20 through the final modified total. |
+| `CG-FND-004` | Pass 1 | RESOLVED | Halfling Lucky and level-up Hit Point rerolls have explicit timing, replacement, repetition, and retry rules. |
+| `CG-FND-005` | Pass 1 | RESOLVED | Validated manual results and their complete resolution records remain bound across technical retries. |
+| `CG-FND-006` | Pass 1 | RESOLVED | Inspiration is mandatory Core V1 functionality. |
 
 Remaining work before the M2.1 gate:
 
@@ -691,7 +713,9 @@ The primary rules-design stage of M2.1 is complete. The Group 9 internal consist
 
 The immediate next activity is:
 
-> **M2.1 — Groups 1–9 Cross-Group Consistency Review**
+> **Pass 2 — Combat, Equipment, Inventory, and Action-Economy Consistency**
+
+Pass 2 is the next bounded pass within the still-pending M2.1 Groups 1–9 cross-group consistency review. Do not begin Pass 3 or treat the overall review as passed merely because Passes 0 and 1 are complete.
 
 Review Groups 1–9 for cross-group contradictions, ambiguous interactions, terminology consistency, source-of-truth alignment, and affected cross-file rules including Weapon Mastery.
 
@@ -792,11 +816,11 @@ At every major milestone:
 
 ## Starting Point
 
-> **M2.1 — Groups 1–9 Cross-Group Consistency Review**
+> **Pass 2 — Combat, Equipment, Inventory, and Action-Economy Consistency**
 
 ## Current Stopping Point
 
-> **M1 complete. M2 active. Sections 9A–9L approved. Group 9 rules design complete. Group 9 internal consistency review and internal-review gate passed on 31 August 2026. Groups 1–9 cross-group consistency review is next. M2.1 gate pending. Production coding not authorized.**
+> **M1 complete. M2 active. Sections 9A–9L approved. Group 9 rules design complete. Group 9 internal consistency review and internal-review gate passed on 31 August 2026. Cross-group review Passes 0 and 1 complete; Passes 2–10 outstanding. Pass 2 is next. M2.1 gate pending. Production coding not authorized.**
 
 ## Current Authoritative M2 Specification
 

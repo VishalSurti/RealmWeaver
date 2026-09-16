@@ -204,7 +204,7 @@ The system shall support Armour Class or equivalent defensive mechanics required
 The system shall support advantage and disadvantage where included by the V1 Game Rules Specification.
 
 **FR-047 — Inspiration**
-The system should support inspiration or an equivalent player resource if included in the V1 Game Rules Specification.
+The system shall support Inspiration as a mandatory Core V1 mechanic, including earning, tracking, spending, validating, resolving, persisting, and displaying Inspiration according to the approved Group 3 rules.
 
 Detailed behaviour for these systems shall be defined in the Game Rules Specification.
 
@@ -473,7 +473,13 @@ Rumours, beliefs, allegations, predictions, and uncertain information may be pre
 **FR-120 — Action-Bound Randomness**
 Once randomness is generated for a validated action, the system shall bind the result to that action and reuse it for technical or persistence retries of the same action.
 
+Once a manually entered physical-die result is successfully validated for an action, the system shall bind the raw result, applicable modifiers, player choices, reroll or replacement-roll sequence, and computed outcome to that action for the same retry purposes. A technical retry shall reuse that bound resolution record and shall not request or accept a replacement roll for the same action.
+
+A submitted manual result that was never successfully validated is not yet bound and may be submitted again for validation.
+
 Cosmetic rewording or technical resubmission shall not create a new action or a new random result. If the bound result cannot be recovered, the system shall fail safely and reconcile state rather than silently reroll.
+
+A new manual result is permitted only for a genuinely new action after conclusive cancellation or materially changed circumstances, with no committed effect from the earlier action. The interface shall distinguish a technical retry from a genuinely new roll.
 
 **FR-121 — NPC Intent and Action Proposals**
 The AI shall decide intent for AI-controlled NPCs and submit intended actions as non-authoritative proposals. RealmWeaver shall validate, resolve, and commit/persist the resulting action.

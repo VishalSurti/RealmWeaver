@@ -217,12 +217,18 @@ The campaign is not permanently locked to one method.
 
 A natural 1 rolled on the class Hit Die for a level-up HP increase is not accepted.
 
-The die must be rerolled.
+The die must be rerolled until the result is 2 or higher.
+
+The first result of 2 or higher is mandatory and final.
+
+The Constitution Modifier is added afterward. After all calculations, the final Hit Point increase remains subject to the minimum of 1 defined below.
 
 This applies to:
 
 * RealmWeaver-generated dice
 * Player-entered physical dice
+
+A technical retry preserves the complete bound roll sequence and must not generate or request replacement rolls for that same level-up action.
 
 ### Minimum HP Increase
 
@@ -718,7 +724,20 @@ Baseline V1 Halfling traits:
 
 ### Lucky
 
-When an eligible d20 roll produces a natural 1, Halfling Lucky allows the roll to be rerolled according to the supported rule.
+When an eligible Ability Check, Attack Roll or Saving Throw produces a natural 1, using Halfling Lucky is optional.
+
+The player chooses after seeing the raw natural 1 but before modifiers are applied and before final resolution.
+
+If Lucky is used:
+
+* The replacement roll must be used.
+* Lucky applies only once to that triggering roll.
+* If the replacement is also a natural 1, it must be used and cannot trigger Lucky again for that roll.
+* Another feature may alter the replacement only when it explicitly permits that interaction.
+
+Automatic Dice mode must offer the player the decision. Manual Dice mode follows the validated manual-roll authority rules.
+
+Technical retries preserve the original result, the Lucky decision and the replacement-roll sequence.
 
 Conceptually:
 
@@ -727,7 +746,9 @@ d20 = 1
 ↓
 Lucky detected
 ↓
-Reroll
+Player chooses whether to reroll
+↓
+If accepted, replacement result is mandatory
 ```
 
 The engine detects the Species feature automatically.
