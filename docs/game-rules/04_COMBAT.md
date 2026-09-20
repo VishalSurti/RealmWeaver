@@ -1704,7 +1704,7 @@ Full multi-character continuation does not need to be completed in the earliest 
 
 ---
 
-# 12. Enemy Combat AI
+# 12. Enemy Combat Controllers
 
 ## 12.1 Hybrid Tactical Model
 
@@ -1714,6 +1714,8 @@ V1 uses a hybrid enemy-control model:
 
 * Simple enemies → primarily deterministic tactical behaviour
 * Intelligent, important or complex enemies → AI-assisted tactical reasoning
+
+Each NPC is assigned the applicable controller for the situation. A deterministic controller may routinely select simple legal behaviour; AI selects intent for actors assigned to AI. Either controller produces a non-authoritative action proposal that RealmWeaver must validate, resolve and commit/persist before the result becomes authoritative or is narrated as completed.
 
 This balances:
 
@@ -2002,7 +2004,7 @@ Examples:
 
 ### Status: APPROVED
 
-When combat ends, RealmWeaver should resolve the complete proposed mechanical aftermath and commit/persist it atomically and durably before normal narrative play resumes.
+When combat ends, RealmWeaver must resolve the complete proposed mechanical aftermath and commit/persist it atomically and durably before normal narrative play resumes.
 
 The system should:
 
@@ -2411,7 +2413,7 @@ Detailed implementation is deferred to later M2 architecture.
 
 ### Status: APPROVED
 
-Authoritative encounter results should be persisted before normal narrative play resumes.
+Authoritative encounter results must be committed/persisted atomically and durably before normal narrative play resumes.
 
 This reduces risks such as:
 
@@ -2602,7 +2604,7 @@ Approved areas:
 8. Attacks, Armour Class & Damage
 9. Critical Hits & Critical Misses
 10. HP, Healing, Unconsciousness & Death
-11. Enemy Combat AI
+11. Enemy Combat Controllers
 12. Combat End & Encounter Resolution
 13. Combat Finalisation
 14. Progression Rewards

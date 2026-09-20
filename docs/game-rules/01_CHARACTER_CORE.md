@@ -118,6 +118,19 @@ Dice behaviour follows `03_DICE_AND_INSPIRATION.md`.
 
 ---
 
+## 3.4 Background Ability Score Allocation
+
+### Status: APPROVED
+
+After the supported generation method establishes the character's base Ability Scores, the player chooses exactly one Background allocation:
+
+* `+2` to one eligible ability and `+1` to a different eligible ability; or
+* `+1` to each of three different eligible abilities.
+
+The selected abilities must be distinct as stated, normal Ability Score limits apply, and RealmWeaver validates the complete allocation deterministically before it becomes authoritative.
+
+---
+
 # 4. Skills
 
 ## 4.1 Skill List

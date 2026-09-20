@@ -449,7 +449,7 @@ The AI may reference those abilities but may not invent unsupported species mech
 
 ## 3.2 V1 Species Scope
 
-### Status: APPROVED
+### Status: SCOPE APPROVED
 
 Initial V1 species:
 
@@ -471,6 +471,8 @@ These provide a useful spread of:
 * Innate magic
 
 Additional species may be added later.
+
+This approves inclusion of these six Species in Core V1. Exact source-dependent trait sets and rules versions remain subject to the separate SRD/IP/content-provenance finalization described below; scope approval does not itself approve unresolved mechanics.
 
 ---
 
@@ -609,30 +611,29 @@ Species must not be treated as permanently static data if a supported trait prog
 
 ## 3.8 Human Traits
 
-### Status: APPROVED V1 DIRECTION
+### Status: SCOPE APPROVED — SOURCE-DEPENDENT TRAIT SET PENDING SRD/IP/PROVENANCE FINALIZATION
 
 Human is the mechanically flexible/generalist V1 Species.
 
-Recommended V1 traits:
+The approved RealmWeaver V1 flexible generalist benefit is exactly one additional validated proficiency choice from:
 
-* Size: Medium
-* Base Speed: 30 ft
-* Common language
-* One additional supported language choice
-* One additional supported skill proficiency choice
-* Flexible generalist character-creation benefit
+* one skill proficiency;
+* one tool proficiency; or
+* one language proficiency.
+
+Duplicate and replacement handling follows normal validated character-creation rules. This benefit grants no feat, Ability Score increase, Weapon Mastery, arbitrary AI-generated bonus or unsupported feature.
 
 Human does not receive blanket Species-based Ability Score increases because RealmWeaver handles Ability Score allocation separately.
 
-Any flexible Human benefit must come from a controlled list of validated options rather than arbitrary AI-generated bonuses.
+Other exact source-dependent Human traits and their rules version remain pending the separate SRD/IP/content-provenance finalization.
 
 ---
 
 ## 3.9 Elf Traits
 
-### Status: APPROVED V1 DIRECTION
+### Status: SCOPE APPROVED — SOURCE-DEPENDENT TRAIT SET PENDING SRD/IP/PROVENANCE FINALIZATION
 
-Baseline V1 Elf traits:
+Current candidate Elf traits for provenance review:
 
 * Size: Medium
 * Base Speed: 30 ft
@@ -678,9 +679,9 @@ No Elf subspecies are required in V1.
 
 ## 3.10 Dwarf Traits
 
-### Status: APPROVED V1 DIRECTION
+### Status: SCOPE APPROVED — SOURCE-DEPENDENT TRAIT SET PENDING SRD/IP/PROVENANCE FINALIZATION
 
-Baseline V1 Dwarf traits:
+Current candidate Dwarf traits for provenance review:
 
 * Size: Medium
 * Base Speed: 25 ft
@@ -716,9 +717,9 @@ The AI may identify a stone-related situation, but the rules system determines t
 
 ## 3.11 Halfling Traits
 
-### Status: APPROVED V1 DIRECTION
+### Status: SCOPE APPROVED — SOURCE-DEPENDENT TRAIT SET PENDING SRD/IP/PROVENANCE FINALIZATION
 
-Baseline V1 Halfling traits:
+Current candidate Halfling traits for provenance review:
 
 * Size: Small
 * Base Speed: 25 ft
@@ -775,13 +776,13 @@ The adaptation should preserve the intended ability to move through spaces occup
 
 ## 3.12 Goliath Traits
 
-### Status: APPROVED V1 DIRECTION
+### Status: SCOPE APPROVED — EXACT MECHANICS AND RULES VERSION PENDING SRD/IP/PROVENANCE FINALIZATION
 
 Goliath is retained as a V1 Species.
 
 Because RealmWeaver's primary baseline is SRD 5.1 while Goliath appears in later SRD material, Goliath is treated as an explicitly documented RealmWeaver rules-source exception.
 
-Baseline V1 Goliath identity should include:
+Current candidate Goliath identity for provenance review includes:
 
 * Size: Medium
 * Base Speed: 30 ft
@@ -797,9 +798,9 @@ The implementation must not silently combine incompatible versions of the Specie
 
 ## 3.13 Tiefling Traits
 
-### Status: APPROVED V1 DIRECTION
+### Status: SCOPE APPROVED — SOURCE-DEPENDENT TRAIT SET PENDING SRD/IP/PROVENANCE FINALIZATION
 
-Baseline V1 Tiefling traits:
+Current candidate Tiefling traits for provenance review:
 
 * Size: Medium
 * Base Speed: 30 ft
@@ -908,18 +909,14 @@ All replacements must be validated.
 
 ## 4.4 Background Ability Score Allocation
 
-### Status: APPROVED DIRECTION
+### Status: APPROVED
 
-Character creation should support flexible Ability Score increases.
+Character creation supports one player-selected Background Ability Score allocation:
 
-The intended model may support:
+* `+2` to one eligible ability and `+1` to a different eligible ability; or
+* `+1` to each of three different eligible abilities.
 
-* +2 to one ability and +1 to another
-* +1 to three different abilities
-
-The exact implementation remains subject to final character-creation validation rules.
-
-Normal Ability Score limits apply.
+The selected abilities must be distinct as stated, normal Ability Score limits apply, and RealmWeaver validates the complete allocation deterministically.
 
 ---
 

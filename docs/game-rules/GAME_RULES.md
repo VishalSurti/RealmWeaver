@@ -38,17 +38,17 @@ A second governing principle is:
 
 > **AI proposes. RealmWeaver validates.**
 
-```markdown
 A third governing principle established by the completed AI/rules boundary is:
 
 > **AI may remember context. RealmWeaver preserves truth.**
 
 The player owns meaningful player-character intent and decisions.
 
-AI may interpret intent, choose behaviour for AI-controlled actors, propose mechanics/content and narrate outcomes.
+AI may interpret intent, choose behaviour for actors assigned to AI, propose mechanics/content and narrate outcomes.
+
+Deterministic controllers may routinely select simple NPC behaviour; AI selects intent for actors assigned to AI. Every selected action remains a proposal until RealmWeaver validates, resolves and commits/persists it.
 
 RealmWeaver remains authoritative over rules, controlled randomness, mechanical resolution, persistent campaign state, world canon, knowledge boundaries and long-term campaign continuity.
-```
 
 
 The AI Dungeon Master may:
@@ -140,6 +140,8 @@ Such exceptions should document:
 * Interaction with the primary baseline
 
 Goliath is currently an example of a Species requiring an explicit later-SRD source decision.
+
+The six-Species and eight-Background Core V1 scope is approved. Exact source-dependent Species trait sets and rules versions, especially Goliath's, remain **PENDING SRD/IP/PROVENANCE FINALIZATION** and must not be inferred or invented before that separate audit.
 
 Weapon Mastery is an approved later-rules exception for RealmWeaver V1.
 
@@ -278,7 +280,7 @@ Covers:
 * Unconsciousness
 * Death Saving Throws
 * Permanent Death
-* Enemy Combat AI
+* Hybrid Enemy Combat Controllers
 * Morale
 * Combat End Conditions
 * Encounter Finalisation
@@ -479,7 +481,7 @@ Covers:
 
 ### NPC & World Authority
 
-* NPC AI Authority
+* Hybrid NPC Controller Authority
 * NPC Knowledge Boundaries
 * Persistent NPC State
 * Selective Off-Screen NPC Progression
@@ -623,6 +625,12 @@ The underlying architecture should support eventual expansion toward:
 
 Architecture support does not mean all levels are initially playable.
 
+## 5.4 V1 Requiredness Alignment
+
+Core V1 requires XP progression, milestone progression, supported level-up processing, durable progression and entitlement state, and a minimum usable progression display. Campaign save/load, authoritative persistent memory/state, session continuity and sufficient resume recap/context are also Core V1 requirements.
+
+Optional enhanced progression presentation, authentication, campaign difficulty, game-style selection and standalone/end-of-session summaries remain Should Have/P1. These optional features do not weaken the Core V1 persistence and resume-context requirements.
+
 ---
 
 # 6. Rules Content Strategy
@@ -690,17 +698,20 @@ Detailed architecture is deferred to later M2 work.
 
 ---
 
-# 8. Source-of-Truth Policy
+# 8. Domain-Specific Document Authority
 
-RealmWeaver documentation uses the following authority order:
+RealmWeaver documentation uses domain-specific ownership rather than one universal precedence hierarchy:
 
-1. **Current detailed rules-group specification**
-2. **Applicable Architecture Decision Record**
-3. **`GAME_RULES.md`**
-4. **`PROJECT_STATUS.md`**
-5. **Conversation history / assistant memory**
+* `AGENTS.md` owns working process and agent permissions.
+* `PROJECT_STATUS.md` owns current milestone, activity and gate status.
+* `V1_SCOPE.md` owns V1, stretch, optional, deferred and excluded boundaries.
+* `REQUIREMENTS.md` owns binding product behaviour.
+* The relevant numbered Group 1–9 specification owns detailed mechanics for its domain.
+* `GAME_RULES.md` is the authoritative rules index and summary. It must agree with the detailed specifications but does not silently override them.
+* `DEFINITION_OF_DONE.md` owns completion standards.
+* A future approved Architecture Decision Record owns only its architectural decision scope and must not silently override approved rules, scope or requirements.
 
-If a summary, previous conversation or status document conflicts with a current approved detailed rules specification, the detailed specification takes precedence unless the rule is intentionally reviewed and changed.
+When documents own different aspects of the same issue, they are reconciled by domain. If two documents claim authority over the same aspect and disagree, that is a source-of-truth conflict requiring explicit review. Conversation history and assistant memory never override current approved repository documentation.
 
 ---
 
@@ -800,32 +811,33 @@ The primary M2.1 rules-design stage is complete. Group 9's internal consistency 
 
 ## Current Phase
 
-**GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — REVIEW BATCH 1 PASSED — REVIEW BATCH 2 IN PROGRESS — M2.1 GATE PENDING**
+**GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — REVIEW BATCHES 1–2 PASSED — REVIEW BATCH 3 VERIFICATION PENDING — M2.1 GATE PENDING**
 
 Cross-group review progress:
 
 * Foundation Review — Character Mathematics, Checks, Saves, Dice, and Inspiration: COMPLETE, PASSED AND COMMITTED
 * Review Batch 1 — Combat and State Effects: COMPLETE AND PASSED
-* Review Batch 2 — Progression, Recovery, Persistence, and AI Lifecycle: IN PROGRESS — APPROVED CORRECTIONS APPLIED; INDEPENDENT VERIFICATION PENDING
-* Review Batch 3 — Scope, Authority, Terminology, and Final Consolidation: OUTSTANDING
+* Review Batch 2 — Progression, Recovery, Persistence, and AI Lifecycle: COMPLETE AND PASSED
+* Review Batch 3 — Scope, Authority, Terminology, and Final Consolidation: IN PROGRESS — APPROVED CORRECTIONS IMPLEMENTED; INDEPENDENT VERIFICATION PENDING
 
 The previously completed Foundation Review recorded the approved rules for contested-check ties, passive checks, ordinary Saving Throw natural results, Halfling Lucky, level-up Hit Point rerolls, validated manual-dice retries, and Inspiration's mandatory Core V1 status.
 
 Review Batch 1 is complete and passed. The approved corrections for `CG-CMB-001` through `CG-CMB-014` have been incorporated into the affected rules specifications. The complete Groups 1–9 cross-group review remains in progress. The A–D labels used during the combat work were decision sub-batches within Review Batch 1, not separate review milestones.
 
-Review Batch 2 remains in progress. The approved corrections for `CG-PRP-001` through `CG-PRP-014` define Trance and Rest qualification, stable natural recovery, class-resource recharge, level-up eligibility and capacity, ordered milestone entitlements, reward idempotency, durable paused activities and ordered time/recovery transitions. These corrections await independent verification; Review Batch 2 and the complete cross-group review are not passed or complete.
+Review Batch 2 is complete and passed. Its approved corrections for `CG-PRP-001` through `CG-PRP-014` define Trance and Rest qualification, stable natural recovery, class-resource recharge, level-up eligibility and capacity, ordered milestone entitlements, reward idempotency, durable paused activities and ordered time/recovery transitions.
 
-The earlier baseline-preparation findings remain open for the applicable later review work. Completing the Foundation Review does not complete or pass the full Groups 1–9 cross-group review.
+Review Batch 3 remains in progress. The approved corrections for `CG-FIN-001` through `CG-FIN-011` have been implemented, but independent verification remains pending. Review Batch 3 and the complete cross-group review are not passed or complete.
+
+The earlier baseline-preparation findings are superseded and resolved by the applicable Review Batch 3 corrections. Passing the Foundation Review and Review Batches 1–2 does not complete or pass the full Groups 1–9 cross-group review.
 
 Remaining M2.1 work:
 
 1. Full Groups 1–9 cross-group consistency review.
 2. Terminology and cross-reference review.
-3. Weapon Mastery cross-group verification.
-4. V1 scope and deferred-mechanics review.
-5. SRD/IP/content-provenance audit.
-6. Required specification corrections.
-7. Final M2.1 completion gate.
+3. V1 scope and deferred-mechanics review.
+4. SRD/IP/content-provenance audit.
+5. Required specification corrections.
+6. Final M2.1 completion gate.
 
 M2.1 must not be marked COMPLETE until these review activities pass.
 
@@ -866,9 +878,9 @@ Do not proceed directly to M2.2 yet.
 
 Continue with:
 
-> **Independent verification of Review Batch 2**
+> **Independent verification of Review Batch 3**
 
-This verification is the next activity within the still-pending M2.1 Groups 1–9 cross-group consistency review. Review Batch 1 remains complete and passed.
+This verification is the next activity within the still-pending M2.1 Groups 1–9 cross-group consistency review. The Foundation Review and Review Batches 1–2 remain complete and passed.
 
 Then:
 

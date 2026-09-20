@@ -2,7 +2,18 @@
 
 ## Repository Authority
 
-RealmWeaver repository documentation is the authoritative source for project status, scope, requirements, rules, and approved decisions.
+RealmWeaver repository documentation is the authoritative source for project status, scope, requirements, rules, and approved decisions. Authority is domain-specific:
+
+- `AGENTS.md` owns working process and agent permissions.
+- `docs/project/PROJECT_STATUS.md` owns current milestone, activity and gate status.
+- `docs/project/V1_SCOPE.md` owns V1, stretch, optional, deferred and excluded boundaries.
+- `docs/project/REQUIREMENTS.md` owns binding product behaviour.
+- The relevant numbered Group 1–9 specification owns detailed mechanics for its domain.
+- `docs/game-rules/GAME_RULES.md` is the authoritative rules index and summary; it must agree with detailed specifications but does not silently override them.
+- `docs/project/DEFINITION_OF_DONE.md` owns completion standards.
+- A future approved Architecture Decision Record owns only its architectural decision scope and must not silently override approved rules, scope or requirements.
+
+When documents own different aspects of the same issue, reconcile them by domain. If two documents claim authority over the same aspect and disagree, stop and report a source-of-truth conflict.
 
 Repository documentation takes precedence over:
 
@@ -22,8 +33,8 @@ If authoritative documents conflict, stop and report the conflict with the affec
 - M2 — Technical Design & Architecture is active.
 - M2.1 rules design is documented, but its completion gate has not passed.
 - The Group 9 internal consistency review and internal-review gate have passed.
-- The Groups 1–9 cross-group consistency review is in progress: the Foundation Review is complete, passed and committed; Review Batch 1 — Combat and State Effects is complete and passed; Review Batch 2 — Progression, Recovery, Persistence, and AI Lifecycle has its approved corrections implemented with independent verification pending; Review Batch 3 — Scope, Authority, Terminology, and Final Consolidation is outstanding.
-- The next approved activity is Independent verification of Review Batch 2.
+- The Groups 1–9 cross-group consistency review is in progress: the Foundation Review is complete, passed and committed; Review Batch 1 — Combat and State Effects is complete and passed; Review Batch 2 — Progression, Recovery, Persistence, and AI Lifecycle is complete and passed; Review Batch 3 — Scope, Authority, Terminology, and Final Consolidation has its approved corrections implemented with independent verification pending.
+- The next approved activity is Independent verification of Review Batch 3.
 - The SRD/IP/content-provenance audit remains outstanding, and M2.2 — System Architecture remains blocked until the complete M2.1 gate passes.
 - Production coding is not currently authorized.
 

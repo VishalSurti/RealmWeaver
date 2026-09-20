@@ -42,16 +42,16 @@ The term **should** indicates a desired behaviour where strict guarantees may no
 ## 3.1 User & Authentication
 
 **FR-001 — Account Creation**
-The system shall allow a user to create an account.
+The system should allow a user to create an account.
 
 **FR-002 — Authentication**
-The system shall allow a registered user to log in using valid credentials.
+The system should allow a registered user to log in using valid credentials.
 
 **FR-003 — Authentication Session**
-The system shall maintain an authenticated user session until the user logs out or the session expires.
+The system should maintain an authenticated user session until the user logs out or the session expires.
 
 **FR-004 — Logout**
-The system shall allow an authenticated user to securely log out.
+The system should allow an authenticated user to securely log out.
 
 ---
 
@@ -86,16 +86,16 @@ The system shall maintain settings associated with an individual campaign.
 The system shall allow the player to provide a basic campaign idea or request an AI-generated campaign premise.
 
 **FR-013 — Campaign Play Style**
-The system shall allow the player to select a preferred campaign style from supported options such as Roleplay-Focused, Balanced, or Combat-Focused.
+The system should allow the player to select a preferred campaign style from supported options such as Roleplay-Focused, Balanced, or Combat-Focused.
 
 **FR-014 — Play-Style Modification**
-The system shall allow the player to modify the preferred campaign style during an active campaign.
+The system should allow the player to modify the preferred campaign style during an active campaign.
 
 **FR-015 — Campaign Difficulty**
-The system shall support defined campaign difficulty levels.
+The system should support defined campaign difficulty levels.
 
 **FR-016 — Mid-Campaign Difficulty Change**
-The system shall allow the player to modify campaign difficulty without restarting or resetting the campaign.
+The system should allow the player to modify campaign difficulty without restarting or resetting the campaign.
 
 **FR-017 — Starting Character**
 The system shall require a supported character to be associated with a campaign before gameplay begins.
@@ -406,10 +406,10 @@ Important factual campaign information shall be stored independently of conversa
 The system shall record important campaign events where required for future continuity.
 
 **FR-103 — End Session**
-The player shall be able to deliberately end an active gameplay session.
+The player should be able to deliberately end an active gameplay session through a standalone session workflow.
 
 **FR-104 — Session Summary**
-The system shall generate a summary of important session events.
+The system should generate and preserve a standalone summary of important session events.
 
 **FR-105 — Campaign Recap**
 The system shall provide an appropriate recap when an existing campaign is resumed.
@@ -482,9 +482,9 @@ Cosmetic rewording or technical resubmission shall not create a new action or a 
 A new manual result is permitted only for a genuinely new action after conclusive cancellation or materially changed circumstances, with no committed effect from the earlier action. The interface shall distinguish a technical retry from a genuinely new roll.
 
 **FR-121 — NPC Intent and Action Proposals**
-The AI shall decide intent for AI-controlled NPCs and submit intended actions as non-authoritative proposals. RealmWeaver shall validate, resolve, and commit/persist the resulting action.
+RealmWeaver shall use the assigned NPC controller for intent selection: deterministic controllers may routinely select simple NPC behaviour, while the AI shall select intent for actors assigned to AI. Every selected action shall remain a non-authoritative proposal until RealmWeaver validates, resolves, and commits/persists it.
 
-A deterministic NPC fallback may be used only as bounded, legal, conservative failure recovery after AI recovery fails.
+For an actor assigned to AI, a deterministic NPC fallback may be used only as bounded, legal, conservative failure recovery after bounded AI recovery fails.
 
 **FR-122 — Rest Qualification and Recovery**
 The system shall deterministically enforce Trance duration, Long Rest starting-HP qualification, food/drink qualification for Exhaustion reduction, accumulated strenuous-interruption thresholds, stable-at-0-HP natural recovery, supported class-resource recharge rules, and applicable recovery limits.
@@ -500,6 +500,15 @@ Mechanically significant paused activities and unresolved choices shall persist 
 
 **FR-126 — Ordered Time and Recovery Lifecycle**
 Rest and other timed recovery activities shall validate and begin, advance authoritative time through ordered durable transitions, process expirations, scheduled events and interruptions, confirm qualification, resolve completed recovery, commit/persist atomically and durably, and narrate only afterward.
+
+**FR-127 — Background Ability Score Allocation**
+During supported character creation, the player shall choose either `+2` to one eligible ability and `+1` to a different eligible ability, or `+1` to each of three different eligible abilities. Normal Ability Score limits apply, and the system shall validate the complete allocation deterministically.
+
+**FR-128 — Human Flexible Generalist Benefit**
+A Human character shall receive exactly one additional validated skill, tool, or language proficiency choice. Duplicate and replacement handling shall use supported character-creation validation. This benefit shall not grant a feat, Ability Score increase, Weapon Mastery, arbitrary AI-generated bonus, or unsupported feature.
+
+**FR-129 — Core V1 Species and Background Scope**
+Core V1 shall include Human, Elf, Dwarf, Halfling, Goliath and Tiefling as supported Species, and Soldier, Criminal, Scholar, Acolyte, Artisan, Noble, Outlander and Custom as supported Backgrounds. Exact source-dependent Species trait sets and rules versions shall remain pending SRD/IP/content-provenance finalization rather than being invented or silently selected.
 
 ---
 

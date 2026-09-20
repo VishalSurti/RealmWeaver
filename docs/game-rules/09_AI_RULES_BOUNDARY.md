@@ -3409,7 +3409,7 @@ Other Applicable Effects:
 Resolved
 ```
 
-Only after these outcomes are known should the AI narrate the result.
+Only after these outcomes are known and successfully committed/persisted atomically and durably may the AI narrate them as completed.
 
 This prevents contradictions such as narrating a creature's death before RealmWeaver has determined that the creature actually reached 0 HP.
 
@@ -3417,7 +3417,7 @@ This prevents contradictions such as narrating a creature's death before RealmWe
 
 ## 9.11 Commit Before Final Outcome Narration
 
-The normal ordering should be:
+For every authoritative or completed outcome, the required ordering is:
 
 ```text
 RESOLVE
@@ -3437,9 +3437,9 @@ NARRATE
 COMMIT / PERSIST
 ```
 
-Narration should describe state that successfully became authoritative.
+Narration must describe only state that successfully became authoritative.
 
-If commitment fails, RealmWeaver should not already have presented an uncommitted mechanical outcome as fact.
+If commitment fails, RealmWeaver must not present an uncommitted mechanical outcome as fact or as completed. A shorter path is permitted only for purely narrative interaction or explicitly uncertain claims that do not establish authoritative state or objective truth.
 
 ---
 
@@ -4084,14 +4084,14 @@ Exact event-log/replay architecture is deferred.
 RealmWeaver adopts the following requirements:
 
 1. Mechanically relevant actions follow an interpretation → proposal → validation → resolution → commitment → narration pipeline.
-2. Purely narrative interactions may use a shorter narrative path.
+2. Purely narrative interactions and explicitly uncertain claims that establish no authoritative state or objective truth may use a shorter narrative path.
 3. Narrative interactions may transition into mechanical resolution when required.
 4. Mechanical proposals undergo preflight validation before resolution.
 5. RealmWeaver supports both player-visible and hidden/system rolls.
 6. AI never fabricates authoritative dice results.
 7. Dice results become authoritative inputs to mechanical resolution.
 8. Mechanical consequences are determined before final narration.
-9. Authoritative state should normally be committed before outcome narration.
+9. Authoritative state must commit/persist atomically and durably before completed-outcome narration.
 10. RealmWeaver provides AI with a structured resolution result for narration.
 11. AI receives minimum sufficient authoritative context for accurate narration.
 12. Multi-stage mechanics resolve dependent stages in authoritative order.
@@ -5125,7 +5125,7 @@ RealmWeaver adopts the following requirements:
 
 ---
 
-# 11. 9G — NPC AI Authority
+# 11. 9G — NPC Controller Authority
 
 ## 11.1 Status
 
@@ -5135,13 +5135,13 @@ RealmWeaver adopts the following requirements:
 
 ## 11.2 Purpose
 
-RealmWeaver treats relevant NPCs as autonomous AI-controlled actors while preserving deterministic mechanical authority.
+RealmWeaver uses a hybrid NPC-controller model while preserving deterministic mechanical authority. Deterministic controllers may routinely choose simple NPC behaviour; AI chooses intent for NPCs assigned to AI.
 
 The governing relationship is:
 
 ```text
-AI:
-Decides what an NPC wants to do and submits that intended action as a proposal.
+ASSIGNED NPC CONTROLLER:
+Selects NPC intent or simple behaviour and submits the intended action as a proposal.
 
 RealmWeaver:
 Determines whether the NPC can legally do it
@@ -5160,11 +5160,11 @@ NPC autonomy must remain constrained by:
 * World state
 * Applicable rules
 
-AI control of an NPC does not grant the AI authority over mechanical resolution.
+Controller assignment does not grant the controller authority over mechanical resolution.
 
 ---
 
-## 11.3 NPCs as AI-Controlled Actors
+## 11.3 NPC Controller Assignment
 
 Relevant NPCs may make autonomous decisions based on information such as:
 
@@ -5180,15 +5180,15 @@ Relevant NPCs may make autonomous decisions based on information such as:
 * Emotional state
 * Tactical circumstances
 
-The AI may determine the NPC's immediate intentions and behaviour within these constraints.
+For actors assigned to AI, the AI may determine immediate intentions and behaviour within these constraints. For simple actors assigned to a deterministic controller, RealmWeaver may routinely select bounded legal behaviour from the actor's authoritative profile and current state.
 
 NPCs should behave as characters with motivations rather than as passive narrative objects.
 
 ---
 
-## 11.4 NPC Decisions Remain Mechanical Proposals
+## 11.4 NPC Controller Decisions Remain Mechanical Proposals
 
-AI-selected NPC actions are not mechanically authoritative until RealmWeaver validates them.
+AI-selected and deterministically selected NPC actions are non-authoritative proposals until RealmWeaver validates, resolves and commits/persists them.
 
 Example:
 
@@ -5684,9 +5684,9 @@ NPCs should remain believable autonomous characters.
 
 ## NPC Combat Authority
 
-## 11.23 AI Selects NPC Combat Intent
+## 11.23 Assigned Controller Selects NPC Combat Intent
 
-During combat, AI may select an NPC's intended action based on:
+During combat, AI may select intent for an NPC assigned to AI. A deterministic controller may routinely select simple behaviour for an NPC assigned to it. Either selection should account for:
 
 * Tactical situation
 * Personality
@@ -5751,7 +5751,7 @@ Depending on context, NPCs may:
 * Escape with an objective
 * Attempt a strategic withdrawal
 
-AI determines the NPC's intent.
+The assigned controller determines the NPC's proposed intent.
 
 RealmWeaver validates the mechanical action.
 
@@ -6135,19 +6135,19 @@ Dodge
 
 The AI may be constrained to legal choices. If bounded AI recovery fails, RealmWeaver may use an appropriate safe deterministic fallback as an explicit failure-recovery exception to normal AI-owned NPC intent.
 
-A deterministic fallback must be legal, conservative and limited to existing supported mechanics. It does not transfer ordinary NPC decision authority from AI to RealmWeaver.
+A deterministic fallback must be legal, conservative and limited to existing supported mechanics. For an actor assigned to AI, fallback after bounded AI failure does not silently reassign that actor's ordinary controller.
 
 Exact retry counts and fallback algorithms are deferred to Section 9K and later architecture.
 
 ---
 
-## 11.43 NPC AI Authority Invariants
+## 11.43 NPC Controller Authority Invariants
 
 RealmWeaver adopts the following requirements:
 
-1. Relevant NPCs are AI-controlled actors capable of autonomous decisions.
-2. NPC decisions remain mechanical proposals until RealmWeaver validates them.
-3. AI controls NPC intent; RealmWeaver controls mechanical legality and outcome.
+1. Relevant NPCs have an assigned AI or deterministic controller appropriate to their role and complexity.
+2. Deterministic controllers may routinely select simple NPC behaviour; AI selects intent for actors assigned to AI.
+3. Every controller-selected NPC action remains a proposal until RealmWeaver validates, resolves and commits/persists it; RealmWeaver controls mechanical legality and outcome.
 4. Continuity-relevant NPCs should have persistent authoritative identity and state.
 5. Lightweight NPCs are allowed and may later be promoted/materialised.
 6. AI cannot invent new mechanical capabilities for already-materialised NPCs.
@@ -6165,7 +6165,7 @@ RealmWeaver adopts the following requirements:
 18. NPC deception remains bounded by the NPC's knowledge and context.
 19. Persistent relationships influence NPC behaviour.
 20. Positive relationships do not remove NPC agency.
-21. AI chooses NPC combat intent while RealmWeaver validates and resolves mechanics.
+21. The assigned controller chooses NPC combat intent while RealmWeaver validates, resolves and commits/persists mechanics.
 22. RealmWeaver should provide relevant legal-action context where useful to reduce invalid AI actions.
 23. NPCs may retreat, surrender, negotiate, hide, call for help or pursue other appropriate responses.
 24. RealmWeaver V1 does not require a universal numeric morale subsystem.
@@ -10404,7 +10404,7 @@ but authoritative commitment failed.
 
 RealmWeaver should clearly correct the discrepancy rather than quietly changing displayed state later.
 
-The preferred architecture should prevent such cases by committing before narration wherever applicable.
+RealmWeaver must prevent such cases for authoritative or completed outcomes by committing/persisting atomically and durably before narration. Purely narrative interaction and explicitly uncertain claims may use a shorter path only when they establish no authoritative state or objective truth.
 
 ---
 
@@ -11635,7 +11635,7 @@ continues from committed state
 
 ## 16.52 Final NPC Action Loop
 
-For AI-controlled NPCs:
+For NPCs, the assigned AI or deterministic controller selects the proposal. The AI branch is:
 
 ```text
 REALMWEAVER
@@ -11653,6 +11653,8 @@ commits/persists
 AI
 narrates
 ```
+
+A deterministic controller may routinely replace the AI intent-selection step for simple NPC behaviour. Both branches use the same RealmWeaver validation, resolution and atomic durable commit/persistence boundary before completed-outcome narration.
 
 ---
 
@@ -11777,7 +11779,7 @@ Completed:
 * 9D — Validation & Rejection
 * 9E — Mechanical Resolution Pipeline
 * 9F — AI Narration Boundary
-* 9G — NPC AI Authority
+* 9G — NPC Controller Authority
 * 9H — World & Content Proposals
 * 9I — Knowledge & Information Boundaries
 * 9J — Context & Memory Boundary
@@ -11812,9 +11814,13 @@ controls meaningful player-character intent.
 
 AI
 interprets natural language,
-chooses behaviour for AI-controlled actors,
+chooses behaviour for actors assigned to AI,
 proposes mechanics/content,
 and narrates outcomes.
+
+DETERMINISTIC NPC CONTROLLERS
+may routinely select simple bounded behaviour
+for actors assigned to them.
 
 REALMWEAVER
 validates rules,
@@ -11853,17 +11859,14 @@ Resolve calculates the complete state change without making it authoritative. Co
 
 ## 17.4 Next M2.1 Steps
 
-With Group 9 rules design complete and its internal consistency review passed, the remaining work is:
+With Group 9 rules design complete, its internal consistency review passed, and Review Batches 1–2 passed, the remaining work is:
 
-1. Perform the **full M2.1 cross-group consistency review** across Groups 1–9.
-2. Verify cross-file terminology and authority boundaries.
-3. Review Weapon Mastery amendments against affected groups.
-4. Review spell, condition, rest, equipment, NPC and world-state interactions.
-5. Update the main game-rules/index documentation as required.
-6. Update `PROJECT_STATUS.md`.
-7. Perform the planned **SRD/IP/content-provenance audit** before implementation begins.
-8. Complete the M2.1 gate.
-9. Proceed into the remaining M2 technical architecture milestones.
+1. Independently verify the implemented **Review Batch 3 — Scope, Authority, Terminology, and Final Consolidation** corrections.
+2. Complete the full M2.1 cross-group consistency review.
+3. Perform the planned **SRD/IP/content-provenance audit** before implementation begins.
+4. Apply any required corrections.
+5. Complete the M2.1 gate.
+6. Proceed into the remaining M2 technical architecture milestones only after that gate passes.
 
 ---
 
@@ -11924,4 +11927,4 @@ RealmWeaver preserves truth.
 * UI state derives from authoritative RealmWeaver state.
 * Visual quality is recognized as a first-class player-facing requirement.
 
-These checks passed on 31 August 2026. The Group 9 internal-review gate is PASSED. The M2.1 completion gate remains PENDING, and the next approved activity is the Groups 1–9 cross-group consistency review.
+These checks passed on 31 August 2026. The Group 9 internal-review gate is PASSED. Review Batches 1–2 are PASSED; Review Batch 3 corrections are implemented with independent verification PENDING. The full cross-group review remains IN PROGRESS, the SRD/IP/content-provenance audit remains OUTSTANDING, and the M2.1 completion gate remains PENDING. The next approved activity is Independent verification of Review Batch 3.

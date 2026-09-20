@@ -90,6 +90,28 @@ Players must be able to:
 
 The exact V1 character rules will be defined in the Game Rules Specification.
 
+Core V1 character content includes exactly these initially approved Species:
+
+* Human.
+* Elf.
+* Dwarf.
+* Halfling.
+* Goliath.
+* Tiefling.
+
+and these eight initially approved Backgrounds:
+
+* Soldier.
+* Criminal.
+* Scholar.
+* Acolyte.
+* Artisan.
+* Noble.
+* Outlander.
+* Custom.
+
+Exact source-dependent Species trait sets and rules versions remain pending the separate SRD/IP/content-provenance finalization. Scope approval must not be treated as approval to invent or silently select unresolved Species mechanics.
+
 ## Dice System
 
 RealmWeaver must support the standard RPG dice required by the V1 ruleset.
@@ -121,6 +143,18 @@ This is expected to include concepts such as:
 * Character progression.
 
 The exact mechanics and rule interpretations will be formally defined during technical/game-rules design.
+
+## Core Character Progression
+
+Core V1 must support:
+
+* Experience-point progression.
+* Milestone progression.
+* Supported level-up eligibility and processing.
+* Durable progression state and ordered level-up entitlements.
+* A minimum usable progression display showing appropriate current progress without revealing hidden information.
+
+Optional progression-view presentation enhancements remain Should Have and must not replace this minimum Core V1 display.
 
 ## Basic Combat
 
@@ -182,6 +216,8 @@ The system should maintain a combination of:
 * Structured campaign state.
 * Important campaign facts/events.
 * Session summaries.
+
+The authoritative minimum is sufficient persisted state and resume context to continue coherently. Standalone or end-of-session summary functionality remains Should Have.
 
 ## Campaign Recap
 
@@ -255,6 +291,10 @@ The primary campaign screen should focus on AI narration and player input. Secon
 
 The following features are strongly desired for V1 but should not prevent development of the core playable system.
 
+## Authentication
+
+Account creation, login/logout and authenticated-session functionality should be provided for the intended professional-development experience, but remain Should Have rather than a Core V1 gameplay dependency.
+
 ## Multiple Campaigns
 
 Players should be able to maintain and resume multiple independent campaigns.
@@ -263,22 +303,9 @@ Players should be able to maintain and resume multiple independent campaigns.
 
 Players should be able to maintain reusable saved characters.
 
-## Character Progression Options
+## Optional Progression Presentation
 
-Campaigns should support:
-
-* Experience-point progression.
-* Milestone progression.
-
-The selected method should be tracked reliably throughout the campaign.
-
-## Progression Viewer
-
-Players should be able to view their current progression during gameplay.
-
-XP campaigns should display appropriate XP progress.
-
-Milestone campaigns should communicate progression without revealing hidden campaign information.
+Beyond the mandatory minimum usable progression display, V1 should provide enhanced progression-view presentation, history, explanation or convenience where practical.
 
 ## Campaign Difficulty
 

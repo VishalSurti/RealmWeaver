@@ -6,9 +6,9 @@
 **Current Milestone:** M2 — Technical Design & Architecture
 **Milestone Status:** IN PROGRESS
 **Current Activity:** M2.1 — V1 Game Rules Specification & Rules-Engine Boundary
-**Next Activity:** Independent verification of Review Batch 2
+**Next Activity:** Independent verification of Review Batch 3
 
-**Current Progress:** Sections 9A–9L APPROVED; Group 9 rules design COMPLETE; internal consistency review PASSED; Foundation Review COMPLETE, PASSED AND COMMITTED; Review Batch 1 COMPLETE AND PASSED; Review Batch 2 IN PROGRESS — CORRECTIONS APPLIED, INDEPENDENT VERIFICATION PENDING; Review Batch 3 OUTSTANDING
+**Current Progress:** Sections 9A–9L APPROVED; Group 9 rules design COMPLETE; internal consistency review PASSED; Foundation Review COMPLETE, PASSED AND COMMITTED; Review Batches 1–2 COMPLETE AND PASSED; Review Batch 3 IN PROGRESS — APPROVED CORRECTIONS IMPLEMENTED, INDEPENDENT VERIFICATION PENDING
 
 **Group 9 Internal Review Gate:** PASSED
 
@@ -133,7 +133,7 @@ No major production implementation should begin until the relevant architectural
 
 ## Status
 
-**RULES DESIGN COMPLETE — GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — REVIEW BATCH 1 PASSED — REVIEW BATCH 2 IN PROGRESS — M2.1 GATE PENDING**
+**RULES DESIGN COMPLETE — GROUP 9 INTERNAL REVIEW PASSED — CROSS-GROUP REVIEW IN PROGRESS — REVIEW BATCHES 1–2 PASSED — REVIEW BATCH 3 VERIFICATION PENDING — M2.1 GATE PENDING**
 
 Authoritative rules index:
 
@@ -162,7 +162,7 @@ The purpose of M2.1 is to determine:
 * How AI-generated proposals are validated
 * How dice and deterministic mechanics are resolved
 * How authoritative state is committed and persisted
-* How AI-controlled NPC decisions remain bounded by rules and knowledge
+* How hybrid AI/deterministic NPC-controller decisions remain bounded by rules and knowledge
 * How world content becomes authoritative
 * How player/NPC/world knowledge remains separated
 * How long-running campaign context and memory are assembled
@@ -242,7 +242,7 @@ Defines:
 * Validation & Rejection
 * Mechanical Resolution Pipeline
 * AI Narration Boundary
-* NPC AI Authority
+* Hybrid NPC Controller Authority
 * World & Content Proposals
 * Knowledge & Information Boundaries
 * Context & Memory Boundary
@@ -251,7 +251,7 @@ Defines:
 
 Group 9 establishes the central contract:
 
-> **Player chooses. AI interprets, proposes, decides for AI-controlled actors and narrates. RealmWeaver validates, resolves, commits and remembers.**
+> **Player chooses. Assigned NPC controllers propose actor intent; AI interprets and narrates. RealmWeaver validates, resolves, commits and remembers.**
 
 The canonical lifecycle is:
 
@@ -273,7 +273,7 @@ CONTINUE WORLD
 
 Commit/persist includes atomic durable persistence. Significant persistent content must complete validation, materialisation and commit/persistence before presentation as established reality. Claims and rumours remain distinct from objective world truth.
 
-Randomness generated for a validated action remains bound to that action across technical and persistence retries. AI decides NPC intent and submits action proposals; deterministic NPC fallback is limited to bounded failure recovery.
+Randomness generated for a validated action remains bound to that action across technical and persistence retries. Deterministic controllers may routinely select simple NPC behaviour; AI selects intent for actors assigned to AI. Every controller-selected action remains a proposal until RealmWeaver validates, resolves and commits/persists it. For AI-assigned actors, deterministic fallback is limited to bounded failure recovery after bounded AI failure.
 
 It also establishes that:
 
@@ -291,18 +291,18 @@ The Groups 1–9 cross-group consistency review uses this approved bounded struc
 
 * Foundation Review — Character Mathematics, Checks, Saves, Dice, and Inspiration: COMPLETE, PASSED AND COMMITTED
 * Review Batch 1 — Combat and State Effects: COMPLETE AND PASSED
-* Review Batch 2 — Progression, Recovery, Persistence, and AI Lifecycle: IN PROGRESS — APPROVED CORRECTIONS APPLIED; INDEPENDENT VERIFICATION PENDING
-* Review Batch 3 — Scope, Authority, Terminology, and Final Consolidation: OUTSTANDING
+* Review Batch 2 — Progression, Recovery, Persistence, and AI Lifecycle: COMPLETE AND PASSED
+* Review Batch 3 — Scope, Authority, Terminology, and Final Consolidation: IN PROGRESS — APPROVED CORRECTIONS IMPLEMENTED; INDEPENDENT VERIFICATION PENDING
 
-The previously completed Foundation Review resolved `CG-FND-001` through `CG-FND-006`. The earlier baseline-preparation findings remain open for the applicable later review work. Completing the Foundation Review does not complete or pass the overall Groups 1–9 cross-group review.
+The Foundation Review resolved `CG-FND-001` through `CG-FND-006`. Review Batches 1–2 are complete and passed. The earlier baseline-preparation findings are superseded and resolved by the applicable Review Batch 3 corrections. These passed components do not complete or pass the overall Groups 1–9 cross-group review.
 
 ### Consolidated Cross-Group Findings Ledger
 
 | Finding | Origin | Status | Summary |
 | --- | --- | --- | --- |
-| `CG-BASE-001` | Baseline preparation | OPEN | Universal source-of-truth hierarchy conflicts with the approved domain-specific ownership model. |
-| `CG-BASE-002` | Baseline preparation | OPEN | Current technical source-of-truth wording may overstate the authority of the rules index. |
-| `CG-BASE-003` | Baseline preparation | OPEN | V1 scope and requirements use inconsistent requiredness for identified progression and campaign options. |
+| `CG-BASE-001` | Baseline preparation | SUPERSEDED — RESOLVED | Domain-specific document ownership replaces the universal hierarchy. |
+| `CG-BASE-002` | Baseline preparation | SUPERSEDED — RESOLVED | `GAME_RULES.md` is the authoritative rules index rather than universal technical authority. |
+| `CG-BASE-003` | Baseline preparation | SUPERSEDED — RESOLVED | Core/P1 requiredness is aligned across scope, requirements and backlog. |
 | `CG-FND-001` | Foundation Review | RESOLVED | Contested-check ties preserve the pre-contest status quo. |
 | `CG-FND-002` | Foundation Review | RESOLVED | Passive checks use all normal modifiers with non-stacking `+5` Advantage and `−5` Disadvantage adjustments. |
 | `CG-FND-003` | Foundation Review | RESOLVED | Ordinary Saving Throws resolve natural 1 and natural 20 through the final modified total. |
@@ -323,29 +323,39 @@ The previously completed Foundation Review resolved `CG-FND-001` through `CG-FND
 | `CG-CMB-012` | Review Batch 1 | RESOLVED | The shared damage pipeline defines modifier, immunity, Resistance, Vulnerability and rounding order. |
 | `CG-CMB-013` | Review Batch 1 | RESOLVED | Damage-at-zero, Death Saving Throw, stabilisation and reset transitions are explicit. |
 | `CG-CMB-014` | Review Batch 1 | RESOLVED | Temporary HP retain-or-replace behaviour is explicit and never stacks by default. |
-| `CG-PRP-001` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Trance provides an eligible four-hour Long Rest duration without changing other Long Rest rules. |
-| `CG-PRP-002` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Stable-at-0-HP natural recovery uses one bound, durable and retry-safe `1d4`-hour result. |
-| `CG-PRP-003` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Long Rest benefits require at least 1 HP at start; Exhaustion reduction requires applicable food and drink. |
-| `CG-PRP-004` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | One accumulated hour of qualifying strenuous interruption fails a Long Rest. |
-| `CG-PRP-005` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Second Wind, Action Surge, Channel Divinity and Arcane Recovery have explicit recharge rules. |
-| `CG-PRP-006` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Newly granted count-based level-up capacity becomes available without refilling spent capacity. |
-| `CG-PRP-007` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Level-up HP changes recalculate Effective Maximum HP and cap Current HP accordingly. |
-| `CG-PRP-008` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Level-up cannot commit during an `ACTIVE` or `PAUSED` Rest. |
-| `CG-PRP-009` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Dead and 0-HP living characters retain progression but cannot commit level-up. |
-| `CG-PRP-010` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Milestone rewards create persistent ordered entitlements with stable identities and one-at-a-time consumption. |
-| `CG-PRP-011` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | XP/milestone rewards use stable identities, atomic durable ledgers and retry-safe pending results. |
-| `CG-PRP-012` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Paused activities and meaningful choices persist and resume without replay or retroactive reopening. |
-| `CG-PRP-013` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Rest time, events, qualification, recovery, commit/persistence and narration use the approved order. |
-| `CG-PRP-014` | Review Batch 2 | CORRECTED — VERIFICATION PENDING | Group 8 conversational wrapper and unmatched Markdown fences were removed. |
+| `CG-PRP-001` | Review Batch 2 | RESOLVED — VERIFIED | Trance provides an eligible four-hour Long Rest duration without changing other Long Rest rules. |
+| `CG-PRP-002` | Review Batch 2 | RESOLVED — VERIFIED | Stable-at-0-HP natural recovery uses one bound, durable and retry-safe `1d4`-hour result. |
+| `CG-PRP-003` | Review Batch 2 | RESOLVED — VERIFIED | Long Rest benefits require at least 1 HP at start; Exhaustion reduction requires applicable food and drink. |
+| `CG-PRP-004` | Review Batch 2 | RESOLVED — VERIFIED | One accumulated hour of qualifying strenuous interruption fails a Long Rest. |
+| `CG-PRP-005` | Review Batch 2 | RESOLVED — VERIFIED | Second Wind, Action Surge, Channel Divinity and Arcane Recovery have explicit recharge rules. |
+| `CG-PRP-006` | Review Batch 2 | RESOLVED — VERIFIED | Newly granted count-based level-up capacity becomes available without refilling spent capacity. |
+| `CG-PRP-007` | Review Batch 2 | RESOLVED — VERIFIED | Level-up HP changes recalculate Effective Maximum HP and cap Current HP accordingly. |
+| `CG-PRP-008` | Review Batch 2 | RESOLVED — VERIFIED | Level-up cannot commit during an `ACTIVE` or `PAUSED` Rest. |
+| `CG-PRP-009` | Review Batch 2 | RESOLVED — VERIFIED | Dead and 0-HP living characters retain progression but cannot commit level-up. |
+| `CG-PRP-010` | Review Batch 2 | RESOLVED — VERIFIED | Milestone rewards create persistent ordered entitlements with stable identities and one-at-a-time consumption. |
+| `CG-PRP-011` | Review Batch 2 | RESOLVED — VERIFIED | XP/milestone rewards use stable identities, atomic durable ledgers and retry-safe pending results. |
+| `CG-PRP-012` | Review Batch 2 | RESOLVED — VERIFIED | Paused activities and meaningful choices persist and resume without replay or retroactive reopening. |
+| `CG-PRP-013` | Review Batch 2 | RESOLVED — VERIFIED | Rest time, events, qualification, recovery, commit/persistence and narration use the approved order. |
+| `CG-PRP-014` | Review Batch 2 | RESOLVED — VERIFIED | Group 8 conversational wrapper and unmatched Markdown fences were removed. |
+| `CG-FIN-001` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Domain-specific document ownership and rules-index authority are explicit. |
+| `CG-FIN-002` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Core progression mechanics, durable state and minimum display are Core V1/P0. |
+| `CG-FIN-003` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Authentication, difficulty, game style, standalone summaries and enhanced progression presentation remain Should Have/P1. |
+| `CG-FIN-004` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Save/load, authoritative memory/state, continuity and minimum resume context remain Core V1/P0. |
+| `CG-FIN-005` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Review status records Batches 1–2 passed and Batch 3 verification pending. |
+| `CG-FIN-006` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Hybrid deterministic/AI NPC-controller terminology and proposal authority are aligned. |
+| `CG-FIN-007` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | The accidental governing-principle Markdown fence was removed. |
+| `CG-FIN-008` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Authoritative completed outcomes require atomic durable commit/persistence before narration. |
+| `CG-FIN-009` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Inspiration is P0 and mandatory approved rule domains have traceable backlog coverage. |
+| `CG-FIN-010` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Background Ability Score allocation and the Human flexible benefit are exact and bounded. |
+| `CG-FIN-011` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Six Species/eight Background scope is approved while source-dependent Species mechanics remain provenance-pending. |
 
-Review Batch 1 is complete and passed. This does not complete or pass the full Groups 1–9 cross-group review or the M2.1 completion gate. The A–D labels used during the combat work were decision sub-batches within Review Batch 1, not separate review milestones.
+The Foundation Review and Review Batches 1–2 are complete and passed. The A–D labels used during the combat work were decision sub-batches within Review Batch 1, not separate review milestones.
 
-Applying the approved Review Batch 2 corrections does not pass Review Batch 2. Independent verification remains required before its status may change.
+Applying the approved Review Batch 3 corrections does not pass Review Batch 3. Independent verification remains required before its status may change, and the full review and M2.1 gate remain incomplete.
 
 Remaining work before the M2.1 gate:
 
 * Full Groups 1–9 cross-group consistency review
-* Weapon Mastery cross-file verification
 * Rules terminology review
 * Deferred-feature review
 * V1 scope alignment review
@@ -498,19 +508,20 @@ These files should be created progressively as their related architectural decis
 
 ---
 
-# 9. Source-of-Truth Policy
+# 9. Domain-Specific Document Authority
 
-RealmWeaver repository documentation is the authoritative source for approved project decisions.
+RealmWeaver repository documentation is authoritative by domain:
 
-If an older conversation, memory, assumption or suggestion conflicts with an approved and subsequently updated repository document:
+* `AGENTS.md` owns working process and agent permissions.
+* `PROJECT_STATUS.md` owns current milestone, activity and gate status.
+* `V1_SCOPE.md` owns V1, stretch, optional, deferred and excluded boundaries.
+* `REQUIREMENTS.md` owns binding product behaviour.
+* The relevant numbered Group 1–9 specification owns detailed mechanics for its domain.
+* `GAME_RULES.md` is the authoritative rules index and summary; it must agree with detailed specifications but does not silently override them.
+* `DEFINITION_OF_DONE.md` owns completion standards.
+* A future approved Architecture Decision Record owns only its architectural decision scope and must not silently override approved rules, scope or requirements.
 
-> **The current approved repository documentation takes precedence.**
-
-Conversation history and assistant memory may support development, but they are not substitutes for repository documentation.
-
-Before making decisions materially dependent on previous RealmWeaver specifications, the relevant repository documents should be reviewed rather than relying solely on memory.
-
-Major architectural or rules changes may additionally require an Architecture Decision Record.
+When documents own different aspects of the same issue, reconcile them by domain. If two documents claim authority over the same aspect and disagree, report a source-of-truth conflict for explicit review. Current approved repository documentation remains authoritative over older conversation, memory, assumption or suggestion.
 
 Git history should preserve previous approved states.
 
@@ -746,9 +757,9 @@ The primary rules-design stage of M2.1 is complete. The Group 9 internal consist
 
 The immediate next activity is:
 
-> **Independent verification of Review Batch 2**
+> **Independent verification of Review Batch 3**
 
-Review Batch 2 remains in progress within the still-pending M2.1 Groups 1–9 cross-group consistency review. Its approved corrections are applied, but independent verification is pending. Review Batch 1 is complete and passed; Review Batch 2 and the overall review have not been marked passed or complete.
+Review Batches 1–2 are complete and passed. Review Batch 3 remains in progress within the still-pending M2.1 Groups 1–9 cross-group consistency review. Its approved corrections are implemented, but independent verification is pending; Review Batch 3 and the overall review have not been marked passed or complete.
 
 Review Groups 1–9 for cross-group contradictions, ambiguous interactions, terminology consistency, source-of-truth alignment, and affected cross-file rules including Weapon Mastery.
 
@@ -756,8 +767,8 @@ During and after the Groups 1–9 cross-group consistency review:
 
 1. Perform the full Groups 1–9 cross-group consistency review.
 2. Resolve contradictions and ambiguous interactions.
-3. Verify Weapon Mastery integration across affected groups.
-4. Review V1/deferred boundaries.
+3. Complete independent verification of Review Batch 3.
+4. Review any remaining V1/deferred boundaries required by the consolidated review.
 5. Perform the SRD/IP/content-provenance audit.
 6. Update affected documentation.
 7. Update `PROJECT_STATUS.md` if required.
@@ -820,7 +831,7 @@ When returning to RealmWeaver after a break:
 6. Check known blockers, technical debt and risks.
 7. Continue from the documented next action rather than reconstructing project state from conversation history.
 
-For the current M2.1 activity, the primary specification to review is:
+For the current M2.1 activity, the authoritative rules index to review is:
 
 `docs/game-rules/GAME_RULES.md`
 
@@ -849,13 +860,13 @@ At every major milestone:
 
 ## Starting Point
 
-> **Independent verification of Review Batch 2**
+> **Independent verification of Review Batch 3**
 
 ## Current Stopping Point
 
-> **M1 complete. M2 active. Sections 9A–9L approved. Group 9 rules design complete. Group 9 internal consistency review and internal-review gate passed on 31 August 2026. Foundation Review complete, passed and committed; Review Batch 1 complete and passed; Review Batch 2 in progress with approved corrections applied and independent verification pending; Review Batch 3 outstanding. M2.1 gate pending. Production coding not authorized.**
+> **M1 complete. M2 active. Sections 9A–9L approved. Group 9 rules design complete. Group 9 internal consistency review and internal-review gate passed on 31 August 2026. Foundation Review complete, passed and committed; Review Batches 1–2 complete and passed; Review Batch 3 corrections implemented with independent verification pending. Full cross-group review in progress. SRD/IP/content-provenance audit outstanding. M2.1 gate pending. Production coding not authorized. M2.2 blocked.**
 
-## Current Authoritative M2 Specification
+## Current Authoritative Rules Index
 
 `docs/game-rules/GAME_RULES.md`
 
@@ -878,7 +889,7 @@ Repository documentation remains authoritative over conversation history or assi
 
 **M2.1 Groups 1–9 Rules Design:** APPROVED
 
-**Weapon Mastery Cross-Group Rules:** APPROVED — CONSOLIDATED CORRECTIONS APPLIED — REVIEW BATCH 1 STILL IN PROGRESS
+**Weapon Mastery Cross-Group Rules:** APPROVED — REVIEW BATCH 1 PASSED
 
 **Group 9 Rules Design:** COMPLETE
 
@@ -890,4 +901,6 @@ Repository documentation remains authoritative over conversation history or assi
 
 **Production Coding:** NOT AUTHORIZED
 
-**Current Technical Source of Truth:** `docs/game-rules/GAME_RULES.md`
+**M2.2 — System Architecture:** BLOCKED UNTIL THE COMPLETE M2.1 GATE PASSES
+
+**Current Authoritative Rules Index:** `docs/game-rules/GAME_RULES.md`

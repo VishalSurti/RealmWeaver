@@ -91,7 +91,7 @@ Authentication is important for professional-development experience but should n
 | PB-017 | Build character sheet interface                       |       P0 |   M  | PB-015                   |
 | PB-018 | Implement supported character resources and abilities |       P0 |   L  | Game Rules Specification |
 | PB-019 | Implement supported saving throws                     |       P0 |   M  | PB-011                   |
-| PB-020 | Implement supported inspiration mechanics             |       P1 |   M  | Game Rules Specification |
+| PB-020 | Implement supported inspiration mechanics             |       P0 |   M  | Game Rules Specification |
 
 ---
 
@@ -228,14 +228,14 @@ PB-052 should be decomposed further during later backlog refinement.
 
 | ID     | Backlog Item                                     | Priority | Size | Key Dependency           |
 | ------ | ------------------------------------------------ | -------: | :--: | ------------------------ |
-| PB-092 | Implement XP progression                         |       P1 |   M  | Character System         |
-| PB-093 | Implement milestone progression                  |       P1 |   M  | Quest System             |
-| PB-094 | Implement progression-event evaluation           |       P1 |   M  | PB-092–093               |
-| PB-095 | Implement level eligibility detection            |       P1 |   M  | PB-092–094               |
-| PB-096 | Implement supported level-up processing          |       P1 |   L  | Game Rules Specification |
-| PB-097 | Persist progression state                        |       P1 |   S  | PB-092–096               |
-| PB-098 | Build progression viewer                         |       P1 |   M  | PB-092–097               |
-| PB-099 | Communicate XP and milestone progression reasons |       P1 |   S  | PB-094                   |
+| PB-092 | Implement XP progression                         |       P0 |   M  | Character System         |
+| PB-093 | Implement milestone progression                  |       P0 |   M  | Quest System             |
+| PB-094 | Implement progression-event evaluation           |       P0 |   M  | PB-092–093               |
+| PB-095 | Implement level eligibility detection            |       P0 |   M  | PB-092–094               |
+| PB-096 | Implement supported level-up processing          |       P0 |   L  | Game Rules Specification |
+| PB-097 | Persist progression and entitlement state        |       P0 |   S  | PB-092–096               |
+| PB-098 | Build optional enhanced progression-view presentation |       P1 |   M  | PB-092–097          |
+| PB-099 | Communicate XP and milestone progression reasons |       P0 |   S  | PB-094                   |
 
 ---
 
@@ -276,10 +276,10 @@ RealmWeaver V1 will use progressively generated and persisted locations rather t
 | PB-114 | Implement recent conversation context        |       P0 |   M  | PB-113         |
 | PB-115 | Implement structured campaign facts          |       P0 |   L  | PB-113         |
 | PB-116 | Integrate game-event history with memory     |       P0 |   M  | PB-038, PB-113 |
-| PB-117 | Implement session summarisation              |       P0 |   L  | AI DM          |
-| PB-118 | Implement end-session workflow               |       P0 |   M  | PB-117         |
-| PB-119 | Implement campaign recap                     |       P0 |   M  | PB-117         |
-| PB-120 | Prevent player-facing memory spoilers        |       P0 |   M  | PB-115–119     |
+| PB-117 | Implement optional standalone session summarisation |       P1 |   L  | AI DM          |
+| PB-118 | Implement optional end-session summary workflow |       P1 |   M  | PB-117         |
+| PB-119 | Implement minimum coherent campaign resume recap/context |       P0 |   M  | PB-113–116     |
+| PB-120 | Prevent player-facing memory spoilers        |       P0 |   M  | PB-115, PB-119 |
 | PB-121 | Build visible Campaign Chronicle/memory view |       P1 |   L  | PB-115–120     |
 
 ---
@@ -387,6 +387,24 @@ The core standard does not make elaborate animations, custom artwork for every e
 | PB-168 | Review V1 functional and visual/UX requirements against implementation |       P0 |   M  | All            |
 | PB-169 | Prepare V1 release documentation              |       P0 |   M  | V1 complete    |
 | PB-170 | Perform formal V1 Go/No-Go review, including visual/UX approval |       P0 |   M  | PB-164–169     |
+
+---
+
+## Epic W — Approved Rules Integration
+
+| ID     | Backlog Item                                                        | Priority | Size | Key Dependency           |
+| ------ | ------------------------------------------------------------------- | -------: | :--: | ------------------------ |
+| PB-171 | Implement the minimum usable XP/milestone progression display      |       P0 |   M  | PB-092–097               |
+| PB-172 | Implement approved Weapon Mastery mechanics and supported mapping  |       P0 |   L  | Game Rules Specification |
+| PB-173 | Implement supported V1 spellcasting and Magic rules                |       P0 |   L  | Game Rules Specification |
+| PB-174 | Implement supported Conditions and Exhaustion rules                |       P0 |   L  | Game Rules Specification |
+| PB-175 | Implement Short/Long Rest, Hit Dice and approved recovery rules     |       P0 |   L  | Game Rules Specification |
+| PB-176 | Implement supported Reaction mechanics and reaction windows         |       P0 |   M  | Combat System            |
+| PB-177 | Implement approved Components and Encumbrance campaign settings     |       P0 |   M  | Game Rules Specification |
+| PB-178 | Persist and resume pending activities and meaningful choices        |       P0 |   M  | PB-034–035               |
+| PB-179 | Enforce authoritative time, event and recovery lifecycle ordering   |       P0 |   L  | PB-034–035               |
+
+These items provide traceable backlog coverage for mandatory approved rule domains without selecting implementation architecture.
 
 ---
 
