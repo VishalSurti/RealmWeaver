@@ -615,6 +615,14 @@ Species must not be treated as permanently static data if a supported trait prog
 
 Human is the mechanically flexible/generalist V1 Species.
 
+Approved Human traits:
+
+* Size: Medium
+* Base Speed: 30 ft
+* Common language
+* One additional supported language choice
+* One additional supported skill proficiency choice
+
 The approved RealmWeaver V1 flexible generalist benefit is exactly one additional validated proficiency choice from:
 
 * one skill proficiency;
@@ -625,7 +633,7 @@ Duplicate and replacement handling follows normal validated character-creation r
 
 Human does not receive blanket Species-based Ability Score increases because RealmWeaver handles Ability Score allocation separately.
 
-Other exact source-dependent Human traits and their rules version remain pending the separate SRD/IP/content-provenance finalization.
+The exact source/version basis for source-dependent Human traits remains pending the separate SRD/IP/content-provenance finalization. The approved traits above remain in force unless a future provenance audit explicitly requires a change.
 
 ---
 

@@ -536,9 +536,9 @@ the invalid action is not committed.
 
 The AI may then select another valid NPC action according to the applicable behaviour defined later in this specification.
 
-The AI controls NPC decision-making.
+The assigned NPC decision controller selects NPC intent. Deterministic controllers may routinely select simple or routine NPC behaviour, while AI selects intent for NPCs assigned to AI-assisted control, especially important, intelligent, complex or socially driven actors. Where already approved, deterministic fallback may be used after bounded AI failure.
 
-RealmWeaver controls whether those decisions are mechanically legal and how they resolve.
+Every resulting NPC action remains a non-authoritative proposal. RealmWeaver always validates, resolves and commits/persists the action, and enforces applicable knowledge boundaries.
 
 ---
 

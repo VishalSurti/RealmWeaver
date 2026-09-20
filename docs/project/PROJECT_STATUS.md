@@ -337,17 +337,17 @@ The Foundation Review resolved `CG-FND-001` through `CG-FND-006`. Review Batches
 | `CG-PRP-012` | Review Batch 2 | RESOLVED — VERIFIED | Paused activities and meaningful choices persist and resume without replay or retroactive reopening. |
 | `CG-PRP-013` | Review Batch 2 | RESOLVED — VERIFIED | Rest time, events, qualification, recovery, commit/persistence and narration use the approved order. |
 | `CG-PRP-014` | Review Batch 2 | RESOLVED — VERIFIED | Group 8 conversational wrapper and unmatched Markdown fences were removed. |
-| `CG-FIN-001` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Domain-specific document ownership and rules-index authority are explicit. |
-| `CG-FIN-002` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Core progression mechanics, durable state and minimum display are Core V1/P0. |
-| `CG-FIN-003` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Authentication, difficulty, game style, standalone summaries and enhanced progression presentation remain Should Have/P1. |
-| `CG-FIN-004` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Save/load, authoritative memory/state, continuity and minimum resume context remain Core V1/P0. |
+| `CG-FIN-001` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Domain-specific document authority and ownership are explicit. |
+| `CG-FIN-002` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | `GAME_RULES.md` is the authoritative rules index rather than universal technical authority. |
+| `CG-FIN-003` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Core progression mechanics, durable state and minimum display are Core V1/P0. |
+| `CG-FIN-004` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Authentication, difficulty, game style, standalone summaries and enhanced progression presentation remain Should Have/P1. |
 | `CG-FIN-005` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Review status records Batches 1–2 passed and Batch 3 verification pending. |
 | `CG-FIN-006` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Hybrid deterministic/AI NPC-controller terminology and proposal authority are aligned. |
 | `CG-FIN-007` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | The accidental governing-principle Markdown fence was removed. |
 | `CG-FIN-008` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Authoritative completed outcomes require atomic durable commit/persistence before narration. |
-| `CG-FIN-009` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Inspiration is P0 and mandatory approved rule domains have traceable backlog coverage. |
-| `CG-FIN-010` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Background Ability Score allocation and the Human flexible benefit are exact and bounded. |
-| `CG-FIN-011` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Six Species/eight Background scope is approved while source-dependent Species mechanics remain provenance-pending. |
+| `CG-FIN-009` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Inspiration backlog priority is P0. |
+| `CG-FIN-010` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Approved mandatory Core V1 rule domains have traceable backlog coverage. |
+| `CG-FIN-011` | Review Batch 3 | CORRECTED — VERIFICATION PENDING | Character-creation rules are exact and bounded; six-Species/eight-Background scope is approved while source-dependent Species mechanics remain provenance-pending. |
 
 The Foundation Review and Review Batches 1–2 are complete and passed. The A–D labels used during the combat work were decision sub-batches within Review Batch 1, not separate review milestones.
 
